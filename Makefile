@@ -1,4 +1,4 @@
-SRCS=exec.c main_prog.c parsing.c additional.c utils.c
+SRCS=exec.c main_prog.c parsing.c additional.c utils.c parsing_additional.c
 LIBFTSRCS=$(wildcard libft/*.c)
 LIBFTOBJS=$(LIBFTSRCS:.c=.o)
 OBJS=$(SRCS:.c=.o)

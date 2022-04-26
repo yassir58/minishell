@@ -52,7 +52,6 @@ char *get_input (char *line, int *ptr)
 {
     int i;
     char *arg;
-    char delim;
     int len;
 
 
@@ -62,19 +61,7 @@ char *get_input (char *line, int *ptr)
     while (line[i] && line[i] == ' ')
             i++;
     if (line[i] == '"' || line[i]  == '\'')
-    {
-        delim = line[i++];
-        while (line[i] && line[i] != delim)
-        {
-            len++;
-            i++;
-        }
-        if (len)
-        {
-            arg = malloc (sizeof (char)* (len + 1));
-            ft_strlcpy (arg, &(line[i++ - len]), (len + 1));
-        }
-    }
+        arg = handle_quote (line , &i);
     else
     {
         while (line[i] && line[i] != ' ' && line[i] != '"' && line[i] != '\'')
@@ -93,7 +80,7 @@ char *get_input (char *line, int *ptr)
 }
 
 
-char **get_command()
+char **get_command(int *acount)
 {
     char *line;
     char *input;
@@ -107,6 +94,7 @@ char **get_command()
     line = readline (">");
     input = "";
     count = arg_count (line);
+    *acount = count;
     args = malloc (sizeof (char*) * (count + 1));
     if (!count || !args)
         return (NULL);
