@@ -7,47 +7,50 @@ char *handle_quote (char *line, int *indx)
     int i;
     char delim;
     char *arg;
+    // int count;
 
     len =  0;
+    // count = 0;
     i = *indx;
     arg = NULL;
     delim = line[i++];
-    printf ("starting indx %d\n", i);
     while (line[i] && line[i] != delim)
-    {
-        len++;
-        i++;
-    }
+        increment_counters (&len, &i);
     if (len && line[i] == delim)
     {
         arg = malloc (sizeof (char)* (len + 1));
         ft_strlcpy (arg, &(line[i++ - len]), (len + 1));
     }
     else
-    {
         printf ("Unclosed quote Error \n");
-        exit (1);
-    }
-    printf ("ending indx %d\n", i);
     *indx = i;
     return (arg);
 }
-
-
 
 int input_validation (char **args, int count)
 {
     int i;
 
     i = 0;
-    while (i < count - 1)
+    while (i < count)
     {
         if (!args[i])
-        {
-            printf ("quote Error \n");
             return (0);
-        }
         i++;
     }
     return (1);
+}
+
+
+int get_quote_count (char delim, char *str, int indx)
+{
+    int count;
+
+    count = 0;
+    while (str[indx] && str[indx] == delim)
+    {
+        indx++;
+        count++;
+    }
+    return (count);
 }

@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-
 int arg_count (char *line)
 {
     int count;
@@ -21,30 +20,20 @@ int arg_count (char *line)
         {
             delim = line[i++];
             while (line[i] && line[i] != delim)
-            {
-                i++;
-                len++;
-            }
+                increment_counters (&len, &i);
             if (len)
-            {
-                i++;
-                count++;
-            }
+                increment_counters (&count, &i);
         }
         else
         {
             while (line[i] && line[i] != ' ' && line[i] != '"' && line[i] !='\'')
-            {
-                i++;
-                len++;
-            }
+                increment_counters (&len, &i);
             if (len)
                 count++;
         }
         if (!line[i])
             done = 1;
     }
-    
     return (count);
 }
 
@@ -54,21 +43,26 @@ char *get_input (char *line, int *ptr)
     char *arg;
     int len;
 
-
     len = 0;
     arg = NULL;
     i = *ptr;
     while (line[i] && line[i] == ' ')
             i++;
     if (line[i] == '"' || line[i]  == '\'')
-        arg = handle_quote (line , &i);
+    {
+        if (line[i] == line[i + 1])
+        {
+            i += 2;
+            arg = malloc (sizeof(char));
+            arg[0] = 0;
+        }
+        else
+            arg = handle_quote (line , &i);
+    }
     else
     {
         while (line[i] && line[i] != ' ' && line[i] != '"' && line[i] != '\'')
-        {
-            len++;
-            i++;
-        }
+            increment_counters (&len, &i);
         if (len)
         {
             arg = malloc (sizeof (char)* (len + 1));
@@ -95,15 +89,24 @@ char **get_command(int *acount)
     input = "";
     count = arg_count (line);
     *acount = count;
+    if (!count)
+        return (NULL);
     args = malloc (sizeof (char*) * (count + 1));
-    if (!count || !args)
+    if (!args)
         return (NULL);
     while (input != NULL)
     {
         input = get_input (line , &indx);
-        printf ("input : %s\n", input);
+        printf ("%s\n", input);
         args[i] = input;
         i++;
     }
+    free (line);
     return (args);
+}
+
+void increment_counters (int *len , int *i)
+{
+    (*i)++;
+    (*len)++;
 }
