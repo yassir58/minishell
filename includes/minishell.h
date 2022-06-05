@@ -29,18 +29,18 @@ typedef struct lexer_node_s
     int length;
     int joinable;
     int closed;
+    int invalid;
     void *next;
 } lexer_node_t;
-
-
 
 lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
 lexer_node_t *handle_delim (char *line, int *index);
-void handle_operator (char *line, int *index, lexer_node_t *node);
+lexer_node_t *handle_operator (char *line, int *index);
 void handle_quote (char *line, int *index, lexer_node_t *node);
 void push_node (lexer_node_t *node, lexer_node_t *temp);
-void	free_list(lexer_node_t *node);
+void free_list(lexer_node_t *node);
 void print_token (int token);
+void testing (lexer_node_t *node);
 
 #endif

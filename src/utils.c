@@ -24,3 +24,18 @@ void print_token (int token)
     else
         printf ("DOUBLE_QUOTED_SEQUENCE \n");
 }
+
+
+void testing (lexer_node_t *node)
+{
+    printf (" __________________ lexer output __________________\n");
+    if (!node)
+        printf ("NULL ==> \n");
+    else
+    {
+        write (1, node->start, node->length);
+        write (1, "\n", 1);
+        print_token (node->token);
+        free (node);
+    }
+}
