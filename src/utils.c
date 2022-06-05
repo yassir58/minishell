@@ -33,8 +33,7 @@ void testing (lexer_node_t *node)
         printf ("NULL ==> \n");
     else
     {
-        write (1, node->start, node->length);
-        write (1, "\n", 1);
+        printf ("%s\n", strndup (node->start, node->length));
         print_token (node->token);
         free (node);
     }

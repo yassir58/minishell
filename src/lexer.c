@@ -17,7 +17,8 @@ lexer_node_t *lexer (char *line)
             tmp = handle_delim (line, &index);
         else
             tmp = handle_regular (line, &index);
-        testing (tmp);
+        if (tmp)
+            testing (tmp);
     }
     return (NULL);
 }
@@ -55,8 +56,11 @@ lexer_node_t *handle_delim (char *line, int *index)
             (*index)++;
     }
     else
-        handle_quote (line, index, node);
-    return (node);
+    {
+         handle_quote (line, index, node);
+         return (node);
+    }
+    return (NULL);
 }
 
 lexer_node_t *handle_operator (char *line, int *index)
