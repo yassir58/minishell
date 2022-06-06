@@ -28,14 +28,8 @@ static int	check(char c, char const *str)
 static int	allocate(char const *str, char const *set, int *start)
 {
 	int		i;
-	int		j ;
-	char	*s1;
-	int		c_count;
-
-	s1 = NULL;
-	c_count = 0;
+	
 	i = 0;
-	j = 0;
 	while (check(str[i], set))
 		i++;
 	*start = i;

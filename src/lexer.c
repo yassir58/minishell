@@ -27,15 +27,15 @@ lexer_node_t *handle_regular (char *line, int *index)
 {
     lexer_node_t *node;
 
-    node = malloc (sizeof (lexer_node_t));
-    if (!node)
-        return (NULL);
-    ft_memset (node, 0, sizeof(node));
+
+    node = init_node ();
     node->start = &line[(*index)];
     node->token = WORD;
     node->next =  NULL;
-    while (!ft_strchr (DELIMTERS, line[(*index)]))
+    while (!ft_strchr (DELIMTERS, line[(*index)]) 
+        && !ft_strchr (OPERATORS, line[(*index)]))
     {
+        printf ("regular char %c at %d \n", line [(*index)], (*index));
         node->length++;
         (*index)++;
     }
@@ -46,18 +46,18 @@ lexer_node_t *handle_delim (char *line, int *index)
 {
     lexer_node_t *node;
 
-    node = malloc (sizeof (lexer_node_t));
-    if (!node)
-        return (NULL);
-    ft_memset (node, 0, sizeof (node));
+    node = init_node ();
     if (line[(*index)] == ' ')
     {
         while (line[(*index)] && line[(*index)] == ' ')
+        {
+            printf ("%d escaping space \n", (*index));
             (*index)++;
+        }
     }
     else
     {
-         handle_quote (line, index, node);
+         handle_quote (line, index, &node);
          return (node);
     }
     return (NULL);
@@ -66,16 +66,15 @@ lexer_node_t *handle_delim (char *line, int *index)
 lexer_node_t *handle_operator (char *line, int *index)
 {
     lexer_node_t *node;
+    char operator;
 
-    node = malloc (sizeof (lexer_node_t));
-    if (!node)
-        return (NULL);
-    ft_memset (node, 0, sizeof (node));
+    node = init_node ();
+    operator = line[(*index)];
     node->start = &(line[(*index)]);
     node->token = OPERATOR;
     if (line[(*index)] != '|')
     {
-        while (line[(*index)] == line[(*index)])
+        while (line[(*index)] == operator)
         {
             node->length++;
             (*index)++;
@@ -85,7 +84,7 @@ lexer_node_t *handle_operator (char *line, int *index)
     }
     else
     {
-        while (line[(*index)] == line[(*index)])
+        while (line[(*index)] == operator)
         {
             node->length++;
             (*index)++;
@@ -96,29 +95,34 @@ lexer_node_t *handle_operator (char *line, int *index)
     return (node);
 }
 
-void handle_quote (char *line, int *index, lexer_node_t *node)
+void handle_quote (char *line, int *index, lexer_node_t **node)
 {
     char delim;
+    lexer_node_t *tmp;
 
+    tmp = *node;
     delim = line[(*index)];
     if (line[(*index - 1)] != ' ')
-        node->joinable = TRUE;
+        tmp->joinable = TRUE;
     (*index)++;
-    node->start = &(line[(*index)]);
+    tmp->start = &(line[(*index)]);
+    printf ("quoted sequence started in %d from char %c %d\n", (*index), line[(*index)], tmp->length);
     while (line[(*index)] && line[(*index)] != delim)
     {
+        printf ("quoted sequence in %d from char %c  %d...\n", (*index), line[(*index)], tmp->length);
         (*index)++;
-        node->length++;
+        tmp->length++;
     }
     if (delim == '\'')
-        node->token = SINGLE_QUOTED_SEQUENCE;
+        tmp->token = SINGLE_QUOTED_SEQUENCE;
     if (delim == '"')
-        node->token = DOUBLE_QUOTED_SEQUENCE;
+        tmp->token = DOUBLE_QUOTED_SEQUENCE;
     if (line[(*index)] == delim)
     {
-         node->closed = TRUE;
+         tmp->closed = TRUE;
+         printf ("quoted sequence closed in %d from char %c %d\n", (*index), line[(*index)], tmp->length);
          (*index)++;
     }
     else
-        node->closed = FALSE;
+        tmp->closed = FALSE;
 }

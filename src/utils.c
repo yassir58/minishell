@@ -3,13 +3,15 @@
 void	free_list(lexer_node_t *node)
 {
 	lexer_node_t	*temp;
+    lexer_node_t    *head;
 
-	temp = node;
-	while (temp->next)
-        temp = temp->next;
-    free (temp);
-    if (node)
-        free_list (node);
+	head = node;
+	while (head)
+    {
+        temp = head;
+        head = head->next;
+        free (temp);
+    }
 }
 
 
@@ -35,6 +37,24 @@ void testing (lexer_node_t *node)
     {
         printf ("%s\n", strndup (node->start, node->length));
         print_token (node->token);
+        if (node->joinable)
+            printf ("JOINABLE\n");
         free (node);
     }
+}
+
+lexer_node_t *init_node ()
+{
+    lexer_node_t *node;
+
+    node = malloc (sizeof (lexer_node_t));
+    if (!node)
+        return (NULL);
+    node->closed = 0;
+    node->invalid = 0;
+    node->joinable = 0;
+    node->length = 0;
+    node->start = 0;
+    node->next = NULL;
+    node->token = 0;
 }
