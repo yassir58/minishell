@@ -8,17 +8,38 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "libft/libft.h"
 
 
-int validate_args ();
-char **get_command (int *count);
-char *get_input (char *line, int *ptr);
-int arg_count (char *line);
-void free_tab (char **tab);
-char *handle_quote (char *line, int *indx);
-int input_validation (char **args, int count);
-void increment_counters (int *len , int *i);
-int exec_command ();
-int get_quote_count (char delim, char *str, int indx);
+
+*/
+
+commandline ::= list |  list ";" |  list "&"
+*/
+
+
+typedef struct lexer_node
+{
+    char *content;
+    int length;
+} LEXER;
+
+enum TOKENS {
+    STRING = 0,
+    D_QUOTE = '"',
+    S_QUOTE = '\'',
+    SPACE = ' ',
+    ENV_VAR = '$',
+    REDIRECT = '>',
+    INPUTRED = '<',
+    APPEND = '>>',
+    HEREDOC = '<<'
+};
+
+enum  // This should indicate which state the token are in
+{
+    DEFAULT = 0,
+    DOUBLE_Q = 1,
+    SINGLE_Q = 2
+};
+
 #endif
