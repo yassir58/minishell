@@ -14,7 +14,6 @@ void	free_list(lexer_node_t *node)
     }
 }
 
-
 void print_token (int token)
 {
     if (token == OPERATOR)
@@ -27,7 +26,6 @@ void print_token (int token)
         printf ("DOUBLE_QUOTED_SEQUENCE \n");
 }
 
-
 void testing (lexer_node_t *node)
 {
     printf (" __________________ lexer output __________________\n");
@@ -35,11 +33,15 @@ void testing (lexer_node_t *node)
         printf ("NULL ==> \n");
     else
     {
-        printf ("%s\n", strndup (node->start, node->length));
         print_token (node->token);
         if (node->joinable)
+        {
+            printf ("%s \n", node->start);
             printf ("JOINABLE\n");
-        free (node);
+        }
+        else
+            printf ("%s\n", strndup (node->start, node->length)); 
+        //free (node);
     }
 }
 
@@ -57,4 +59,23 @@ lexer_node_t *init_node ()
     node->start = 0;
     node->next = NULL;
     node->token = 0;
+    return (node);
+}
+
+void push_to_list (lexer_node_t **head, lexer_node_t *node)
+{
+    lexer_node_t *temp;
+
+    temp = *head;
+    if (node)
+    {
+        if (*head == NULL)
+            *head = node;
+        else
+        {
+            while (temp->next)
+                temp = temp->next;
+           temp->next = node; 
+        }
+    }
 }

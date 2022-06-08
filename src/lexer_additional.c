@@ -1,24 +1,28 @@
 #include "../includes/minishell.h"
 
 
-void push_node (lexer_node_t **head, lexer_node_t **tmp)
+void create_token_list (lexer_node_t **head, lexer_node_t *temp)
 {
     lexer_node_t *node;
-    lexer_node_t *temp;
+    lexer_node_t *ptr;
 
     node = *head;
-    temp = *tmp;
-    if (!node)
-        node = temp;
-    else if (node && temp->joinable == TRUE)
+    ptr = node;
+    
+    if (temp)
     {
-        node->length += temp->length;
-        node->start = ft_strjoin (strndup (node->start, node->length)
-            , strndup (temp->start, temp->length));
-        node->token = temp->token;
-        node->closed = temp->closed;
-        free (temp);
+        if (temp->joinable)
+        {
+            while (ptr->next)
+                ptr = ptr->next;
+            ptr->start = ft_strjoin (strndup (ptr->start, ptr->length), strndup (temp->start, temp->length));
+            ptr->length += temp->length;
+            ptr->joinable = TRUE;
+            ptr->closed = temp->closed ;
+            if (ft_strchr (ptr->start, ' '))
+                ptr->token = temp->token;
+        }
+        else
+            push_to_list (head, temp);
     }
-    else
-    node->next = temp;
 }

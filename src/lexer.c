@@ -4,10 +4,11 @@
 lexer_node_t *lexer (char *line)
 {
     int index;
-    // lexer_node_t *node;
+    lexer_node_t *node;
     lexer_node_t *tmp;
+    lexer_node_t *pointer;
 
-    // node = NULL;
+    node = NULL;
     index = 0;
     while (line[index])
     {
@@ -18,9 +19,17 @@ lexer_node_t *lexer (char *line)
         else
             tmp = handle_regular (line, &index);
         if (tmp)
-            testing (tmp);
+        {
+            create_token_list (&node, tmp);
+            printf ("tmp exist \n");
+        }
+        if (!node)
+            printf ("index %d node is NULL \n", index);
+        else
+         printf ("index %d node exist \n", index);
+            
     }
-    return (NULL);
+    return (node);
 }
 
 lexer_node_t *handle_regular (char *line, int *index)
