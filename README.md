@@ -5,3 +5,4 @@
 - Validate the syntax using the lexer.
 
 - 
+building a tokenizer
