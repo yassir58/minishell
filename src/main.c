@@ -14,7 +14,7 @@ int main (int argc ,char *argv[])
         printf ("_________________________ command lexical analysis _________________________\n");
         node = lexer (line);
         tmp = node;
-    
+        syntax_validation (node);
         while (tmp)
         {
             testing (tmp);
@@ -22,5 +22,6 @@ int main (int argc ,char *argv[])
         }
         free (line);
     }
+    free_list (node);
     return (0);
 }

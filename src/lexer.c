@@ -19,15 +19,7 @@ lexer_node_t *lexer (char *line)
         else
             tmp = handle_regular (line, &index);
         if (tmp)
-        {
-            create_token_list (&node, tmp);
-            printf ("tmp exist \n");
-        }
-        if (!node)
-            printf ("index %d node is NULL \n", index);
-        else
-         printf ("index %d node exist \n", index);
-            
+            create_token_list (&node, tmp);    
     }
     return (node);
 }
@@ -44,7 +36,6 @@ lexer_node_t *handle_regular (char *line, int *index)
     while (!ft_strchr (DELIMTERS, line[(*index)]) 
         && !ft_strchr (OPERATORS, line[(*index)]))
     {
-        printf ("regular char %c at %d \n", line [(*index)], (*index));
         node->length++;
         (*index)++;
     }
@@ -115,10 +106,8 @@ void handle_quote (char *line, int *index, lexer_node_t **node)
         tmp->joinable = TRUE;
     (*index)++;
     tmp->start = &(line[(*index)]);
-    printf ("quoted sequence started in %d from char %c %d\n", (*index), line[(*index)], tmp->length);
     while (line[(*index)] && line[(*index)] != delim)
     {
-        printf ("quoted sequence in %d from char %c  %d...\n", (*index), line[(*index)], tmp->length);
         (*index)++;
         tmp->length++;
     }
@@ -129,7 +118,6 @@ void handle_quote (char *line, int *index, lexer_node_t **node)
     if (line[(*index)] == delim)
     {
          tmp->closed = TRUE;
-         printf ("quoted sequence closed in %d from char %c %d\n", (*index), line[(*index)], tmp->length);
          (*index)++;
     }
     else

@@ -44,5 +44,7 @@ void free_list(lexer_node_t *node);
 void print_token (int token);
 void testing (lexer_node_t *node);
 lexer_node_t *init_node ();
+void syntax_error (lexer_node_t *node);
+void syntax_validation (lexer_node_t *node);
 
 #endif
