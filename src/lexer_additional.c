@@ -26,3 +26,31 @@ void create_token_list (lexer_node_t **head, lexer_node_t *temp)
             push_to_list (head, temp);
     }
 }
+
+
+void syntax_error (lexer_node_t *node)
+{
+    free_list (node);
+    write (2, "Syntax error \n", 14);
+    exit (EXIT_FAILURE);
+}
+
+
+void syntax_validation (lexer_node_t *node)
+{
+    lexer_node_t *tmp;
+
+    if (node->token)
+        syntax_error (node);
+    tmp = node;
+    while (tmp)
+    {
+        if (tmp->token == DOUBLE_QUOTED_SEQUENCE ||
+        tmp->token == SINGLE_QUOTED_SEQUENCE)
+        {
+            if (tmp->closed == FALSE)
+                syntax_error (node);
+        }
+        tmp = tmp->next;
+    }
+}
