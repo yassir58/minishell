@@ -11,8 +11,10 @@ void create_token_list (lexer_node_t **head, lexer_node_t *temp)
     
     if (temp)
     {
+       
         if (temp->joinable)
         {
+            printf ("before sigf (1)\n");
             while (ptr->next)
                 ptr = ptr->next;
             ptr->start = ft_strjoin (strndup (ptr->start, ptr->length), strndup (temp->start, temp->length));
@@ -23,7 +25,10 @@ void create_token_list (lexer_node_t **head, lexer_node_t *temp)
                 ptr->token = temp->token;
         }
         else
+        {
+            printf ("before sigf (2)\n");
             push_to_list (head, temp);
+        }
     }
 }
 
@@ -54,3 +59,6 @@ void syntax_validation (lexer_node_t *node)
         tmp = tmp->next;
     }
 }
+
+
+

@@ -1,6 +1,5 @@
 #include "../includes/minishell.h"
 
-
 lexer_node_t *lexer (char *line)
 {
     int index;
@@ -23,11 +22,6 @@ lexer_node_t *lexer (char *line)
             create_token_list (&node, tmp);
             printf ("tmp exist \n");
         }
-        if (!node)
-            printf ("index %d node is NULL \n", index);
-        else
-         printf ("index %d node exist \n", index);
-            
     }
     return (node);
 }
@@ -106,12 +100,12 @@ lexer_node_t *handle_operator (char *line, int *index)
 
 void handle_quote (char *line, int *index, lexer_node_t **node)
 {
-    char delim;
-    lexer_node_t *tmp;
+    char            delim;
+    lexer_node_t    *tmp;
 
     tmp = *node;
     delim = line[(*index)];
-    if (line[(*index - 1)] != ' ')
+    if (*index > 0 && line[(*index - 1)] != ' ')
         tmp->joinable = TRUE;
     (*index)++;
     tmp->start = &(line[(*index)]);
