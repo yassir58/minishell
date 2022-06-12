@@ -46,5 +46,11 @@ void testing (lexer_node_t *node);
 lexer_node_t *init_node ();
 void syntax_error (lexer_node_t *node);
 void syntax_validation (lexer_node_t *node);
+void check_word (lexer_node_t *tokens_list);
+void expand_variables (lexer_node_t *tokens_list);
+char *handle_variables (char *str);
+char *extract_var_name (char *str, int *index);
+char *get_variable_value (char *str, int *i);
+char *push_char (char *str, char c);
 
 #endif

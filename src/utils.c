@@ -14,37 +14,6 @@ void	free_list(lexer_node_t *node)
     }
 }
 
-void print_token (int token)
-{
-    if (token == OPERATOR)
-        printf ("OPERATOR \n");
-    else if (token == WORD)
-        printf ("WORD \n");
-    else if (token == SINGLE_QUOTED_SEQUENCE)
-        printf ("SINGLE_QUOTED_SEQUENCE \n");
-    else
-        printf ("DOUBLE_QUOTED_SEQUENCE \n");
-}
-
-void testing (lexer_node_t *node)
-{
-    printf (" __________________ lexer output __________________\n");
-    if (!node)
-        printf ("NULL ==> \n");
-    else
-    {
-        print_token (node->token);
-        if (node->joinable)
-        {
-            printf ("%s \n", node->start);
-            printf ("JOINABLE\n");
-        }
-        else
-            printf ("%s\n", strndup (node->start, node->length)); 
-        //free (node);
-    }
-}
-
 lexer_node_t *init_node ()
 {
     lexer_node_t *node;
@@ -78,4 +47,42 @@ void push_to_list (lexer_node_t **head, lexer_node_t *node)
            temp->next = node; 
         }
     }
+}
+
+
+char *get_variable_value (char *str, int *i)
+{
+    char *varName;
+    char *varValue;
+    
+    varName = extract_var_name (str, i);
+    if (varName)
+        varValue = getenv (varName);
+    return (varValue);
+}
+
+char *push_char (char *str, char c)
+{
+    int i;
+    int length;
+    char *res;
+
+    i = 0;
+    res = NULL;
+    length = 0;
+    if (str)
+        length = ft_strlen (str);
+    res = malloc (sizeof (char) * (length + 2));
+    if (!res)
+        return (NULL);
+    while (i < length)
+    {
+        res[i] = str[i];
+        i++;
+    }
+    res[i++] = c;
+    res[i] = 0;
+    if (str)
+        free (str);
+    return (res);
 }

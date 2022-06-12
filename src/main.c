@@ -14,7 +14,8 @@ int main (int argc ,char *argv[])
         printf ("_________________________ command lexical analysis _________________________\n");
         node = lexer (line);
         tmp = node;
-    
+        check_word (node);
+        expand_variables (node);
         while (tmp)
         {
             testing (tmp);

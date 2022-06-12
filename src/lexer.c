@@ -109,10 +109,10 @@ void handle_quote (char *line, int *index, lexer_node_t **node)
         tmp->joinable = TRUE;
     (*index)++;
     tmp->start = &(line[(*index)]);
-    printf ("quoted sequence started in %d from char %c %d\n", (*index), line[(*index)], tmp->length);
+    //printf ("quoted sequence started in %d from char %c %d\n", (*index), line[(*index)], tmp->length);
     while (line[(*index)] && line[(*index)] != delim)
     {
-        printf ("quoted sequence in %d from char %c  %d...\n", (*index), line[(*index)], tmp->length);
+        //printf ("quoted sequence in %d from char %c  %d...\n", (*index), line[(*index)], tmp->length);
         (*index)++;
         tmp->length++;
     }
@@ -123,7 +123,7 @@ void handle_quote (char *line, int *index, lexer_node_t **node)
     if (line[(*index)] == delim)
     {
          tmp->closed = TRUE;
-         printf ("quoted sequence closed in %d from char %c %d\n", (*index), line[(*index)], tmp->length);
+         //printf ("quoted sequence closed in %d from char %c %d\n", (*index), line[(*index)], tmp->length);
          (*index)++;
     }
     else
