@@ -128,4 +128,5 @@ void handle_quote (char *line, int *index, lexer_node_t **node)
     }
     else
         tmp->closed = FALSE;
+    printf ("______ %d _____ \n", tmp->length);
 }

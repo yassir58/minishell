@@ -57,7 +57,10 @@ char *get_variable_value (char *str, int *i)
     
     varName = extract_var_name (str, i);
     if (varName)
+    {
         varValue = getenv (varName);
+        free (varName);
+    }
     return (varValue);
 }
 
@@ -82,7 +85,7 @@ char *push_char (char *str, char c)
     }
     res[i++] = c;
     res[i] = 0;
-    if (str)
+    if (str && length > 0)
         free (str);
     return (res);
 }

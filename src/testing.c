@@ -21,13 +21,8 @@ void testing (lexer_node_t *node)
     else
     {
         print_token (node->token);
-        if (node->joinable)
-        {
-            printf ("%s \n", node->start);
-            printf ("JOINABLE\n");
-        }
-        else
-            printf ("%s\n", strndup (node->start, node->length)); 
+        printf ("%s \n", node->start);
+        printf ("JOINABLE\n");
         //free (node);
     }
 }
