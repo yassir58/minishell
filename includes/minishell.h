@@ -32,51 +32,51 @@ typedef struct lexer_node_s
     void *next;
 } lexer_node_t;
 
-typedef enum S_NODE_TYPE
+typedef enum s_node_type
 {
-    COMD_NODE,
+    CMD_NODE,
     PIPE_NODE
-} T_NODE_TYPE;
+} t_node_type;
 
-typedef enum S_REDIR_TYPE 
+typedef enum s_redir_type 
 {
     REDIRIN,
     REDIROUT,
     APPEND,
     HEREDOC
-} T_REDIR_TYPE;
+} t_redir_type;
 
-typedef struct S_AST_NODE 
+typedef struct s_ast_node 
 {
-    T_NODE_TYPE type;
-    T_NODE_VALUE *value; // This will point on the type of node and will set the type of that node
+    t_node_type type;
+    t_node_value *value; // This will point on the type of node and will set the type of that node
     struct S_AST_NODE *next;
-} T_AST_NODE;
+} t_ast_node;
 
-typedef struct S_PIPE_NODE 
+typedef struct s_pipe_node 
 {
-    T_AST_NODE *left;
-    T_AST_NODE *right;
-} T_PIPE_NODE;
+    t_ast_node *left;
+    t_ast_node *right;
+} t_pipe_node;
 
-typedef struct S_COMD_NODE 
+typedef struct s_redirect 
+{
+    t_redir_type type;
+    char *filename;
+    struct s_redirect *next;
+} t_redirect;
+
+typedef struct s_cmd_node 
 {
     char *cmd; // This table will contain the command and expanded variables and options
-    T_REDIRECT *redir_list;
-} T_COMD_NODE;
+    t_redirect *redir_list;
+} t_cmd_node;
 
-typedef struct S_REDIRECT 
+typedef union s_node_value
 {
-    T_REDIR_TYPE type;
-    char *filename;
-    struct S_REDIRECT *next;
-} T_REDIRECT;
-
-typedef union S_NODE_VALUE
-{
-    T_PIPE_NODE PIPE;
-    T_COMD_NODE CMD;
-} T_NODE_VALUE;
+    t_pipe_node PIPE;
+    t_cmd_node CMD;
+} t_node_value;
 
 lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
