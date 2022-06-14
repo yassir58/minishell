@@ -21,7 +21,6 @@
 #define TRUE 1
 #define FALSE 0
 
-
 typedef struct lexer_node_s
 {
     int token;
@@ -32,6 +31,52 @@ typedef struct lexer_node_s
     int invalid;
     void *next;
 } lexer_node_t;
+
+typedef enum S_NODE_TYPE
+{
+    COMD_NODE,
+    PIPE_NODE
+} T_NODE_TYPE;
+
+typedef enum S_REDIR_TYPE 
+{
+    REDIRIN,
+    REDIROUT,
+    APPEND,
+    HEREDOC
+} T_REDIR_TYPE;
+
+typedef struct S_AST_NODE 
+{
+    T_NODE_TYPE type;
+    T_NODE_VALUE *value; // This will point on the type of node and will set the type of that node
+    struct S_AST_NODE *next;
+} T_AST_NODE;
+
+typedef struct S_PIPE_NODE 
+{
+    T_AST_NODE *left;
+    T_AST_NODE *right;
+} T_PIPE_NODE;
+
+typedef struct S_COMD_NODE 
+{
+    char *cmd; // This table will contain the command and expanded variables and options
+    T_REDIRECT *redir_list;
+} T_COMD_NODE;
+
+typedef struct S_REDIRECT 
+{
+    T_REDIR_TYPE type;
+    char *filename;
+    struct S_REDIRECT *next;
+} T_REDIRECT;
+
+typedef union S_NODE_VALUE
+{
+    T_PIPE_NODE PIPE;
+    T_COMD_NODE CMD;
+} T_NODE_VALUE;
 
 lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
