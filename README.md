@@ -10,10 +10,10 @@ haj gigachad        |         haj matich
 ________________________________________________________________
 lexer               |   build AST using recusive descent
 variable expansion  |   shell history
-pipes               |   redirictions 
-AST iteration       |   signale handling
+pipes               |   exit
+redirictions        |   export 
+AST traversing      |   signale handling
 execution           |   $? expansion
-echo                |   pwd
-cd                  |   unset
-export              |   env
-                    |   exit
+echo                |   unset
+cd                  |   env
+pwd                 |    
