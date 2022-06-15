@@ -16,11 +16,12 @@ int main (int argc ,char *argv[])
         check_word (node);
         node = expand_variables (node);
         tmp = node;
-        while (tmp)
-        {
-            testing (tmp);
-            tmp = tmp->next ;
-        }
+        printf("number of arguments: %d\n", arguments_number(tmp));
+        // while (tmp)
+        // {
+        //     testing (tmp);
+        //     tmp = tmp->next ;
+        // }
         free (line);
     }
     return (0);

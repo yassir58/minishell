@@ -21,7 +21,6 @@
 #define TRUE 1
 #define FALSE 0
 
-// >> <<
 typedef struct lexer_node_s
 {
     int token;
@@ -47,17 +46,12 @@ typedef enum s_redir_type
     HEREDOC
 } t_redir_type;
 
-typedef struct s_ast_node 
-{
-    t_node_type type;
-    t_node_value *value; // This will point on the type of node and will set the type of that node
-    struct S_AST_NODE *next;
-} t_ast_node;
+
 
 typedef struct s_pipe_node 
 {
-    t_ast_node *left;
-    t_ast_node *right;
+    struct s_ast_node *left;
+    struct s_ast_node *right;
 } t_pipe_node;
 
 typedef struct s_redirect 
@@ -79,6 +73,15 @@ typedef union s_node_value
     t_cmd_node CMD;
 } t_node_value;
 
+typedef struct s_ast_node 
+{
+    t_node_type type;
+    t_node_value *value; // This will point on the type of node and will set the type of that node
+    struct s_ast_node *next;
+} t_ast_node;
+
+
+
 lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
 lexer_node_t *handle_delim (char *line, int *index);
@@ -99,5 +102,12 @@ char *extract_var_name (char *str, int *index);
 char *get_variable_value (char *str, int *i);
 char *push_char (char *str, char c);
 void expand_single (lexer_node_t *head, lexer_node_t *temp);
+
+/* ======================= Parser Functions ========================== **/
+
+int arguments_number(lexer_node_t *node);
+
+/* ======================= Helper Functions ========================== **/
+int	ft_strcmp(const char *s1, const char *s2);
 
 #endif
