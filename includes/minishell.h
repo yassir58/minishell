@@ -21,6 +21,7 @@
 #define TRUE 1
 #define FALSE 0
 
+// >> <<
 typedef struct lexer_node_s
 {
     int token;
@@ -68,7 +69,7 @@ typedef struct s_redirect
 
 typedef struct s_cmd_node 
 {
-    char *cmd; // This table will contain the command and expanded variables and options
+    char **cmd; // This table will contain the command and expanded variables and options
     t_redirect *redir_list;
 } t_cmd_node;
 
