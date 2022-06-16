@@ -16,25 +16,33 @@ int main (int argc ,char *argv[], char *env[])
     {
         prompt = ft_strjoin (buffer, "$>");
         line = readline (prompt);
-        printf ("_________________________ command lexical analysis _________________________\n");
-        node = lexer (line);
-        check_word (node);
-        node = expand_variables (node);
-        if (!strcmp(node->start, "cd"))
+        // printf ("_________________________ command lexical analysis _________________________\n");
+        if (line && strcmp (line, ""))
         {
-            if (node->next)
+            node = lexer (line);
+            check_word (node);
+            node = expand_variables (node);
+            if (!strcmp(node->start, "cd"))
             {
-                cd_function (node->next->start, 0);
-                getcwd (buffer, sizeof (buffer)); 
+                if (node->next)
+                {
+                    cd_function (node->next->start, 0, get_env_list (env));
+                    getcwd (buffer, sizeof (buffer)); 
+                }
+                else
+                {
+                    cd_function (NULL, 0, get_env_list (env));
+                    getcwd (buffer, sizeof (buffer)); 
+                }
             }
+            // tmp = node;
+            // while (tmp)
+            // {
+            //     testing (tmp);
+            //     tmp = tmp->next ;
+            // }
+            free (line);
         }
-        // tmp = node;
-        // while (tmp)
-        // {
-        //     testing (tmp);
-        //     tmp = tmp->next ;
-        // }
-        free (line);
     }
     return (0);
 }

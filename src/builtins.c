@@ -18,7 +18,7 @@ int pwd_function (env_list_t *env_list)
     return (0);
 }
 
-int cd_function (char *arg, int flag)
+int cd_function (char *arg, int flag, env_list_t *env_list)
 {
     int i;
     int err;
@@ -30,7 +30,9 @@ int cd_function (char *arg, int flag)
     else
     {
         if (arg == NULL)
-            chdir ("~");
+            cd_to_home (env_list);
+        else if (!strcmp (arg, "~"))
+            cd_to_home (env_list);
         else
         {
             err = chdir (arg);
@@ -41,9 +43,23 @@ int cd_function (char *arg, int flag)
     return (0);
 }
 
-int echo_function (char *argv, int argc)
+void cd_to_home (env_list_t *env_list)
 {
-     int i = 1;
+     env_list_t *tmp;
+
+    tmp = env_list;
+    while (tmp)
+    {
+        if (!(strcmp (tmp->variable_name, "HOME")))
+            break ;
+        tmp = tmp->next;
+    }
+    chdir (tmp->value);
+}
+
+int echo_function (char *argv[], int argc)
+{
+    int i = 1;
     char thrilling;
 
     thrilling = '\0';
