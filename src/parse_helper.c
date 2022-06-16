@@ -40,8 +40,11 @@ int arguments_number(lexer_node_t *node)
         i += 1;
         node = node->next;
     }
-    if (node->next && node->token == OPERATOR && (check_redirect(node) == 0))
+    node = node->next;
+    printf("%d\b ")
+    if (node && node->token == OPERATOR && (check_redirect(node) == 0))
     {
+        printf("Condition has been matched\n");
         node = node->next;
         if (node->next)
         {
