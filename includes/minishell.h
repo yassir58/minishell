@@ -30,8 +30,16 @@ typedef struct lexer_node_s
     int joinable;
     int closed;
     int invalid;
-    void *next;
+    struct lexer_node_s *next;
 } lexer_node_t;
+
+
+typedef struct env_list_s 
+{
+    char *variable_name;
+    char *value;
+    struct env_list_s *next;
+} env_list_t;
 
 lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
@@ -53,5 +61,12 @@ char *extract_var_name (char *str, int *index);
 char *get_variable_value (char *str, int *i);
 char *push_char (char *str, char c);
 void expand_single (lexer_node_t *head, lexer_node_t *temp);
+env_list_t *get_env_list (char *env[]);
+env_list_t *create_env_node (char *envStr);
+void push_env_node (env_list_t **head, env_list_t *node);
+void free_tab (char *tab[]);
+int pwd_function (env_list_t *env_list);
+void test_env_list (env_list_t *list);
+int cd_function (char *arg, int flag);
 
 #endif
