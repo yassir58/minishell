@@ -66,7 +66,7 @@ typedef struct s_cmd {
 
 typedef struct s_cmd_node 
 {
-    t_cmd *cmds; // This table will contain the command and expanded variables and options
+    t_cmd *cmds;
     t_redirect *redir_list;
 } t_cmd_node;
 
@@ -79,8 +79,7 @@ typedef union s_node_value
 typedef struct s_ast_node 
 {
     t_node_type type;
-    t_node_value *value; // This will point on the type of node and will set the type of that node
-    struct s_ast_node *next;
+    t_node_value *value;
 } t_ast_node;
 
 
@@ -109,7 +108,7 @@ void expand_single (lexer_node_t *head, lexer_node_t *temp);
 /* ======================= Parser Functions ========================== **/
 
 void        print_commands(t_cmd *list);
-void        parse_command(lexer_node_t *node);
+t_ast_node  *parse_command(lexer_node_t *node);
 void        add_command(t_cmd **list, t_cmd *cmd);
 void        add_redirect(t_redirect **list, t_redirect *node);
 t_cmd       *new_command(char *cmd);

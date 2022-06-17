@@ -70,15 +70,10 @@ void    print_redirects(t_redirect *list)
     }
 }
 
-void    parse_command(lexer_node_t *node)
+void    handle_command(lexer_node_t *node, t_cmd *cmds, t_redirect *redirects)
 {
-    int     i;
-    t_cmd   *cmds;
-    t_redirect *redirects;
+    int i;
 
-
-    cmds = NULL;
-    redirects = NULL;
     i = 0;
     while (node != NULL && !check_node(node, "|"))
     {
@@ -93,21 +88,50 @@ void    parse_command(lexer_node_t *node)
             node = node->next;
         }
     }
-    print_commands(cmds);
-    print_redirects(redirects);
 }
 
-// void    parse_main(lexer_node_t *node)
-// {
-//     t_cmd *cmds;
-//     t_redirect *redirects;
-    
-//     cmds = NULL;
-//     redirects = NULL;
-//     if (node)
-//         return ;
-    
-// }
+t_ast_node *new_pipe_node(t_ast_node *left, t_ast_node *right)
+{
+    t_ast_node *node;
+
+    node = (t_ast_node *)malloc(sizeof(t_ast_node));
+    if (!node)
+        return (NULL);
+    node->type = PIPE_NODE;
+    node->value->PIPE.left = left;
+    node->value->PIPE.right = right;
+    return (node);
+}
+
+t_ast_node *new_cmd_node(t_cmd_node *cmd, t_redirect *redir)
+{
+    t_ast_node *node;
+
+    node = (t_ast_node *)malloc(sizeof(t_ast_node));
+    if (!node)
+        return (NULL);
+    node->type = CMD_NODE;
+    node->value->CMD.cmds = cmd;
+    node->value->CMD.redir_list = redir;
+    return (node);
+}
+
+t_ast_node *parse_command(lexer_node_t *node)
+{
+    t_cmd *cmds;
+    t_redirect *redirects;
+    t_ast_node *ast_cmd;
+
+    cmds = NULL;
+    redirects = NULL;
+    if (node)
+        return ;
+    handle_command(node, cmds, redirects);
+    ast_cmd = new_cmd_node(cmds, redirects);
+    if (!ast_cmd)
+        return (NULL);
+    return ast_cmd;
+}
 
 // Todo List:
 // Handle CMD: DONE
@@ -138,7 +162,6 @@ void    add_redirect(t_redirect **list, t_redirect *node)
     *list = node;
 }
 
-
 /** Note: This should be the first function since am 
  * sure that the first word is gonna be always a command.
  */
@@ -166,19 +189,7 @@ void    add_command(t_cmd **list, t_cmd *cmd)
     *list = cmd;
 }
 
-// t_ast_node *create_node(t_node_type type, t_cmd *cmd, t_redirect *redirlist)
-// {
-//     t_ast_node *tree_node;
-//     tree_node = (t_ast_node *)malloc(sizeof(t_ast_node));
-//     if (!tree_node)
-//         return (NULL);
-//     if (type == CMD_NODE)
-//     {
-//         tree_node->type = CMD_NODE;
-//         tree_node->value->CMD.redir_list = redirlist;
-//     }
-//     return (tree_node);
-// }
+
 
 // void    print_table(char **table)
 // {
