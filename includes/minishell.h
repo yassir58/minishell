@@ -29,7 +29,7 @@ typedef struct lexer_node_s
     int joinable;
     int closed;
     int invalid;
-    void *next;
+    struct lexer_node_s *next;
 } lexer_node_t;
 
 typedef enum s_node_type
@@ -46,8 +46,6 @@ typedef enum s_redir_type
     HEREDOC
 } t_redir_type;
 
-
-
 typedef struct s_pipe_node 
 {
     struct s_ast_node *left;
@@ -61,9 +59,14 @@ typedef struct s_redirect
     struct s_redirect *next;
 } t_redirect;
 
+typedef struct s_cmd {
+    char *cmd;
+    struct s_cmd *next;
+} t_cmd;
+
 typedef struct s_cmd_node 
 {
-    char **cmd; // This table will contain the command and expanded variables and options
+    t_cmd *cmds; // This table will contain the command and expanded variables and options
     t_redirect *redir_list;
 } t_cmd_node;
 
@@ -105,9 +108,14 @@ void expand_single (lexer_node_t *head, lexer_node_t *temp);
 
 /* ======================= Parser Functions ========================== **/
 
-int arguments_number(lexer_node_t *node);
+void        print_commands(t_cmd *list);
+void        parse_command(lexer_node_t *node);
+void        add_command(t_cmd **list, t_cmd *cmd);
+void        add_redirect(t_redirect **list, t_redirect *node);
+t_cmd       *new_command(char *cmd);
+t_redirect  *new_redirect(char *name, t_redir_type type);
 
 /* ======================= Helper Functions ========================== **/
-int	ft_strcmp(const char *s1, const char *s2);
+int	    ft_strcmp(const char *s1, const char *s2);
 
 #endif
