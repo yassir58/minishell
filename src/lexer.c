@@ -49,10 +49,7 @@ lexer_node_t *handle_delim (char *line, int *index)
     if (line[(*index)] == ' ')
     {
         while (line[(*index)] && line[(*index)] == ' ')
-        {
-            printf ("%d escaping space \n", (*index));
             (*index)++;
-        }
     }
     else
     {

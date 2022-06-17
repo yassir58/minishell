@@ -45,7 +45,7 @@ void cd_to_home (env_list_t *env_list)
     chdir (tmp->value);
 }
 
-char *get_pwd (env_list_t *list)
+char *get_pwd_env (env_list_t *list)
 {
     env_list_t *tmp;
     char *pwd;
@@ -62,17 +62,17 @@ char *get_pwd (env_list_t *list)
 }
 
 
-int update_pwd_env (env_list_t *list)
+int update_pwd_env (env_list_t **list)
 {
     char *current;
     char *old;
     env_list_t *tmp;
 
-    tmp = list;
+    tmp = *list;
     current = getcwd (NULL, 0);
     if (!current)
         return (-1);
-    old = get_pwd (list);
+    old = get_pwd_env (*list);
     while (tmp)
     {
         if (!strcmp (tmp->variable_name, "PWD"))
@@ -82,4 +82,15 @@ int update_pwd_env (env_list_t *list)
         tmp = tmp->next;
     }
     return (0);
+}
+
+char *get_pwd (env_list_t *env_list)
+{
+    char *buffer;
+
+    buffer = NULL;
+    buffer = getcwd (NULL, 0);
+    if (!buffer)
+        buffer = get_pwd_env (env_list);
+    return (buffer);
 }

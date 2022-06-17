@@ -12,7 +12,8 @@ int main (int argc ,char *argv[], char *env[])
 
     line = "";
     buffer = NULL;
-    buffer = getcwd (NULL, 0); 
+    buffer = getcwd (NULL, 0);
+    list = get_env_list (env);
     while (strcmp(line, "quit") != 0)
     {
         prompt = ft_strjoin (buffer, "$>");
@@ -23,18 +24,16 @@ int main (int argc ,char *argv[], char *env[])
             node = lexer (line);
             check_word (node);
             node = expand_variables (node);
-            list = get_env_list (env);
             if (!strcmp(node->start, "cd"))
             {
                 if (node->next)
                 {
-                    printf ("%s\n", node->next->start);
-                    cd_function (node->next->start, 0, list);
+                    cd_function (node->next->start, 0, &list);
                     buffer = getcwd (NULL, 0); 
                 }
                 else
                 {
-                    cd_function (NULL, 0, get_env_list (env));
+                    cd_function (NULL, 0, &list);
                     buffer = getcwd (NULL, 0); 
                 }
             }

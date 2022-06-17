@@ -2,26 +2,13 @@
 
 void pwd_function (env_list_t *env_list)
 {
-    env_list_t *tmp;
-    char *buffer;
-
-    buffer = NULL;
-    buffer = getcwd (NULL, 0);
-    if (buffer)
-        printf ("%s\n", buffer);
-    else
-    {
-        tmp = env_list;
-        while (tmp)
-        {
-            if (!strcmp (tmp->variable_name, "PWD"))
-                printf ("%s\n", tmp->value);
-            tmp = tmp->next;
-        }
-    }
+    char *pwd;
+    
+    pwd = get_pwd (env_list);
+    printf ("%s\n", pwd);
 }
 
-int cd_function (char *arg, int flag, env_list_t *env_list)
+int cd_function (char *arg, int flag, env_list_t **env_list)
 {
     int i;
     int err;
@@ -33,15 +20,15 @@ int cd_function (char *arg, int flag, env_list_t *env_list)
     else
     {
         if (arg == NULL)
-            cd_to_home (env_list);
+            cd_to_home (*env_list);
         else if (!strcmp (arg, "~"))
-            cd_to_home (env_list);
+            cd_to_home (*env_list);
         else
         {
             err = chdir (arg);
             if (err == -1)
             {
-                err  = check_for_dots (arg, env_list);
+                err  = check_for_dots (arg, *env_list);
                 if (err == -1)
                     printf ("no such file or directory : %s\n", arg);
             }

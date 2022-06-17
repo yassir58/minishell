@@ -67,10 +67,11 @@ void push_env_node (env_list_t **head, env_list_t *node);
 void free_tab (char *tab[]);
 void pwd_function (env_list_t *env_list);
 void test_env_list (env_list_t *list);
-int cd_function (char *arg, int flag, env_list_t *env_list);
+int cd_function (char *arg, int flag, env_list_t **env_list);
 void cd_to_home (env_list_t *env_list);
 int check_for_dots (char *arg, env_list_t *list);
-char *get_pwd (env_list_t *list);
-int update_pwd_env (env_list_t *list);
+char *get_pwd_env (env_list_t *list);
+int update_pwd_env (env_list_t **list);
+char *get_pwd (env_list_t *env_list);
 
 #endif
