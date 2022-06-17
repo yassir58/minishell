@@ -37,8 +37,11 @@ void test_env_list (env_list_t *list)
     tmp = list;
     while (tmp)
     {
-        printf ("{name:%s}\n", tmp->variable_name);
-        printf ("{value:%s}\n", tmp->value);
+        if (!strcmp (tmp->variable_name, "PWD") || !strcmp (tmp->variable_name, "OLDPWD"))
+        {
+            printf ("{name:%s}\n", tmp->variable_name);
+            printf ("{value:%s}\n", tmp->value);
+        }
         tmp = tmp->next;
     }
     tmp = list;

@@ -1,10 +1,14 @@
 #include "../includes/minishell.h"
 
-int pwd_function (env_list_t *env_list)
+void pwd_function (env_list_t *env_list)
 {
     env_list_t *tmp;
-    if (!env_list)
-        return (-1);
+    char *buffer;
+
+    buffer = NULL;
+    buffer = getcwd (NULL, 0);
+    if (buffer)
+        printf ("%s\n", buffer);
     else
     {
         tmp = env_list;
@@ -15,7 +19,6 @@ int pwd_function (env_list_t *env_list)
             tmp = tmp->next;
         }
     }
-    return (0);
 }
 
 int cd_function (char *arg, int flag, env_list_t *env_list)
@@ -43,6 +46,7 @@ int cd_function (char *arg, int flag, env_list_t *env_list)
                     printf ("no such file or directory : %s\n", arg);
             }
         }
+        update_pwd_env (env_list);
     }
     return (0);
 }
