@@ -26,6 +26,7 @@ int main (int argc ,char *argv[], char *env[])
             {
                 if (node->next)
                 {
+                    printf ("%s\n", node->next->start);
                     cd_function (node->next->start, 0, get_env_list (env));
                     getcwd (buffer, sizeof (buffer)); 
                 }

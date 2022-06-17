@@ -1,5 +1,5 @@
 
-SRCS=main.c lexer.c lexer_additional.c utils.c testing.c syntax_err.c lexer_utils.c env_utils.c builtins.c
+SRCS=main.c lexer.c lexer_additional.c utils.c testing.c syntax_err.c lexer_utils.c env_utils.c builtins.c builtins_utils.c
 RED=\033[0;31m
 NC=\033[0m
 LIBFTDIR=./libft/

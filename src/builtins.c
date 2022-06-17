@@ -37,24 +37,14 @@ int cd_function (char *arg, int flag, env_list_t *env_list)
         {
             err = chdir (arg);
             if (err == -1)
-                printf ("no such file or directory : %s\n", arg);
+            {
+                err  = check_for_dots (arg, env_list);
+                if (err == -1)
+                    printf ("no such file or directory : %s\n", arg);
+            }
         }
     }
     return (0);
-}
-
-void cd_to_home (env_list_t *env_list)
-{
-     env_list_t *tmp;
-
-    tmp = env_list;
-    while (tmp)
-    {
-        if (!(strcmp (tmp->variable_name, "HOME")))
-            break ;
-        tmp = tmp->next;
-    }
-    chdir (tmp->value);
 }
 
 int echo_function (char *argv[], int argc)
@@ -77,4 +67,5 @@ int echo_function (char *argv[], int argc)
         i++;
     }
     printf ("%c", thrilling);
+    return (0);
 }
