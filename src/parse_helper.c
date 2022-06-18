@@ -50,10 +50,10 @@ void    print_commands(t_cmd *list)
     t_cmd *tmp;
 
     tmp = list;
-    printf("Print Commands\n");
+    printf("Commands\n");
     while (tmp != NULL)
     {
-        printf("%s\n", tmp->cmd);
+        printf("Command args: %s\n", tmp->cmd);
         tmp = tmp->next;
     }
 }
@@ -63,10 +63,10 @@ void    print_redirects(t_redirect *list)
     t_redirect *tmp;
 
     tmp = list;
-    printf("Print Redirect:\n");
+    printf("Redirections:\n");
     while (tmp != NULL)
     {
-        printf("%s %d\n", tmp->filename, tmp->type);
+        printf("Redirect file: %s Type: %d Redirect Content: %s\n", tmp->filename, tmp->type, tmp->heredoc_content);
         tmp = tmp->next;
     }
 }
@@ -79,12 +79,14 @@ void    handle_heredoc(t_redirect *node)
     while (input != NULL)
     {
         if (ft_strcmp(input, node->filename))
-            ft_strjoin(node->heredoc_content, input);
+        {
+            node->heredoc_content = ft_strjoin(node->heredoc_content, input);
+            node->heredoc_content = ft_strjoin(node->heredoc_content, "\n");
+        }
         else
             break;
         input = readline("heredoc>");
     }
-    printf("The Content: %s\n", node->heredoc_content);
 }
 
 void    handle_command(lexer_node_t *node)
@@ -112,9 +114,10 @@ void    handle_command(lexer_node_t *node)
                 handle_heredoc(tmp);
             node = node->next;
         }
+        node = node->next;
     }
-    // print_commands(cmds);
-    // print_redirects(redirects);
+    print_commands(cmds);
+    print_redirects(redirects);
 }
 
 // t_ast_node *new_pipe_node(t_ast_node *left, t_ast_node *right)
