@@ -26,3 +26,29 @@ void testing (lexer_node_t *node)
         //free (node);
     }
 }
+
+
+void test_env_list (env_list_t *list)
+{
+    env_list_t *tmp;
+    env_list_t *ptr;
+
+
+    tmp = list;
+    while (tmp)
+    {
+        if (!strcmp (tmp->variable_name, "PWD") || !strcmp (tmp->variable_name, "OLDPWD"))
+        {
+            printf ("{name:%s}\n", tmp->variable_name);
+            printf ("{value:%s}\n", tmp->value);
+        }
+        tmp = tmp->next;
+    }
+    tmp = list;
+    while (tmp)
+    {
+        ptr = tmp;
+        tmp = tmp->next;
+        free (ptr);
+    }
+}

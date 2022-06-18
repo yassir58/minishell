@@ -17,7 +17,21 @@ function exec_test ()
     if [ "$RES" == "" ]; then
         printf "$RESET test [$@] $GREEN\t\tpassed\n"
     else
-        echo "$RESET test [$@]   $REED\t\tfailed\n"
+        printf "$RESET test [$@] $REED\t\tfailed\n"
+    fi
+}
+
+function test_pwd ()
+{
+    $($@)
+    MINS_TEST=$(./pwd > MINS_FILE)
+    BASH_TEST=$(pwd > BASH_FILE)
+    RES=$(diff BASH_FILE MINS_FILE)
+    cat MINS_FILE BASH_FILE
+    if [ "$RES" == "" ]; then
+        printf "$RESET test $GREEN\t\tpassed\n"
+    else
+        printf "$RESET test $REED\t\tfailed\n"
     fi
 }
 
@@ -26,3 +40,5 @@ exec_test 'echo test tout'
 exec_test 'echo test      tout'
 exec_test 'echo -n test tout'
 exec_test 'echo -n -n -n test tout'
+printf "$YELLOW testing [pwd] ...\n$RESET"
+test_pwd

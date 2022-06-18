@@ -84,6 +84,13 @@ typedef struct s_ast_node
 } t_ast_node;
 
 
+typedef struct env_list_s 
+{
+    char *variable_name;
+    char *value;
+    struct env_list_s *next;
+} env_list_t;
+
 lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
 lexer_node_t *handle_delim (char *line, int *index);
@@ -104,6 +111,19 @@ char *extract_var_name (char *str, int *index);
 char *get_variable_value (char *str, int *i);
 char *push_char (char *str, char c);
 void expand_single (lexer_node_t *head, lexer_node_t *temp);
+env_list_t *get_env_list (char *env[]);
+env_list_t *create_env_node (char *envStr);
+void push_env_node (env_list_t **head, env_list_t *node);
+void free_tab (char *tab[]);
+void pwd_function (env_list_t *env_list);
+void test_env_list (env_list_t *list);
+int cd_function (char *arg, int flag, env_list_t **env_list);
+void cd_to_home (env_list_t *env_list);
+int check_for_dots (char *arg, env_list_t *list);
+char *get_pwd_env (env_list_t *list);
+int update_pwd_env (env_list_t **list);
+char *get_pwd (env_list_t *env_list);
+void echo_function (char *argv[], int argc);
 
 /* ======================= Parser Functions ========================== **/
 
