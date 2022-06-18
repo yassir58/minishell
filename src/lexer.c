@@ -18,6 +18,7 @@ lexer_node_t *lexer (char *line)
         else
             tmp = handle_regular (line, &index);
         if (tmp)
+        {
             create_token_list (&node, tmp);
             // printf ("tmp exist \n");
         }
@@ -55,6 +56,7 @@ lexer_node_t *handle_delim (char *line, int *index)
         {
             // printf ("%d escaping space \n", (*index));
             (*index)++;
+        }
     }
     else
     {
@@ -69,7 +71,7 @@ lexer_node_t *handle_operator (char *line, int *index)
     lexer_node_t *node;
     char operator;
 
-    node = init_node ();
+    node = init_node();
     operator = line[(*index)];
     node->start = &(line[(*index)]);
     node->token = OPERATOR;

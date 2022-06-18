@@ -20,7 +20,7 @@ int main (int argc ,char *argv[], char *env[])
         // printf ("_________________________ parser output analysis _________________________\n");
         node = lexer (line);
         check_word (node);
-        node = expand_variables (node);
+        // node = expand_variables (node);
         tmp = node;
         handle_command(tmp);
         // while (tmp)
