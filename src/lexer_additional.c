@@ -17,7 +17,6 @@ void create_token_list (lexer_node_t **head, lexer_node_t *temp)
             expand_single (ptr, temp);
             temp->start = strndup (temp->start, temp->length);
             ptr->start = ft_strjoin (ptr->start, temp->start);
-            printf ("this is temp %s %d\n", temp->start, ft_strlen (temp->start));
             ptr->length += temp->length;
             ptr->joinable = TRUE;
             ptr->closed = temp->closed;

@@ -11,12 +11,12 @@ int main (int argc ,char *argv[])
     while (strcmp(line, "quit") != 0)
     {
         line = readline ("@minishell: ");
-        printf ("_________________________ parser output analysis _________________________\n");
+        // printf ("_________________________ parser output analysis _________________________\n");
         node = lexer (line);
         check_word (node);
         node = expand_variables (node);
         tmp = node;
-        parse_command(tmp);
+        handle_command(tmp);
         // while (tmp)
         // {
         //     testing (tmp);

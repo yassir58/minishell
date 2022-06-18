@@ -56,6 +56,7 @@ typedef struct s_redirect
 {
     t_redir_type type;
     char *filename;
+    char *heredoc_content;
     struct s_redirect *next;
 } t_redirect;
 
@@ -81,7 +82,6 @@ typedef struct s_ast_node
     t_node_type type;
     t_node_value *value;
 } t_ast_node;
-
 
 
 lexer_node_t *lexer (char *line);
@@ -110,11 +110,13 @@ void expand_single (lexer_node_t *head, lexer_node_t *temp);
 void        print_commands(t_cmd *list);
 t_ast_node  *parse_command(lexer_node_t *node);
 void        add_command(t_cmd **list, t_cmd *cmd);
-void        add_redirect(t_redirect **list, t_redirect *node);
+t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
 t_cmd       *new_command(char *cmd);
-t_redirect  *new_redirect(char *name, t_redir_type type);
+t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type);
+void    handle_command(lexer_node_t *node);
 
 /* ======================= Helper Functions ========================== **/
 int	    ft_strcmp(const char *s1, const char *s2);
+char    *get_next_line(int fd);
 
 #endif

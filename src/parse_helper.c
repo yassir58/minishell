@@ -1,4 +1,5 @@
 #include "../includes/minishell.h"
+#include <stdio.h>
 
 /** GRAMMAR
  *  <EXP> : <COMMAND>
@@ -70,10 +71,32 @@ void    print_redirects(t_redirect *list)
     }
 }
 
-void    handle_command(lexer_node_t *node, t_cmd *cmds, t_redirect *redirects)
+void    handle_heredoc(t_redirect *node)
 {
+    char *input;
+
+    input = readline("heredoc>");
+    while (input != NULL)
+    {
+        if (ft_strcmp(input, node->filename))
+            ft_strjoin(node->heredoc_content, input);
+        else
+            break;
+        input = readline("heredoc>");
+    }
+    printf("The Content: %s\n", node->heredoc_content);
+}
+
+void    handle_command(lexer_node_t *node)
+{
+    t_redirect *redirects;
+    t_cmd *cmds;
+    t_redirect *tmp;
     int i;
 
+    cmds = NULL;
+    tmp = NULL;
+    redirects = NULL;
     i = 0;
     while (node != NULL && !check_node(node, "|"))
     {
@@ -84,61 +107,65 @@ void    handle_command(lexer_node_t *node, t_cmd *cmds, t_redirect *redirects)
         }
         if (node && check_redirect(node))
         {
-            add_redirect(&redirects, new_redirect(ft_strdup(node->next->start),redirect_type(node)));
+            tmp = add_redirect(&redirects, new_redirect(ft_strdup(node->next->start), NULL ,redirect_type(node)));
+            if (redirect_type(node) == HEREDOC)
+                handle_heredoc(tmp);
             node = node->next;
         }
     }
+    // print_commands(cmds);
+    // print_redirects(redirects);
 }
 
-t_ast_node *new_pipe_node(t_ast_node *left, t_ast_node *right)
-{
-    t_ast_node *node;
+// t_ast_node *new_pipe_node(t_ast_node *left, t_ast_node *right)
+// {
+//     t_ast_node *node;
 
-    node = (t_ast_node *)malloc(sizeof(t_ast_node));
-    if (!node)
-        return (NULL);
-    node->type = PIPE_NODE;
-    node->value->PIPE.left = left;
-    node->value->PIPE.right = right;
-    return (node);
-}
+//     node = (t_ast_node *)malloc(sizeof(t_ast_node));
+//     if (!node)
+//         return (NULL);
+//     node->type = PIPE_NODE;
+//     node->value->PIPE.left = left;
+//     node->value->PIPE.right = right;
+//     return (node);
+// }
 
-t_ast_node *new_cmd_node(t_cmd_node *cmd, t_redirect *redir)
-{
-    t_ast_node *node;
+// t_ast_node *new_cmd_node(t_cmd_node *cmd, t_redirect *redir)
+// {
+//     t_ast_node *node;
 
-    node = (t_ast_node *)malloc(sizeof(t_ast_node));
-    if (!node)
-        return (NULL);
-    node->type = CMD_NODE;
-    node->value->CMD.cmds = cmd;
-    node->value->CMD.redir_list = redir;
-    return (node);
-}
+//     node = (t_ast_node *)malloc(sizeof(t_ast_node));
+//     if (!node)
+//         return (NULL);
+//     node->type = CMD_NODE;
+//     node->value->CMD.cmds = cmd;
+//     node->value->CMD.redir_list = redir;
+//     return (node);
+// }
 
-t_ast_node *parse_command(lexer_node_t *node)
-{
-    t_cmd *cmds;
-    t_redirect *redirects;
-    t_ast_node *ast_cmd;
+// t_ast_node *parse_command(lexer_node_t *node)
+// {
+//     t_cmd *cmds;
+//     t_redirect *redirects;
+//     t_ast_node *ast_cmd;
 
-    cmds = NULL;
-    redirects = NULL;
-    if (node)
-        return ;
-    handle_command(node, cmds, redirects);
-    ast_cmd = new_cmd_node(cmds, redirects);
-    if (!ast_cmd)
-        return (NULL);
-    return ast_cmd;
-}
+//     cmds = NULL;
+//     redirects = NULL;
+//     if (node)
+//         return ;
+//     handle_command(node, cmds, redirects);
+//     ast_cmd = new_cmd_node(cmds, redirects);
+//     if (!ast_cmd)
+//         return (NULL);
+//     return ast_cmd;
+// }
 
 // Todo List:
 // Handle CMD: DONE
 // Handle PIPE
 // Hanlde REDIR: DONE
 
-t_redirect *new_redirect(char *name, t_redir_type type)
+t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type)
 {
     t_redirect *node;
 
@@ -147,19 +174,23 @@ t_redirect *new_redirect(char *name, t_redir_type type)
         return (NULL);
     node->type = type;
     node->filename = name;
+    node->heredoc_content = heredoc;
     node->next = NULL;
     return (node);
 }
 
-void    add_redirect(t_redirect **list, t_redirect *node)
+
+// This function will be modified to return the address of the new node.
+t_redirect  *add_redirect(t_redirect **list, t_redirect *node)
 {
     if (!*list)
     {
         *list = node;
-        return ;
+        return (node);
     }
     node->next = *list;
     *list = node;
+    return (node);
 }
 
 /** Note: This should be the first function since am 
