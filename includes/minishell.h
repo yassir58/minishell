@@ -73,5 +73,6 @@ int check_for_dots (char *arg, env_list_t *list);
 char *get_pwd_env (env_list_t *list);
 int update_pwd_env (env_list_t **list);
 char *get_pwd (env_list_t *env_list);
+void echo_function (char *argv[], int argc);
 
 #endif

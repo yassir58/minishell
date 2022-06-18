@@ -25,6 +25,7 @@ int check_for_dots (char *arg, env_list_t *list)
             chdir ("..");
             while (count--)
                 chdir ("..");
+            update_pwd_env (&list);
             return (0);
         }
     }

@@ -38,25 +38,29 @@ int cd_function (char *arg, int flag, env_list_t **env_list)
     return (0);
 }
 
-int echo_function (char *argv[], int argc)
+void echo_function (char *argv[], int argc)
 {
     int i = 1;
     char thrilling;
 
-    thrilling = '\0';
-    if (strcmp (argv[i], "-n"))
-        thrilling = '\n';
-    else
-        i++;
-
-    while (argv[i])
+    thrilling = '\n';
+    if (argc > 1)
     {
-        if (i == (argc - 1))
-            printf ("%s", argv[i]);
-        else
-            printf ("%s ", argv[i]);
-        i++;
+        if (!strcmp (argv[i], "-n"))
+        {
+            thrilling = '\0';
+            while (argv[i] && !strcmp (argv[i], "-n"))
+                i++;
+        }
+        while (argv[i])
+        {
+            if (i == (argc - 1))
+                printf ("%s", argv[i]);
+            else
+                printf ("%s ", argv[i]);
+            i++;
+        }
     }
-    printf ("%c", thrilling);
-    return (0);
+    if (thrilling)
+        printf ("%c", thrilling);
 }
