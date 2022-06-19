@@ -105,9 +105,11 @@ void    handle_command(lexer_node_t *node)
     {
         while (node && (node->token == WORD || node->token == DOUBLE_QUOTED_SEQUENCE))
         {
+            printf("Before the segault\n");
             add_command(&cmds, new_command(ft_strdup(node->start)));
             node = node->next;
         }
+        printf("Finished Handling commands\n");
         if (node && check_redirect(node))
         {
             tmp = add_redirect(&redirects, new_redirect(ft_strdup(node->next->start), NULL ,redirect_type(node)));
@@ -187,13 +189,15 @@ t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type)
 // This function will be modified to return the address of the new node.
 t_redirect  *add_redirect(t_redirect **list, t_redirect *node)
 {
+    t_redirect *last;
+
     if (!*list)
     {
         *list = node;
         return (node);
     }
-    node->next = *list;
-    *list = node;
+    last = last_redirect(*list);
+    last->next = node;
     return (node);
 }
 
@@ -215,15 +219,40 @@ t_cmd *new_command(char *cmd)
 
 void    add_command(t_cmd **list, t_cmd *cmd)
 {
+    t_cmd *lst_node;
+
     if (!*list)
     {
         *list = cmd;
         return ;
     }
-    cmd->next = *list;
-    *list = cmd;
+    lst_node = last_command(*list);
+    lst_node->next = cmd;
 }
 
+t_redirect *last_redirect(t_redirect *lst)
+{
+    t_redirect *tmp;
+
+    tmp = lst;
+    while (tmp != NULL)
+    {
+        tmp = tmp->next;
+    }
+    return (tmp);
+}
+
+t_cmd *last_command(t_cmd *lst)
+{
+    t_cmd *tmp;
+
+    tmp = lst;
+    while (tmp != NULL)
+    {
+        tmp = tmp->next;
+    }
+    return (tmp);
+}
 
 
 // void    print_table(char **table)

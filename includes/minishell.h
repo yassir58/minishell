@@ -134,6 +134,8 @@ t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
 t_cmd       *new_command(char *cmd);
 t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type);
 void    handle_command(lexer_node_t *node);
+t_cmd *last_command(t_cmd *lst);
+t_redirect *last_redirect(t_redirect *lst);
 
 /* ======================= Helper Functions ========================== **/
 int	    ft_strcmp(const char *s1, const char *s2);
