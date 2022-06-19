@@ -52,3 +52,20 @@ void test_env_list (env_list_t *list)
         free (ptr);
     }
 }
+
+char *test_cd (lexer_node_t *node, env_list_t *list)
+{
+    char *buffer;
+    buffer = NULL;
+    if (node->next)
+    {
+        cd_function (node->next->start, 0, &list);
+        buffer = getcwd (NULL, 0); 
+    }
+    else
+    {
+        cd_function (NULL, 0, &list);
+        buffer = getcwd (NULL, 0); 
+    }
+    return (buffer);
+}

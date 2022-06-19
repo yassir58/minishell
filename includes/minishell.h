@@ -74,5 +74,6 @@ char *get_pwd_env (env_list_t *list);
 int update_pwd_env (env_list_t **list);
 char *get_pwd (env_list_t *env_list);
 void echo_function (char *argv[], int argc);
+char *test_cd (lexer_node_t *node, env_list_t *list);
 
 #endif
