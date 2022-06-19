@@ -96,13 +96,14 @@ void    handle_command(lexer_node_t *node)
     t_redirect *tmp;
     int i;
 
+    i = 0;
     cmds = NULL;
     tmp = NULL;
     redirects = NULL;
-    i = 0;
+
     while (node != NULL && !check_node(node, "|"))
     {
-        while (node && node->token == 1)
+        while (node && (node->token == WORD || node->token == DOUBLE_QUOTED_SEQUENCE))
         {
             add_command(&cmds, new_command(ft_strdup(node->start)));
             node = node->next;
