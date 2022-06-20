@@ -50,7 +50,7 @@ void    print_commands(t_cmd *list)
     t_cmd *tmp;
 
     tmp = list;
-    printf("Commands\n");
+    printf("Commands:\n");
     while (tmp != NULL)
     {
         printf("Command args: %s\n", tmp->cmd);
@@ -105,11 +105,9 @@ void    handle_command(lexer_node_t *node)
     {
         while (node && (node->token == WORD || node->token == DOUBLE_QUOTED_SEQUENCE))
         {
-            printf("Before the segault\n");
             add_command(&cmds, new_command(ft_strdup(node->start)));
             node = node->next;
         }
-        printf("Finished Handling commands\n");
         if (node && check_redirect(node))
         {
             tmp = add_redirect(&redirects, new_redirect(ft_strdup(node->next->start), NULL ,redirect_type(node)));
@@ -235,10 +233,10 @@ t_redirect *last_redirect(t_redirect *lst)
     t_redirect *tmp;
 
     tmp = lst;
-    while (tmp != NULL)
-    {
+    if (!lst)
+        return (NULL);
+    while (tmp->next != NULL)
         tmp = tmp->next;
-    }
     return (tmp);
 }
 
@@ -247,10 +245,10 @@ t_cmd *last_command(t_cmd *lst)
     t_cmd *tmp;
 
     tmp = lst;
-    while (tmp != NULL)
-    {
+    if (!lst)
+        return (NULL);
+    while (tmp->next != NULL)
         tmp = tmp->next;
-    }
     return (tmp);
 }
 
