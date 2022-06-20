@@ -103,7 +103,7 @@ void    handle_command(lexer_node_t *node)
 
     while (node != NULL && !check_node(node, "|"))
     {
-        while (node && (node->token == WORD || node->token == DOUBLE_QUOTED_SEQUENCE))
+        while (node && (node->token == WORD || node->token == DOUBLE_QUOTED_SEQUENCE || node->token == SINGLE_QUOTED_SEQUENCE))
         {
             add_command(&cmds, new_command(ft_strdup(node->start)));
             node = node->next;
@@ -113,12 +113,22 @@ void    handle_command(lexer_node_t *node)
             tmp = add_redirect(&redirects, new_redirect(ft_strdup(node->next->start), NULL ,redirect_type(node)));
             if (redirect_type(node) == HEREDOC)
                 handle_heredoc(tmp);
-            node = node->next;
+            node = node->next->next;
         }
-        node = node->next;
     }
-    print_commands(cmds);
-    print_redirects(redirects);
+}
+
+void    parse(lexer_node_t *node)
+{
+    t_redirect *redirects;
+    t_cmd *cmds;
+
+    cmds = NULL;
+    redirects = NULL;
+    // Handling the command
+
+    // In case of pipe creating a new pipe command that will point on the next command
+
 }
 
 // t_ast_node *new_pipe_node(t_ast_node *left, t_ast_node *right)

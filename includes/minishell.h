@@ -83,7 +83,6 @@ typedef struct s_ast_node
     t_node_value *value;
 } t_ast_node;
 
-
 typedef struct env_list_s 
 {
     char *variable_name;
