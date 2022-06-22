@@ -22,7 +22,8 @@ int main (int argc ,char *argv[], char *env[])
         {
             node = lexer (line);
             check_word (node);
-            node = expand_variables (node);
+            // node = expand_variables (node);
+            syntax_validation (node);
             if (!strcmp(node->start, "cd"))
                 test_cd (node, list);
             else if (!strcmp (node->start, "env"))

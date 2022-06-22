@@ -1,0 +1,14 @@
+execution node
+|||||||||||||||||||||||||
+|                       |
+|  prev:                |
+|  next:                |
+|  command:-----------------> char *
+|  riderictions:------------>  linked list
+|  args:--------------------> char **
+|  piped   ----------------->  if piped :  standard input ==> next node standard output
+|  builtin: true | false |
+||||||||||||||||||||||||||
+
+check for invalid commands or riderictions
+handle herdoc before parse

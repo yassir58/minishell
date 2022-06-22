@@ -15,8 +15,11 @@ void syntax_validation (lexer_node_t *node)
     lexer_node_t *tmp;
 
     tmp = node ;
-    if (node->token == OPERATOR)
-        syntax_error (node);
+    if (node->token == OPERATOR)    
+    {
+        if (!strcmp (node->start, "|"))
+            syntax_error (node);
+    }
     while (tmp)
     {
         if (tmp->token == DOUBLE_QUOTED_SEQUENCE ||
@@ -27,4 +30,9 @@ void syntax_validation (lexer_node_t *node)
         }
         tmp = tmp->next;
     }
+    tmp = node;
+    while (tmp->next)
+        tmp = tmp->next;
+    if (tmp->token == OPERATOR)    
+            syntax_error (node);
 }
