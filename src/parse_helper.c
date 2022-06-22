@@ -89,7 +89,7 @@ void    handle_heredoc(t_redirect *node)
     }
 }
 
-void    handle_command(lexer_node_t *node)
+t_exec_node *parse_command(lexer_node_t *node)
 {
     t_redirect *redirects;
     t_cmd *cmds;
@@ -100,7 +100,6 @@ void    handle_command(lexer_node_t *node)
     cmds = NULL;
     tmp = NULL;
     redirects = NULL;
-
     while (node != NULL && !check_node(node, "|"))
     {
         while (node && (node->token == WORD || node->token == DOUBLE_QUOTED_SEQUENCE || node->token == SINGLE_QUOTED_SEQUENCE))
@@ -116,68 +115,51 @@ void    handle_command(lexer_node_t *node)
             node = node->next->next;
         }
     }
+    if (check_node(node, "|"))
+        return (new_exec_node(CMD_NODE, command_node(redirects, cmds), TRUE));
+    return (new_exec_node(CMD_NODE, command_node(redirects, cmds), FALSE));
+}
+
+bool command_type(t_cmd_node *cmd)
+{
+    if (cmd->cmds->cmd)
 }
 
 void    parse(lexer_node_t *node)
 {
-    t_redirect *redirects;
-    t_cmd *cmds;
-
-    cmds = NULL;
-    redirects = NULL;
     // Handling the command
+    printf("%d\n", node->token);
 
     // In case of pipe creating a new pipe command that will point on the next command
-
 }
 
-// t_ast_node *new_pipe_node(t_ast_node *left, t_ast_node *right)
-// {
-//     t_ast_node *node;
+t_exec_node *new_exec_node(t_node_type type, t_cmd_node *cmd, bool piped)
+{
+    t_exec_node *node;
 
-//     node = (t_ast_node *)malloc(sizeof(t_ast_node));
-//     if (!node)
-//         return (NULL);
-//     node->type = PIPE_NODE;
-//     node->value->PIPE.left = left;
-//     node->value->PIPE.right = right;
-//     return (node);
-// }
-
-// t_ast_node *new_cmd_node(t_cmd_node *cmd, t_redirect *redir)
-// {
-//     t_ast_node *node;
-
-//     node = (t_ast_node *)malloc(sizeof(t_ast_node));
-//     if (!node)
-//         return (NULL);
-//     node->type = CMD_NODE;
-//     node->value->CMD.cmds = cmd;
-//     node->value->CMD.redir_list = redir;
-//     return (node);
-// }
-
-// t_ast_node *parse_command(lexer_node_t *node)
-// {
-//     t_cmd *cmds;
-//     t_redirect *redirects;
-//     t_ast_node *ast_cmd;
-
-//     cmds = NULL;
-//     redirects = NULL;
-//     if (node)
-//         return ;
-//     handle_command(node, cmds, redirects);
-//     ast_cmd = new_cmd_node(cmds, redirects);
-//     if (!ast_cmd)
-//         return (NULL);
-//     return ast_cmd;
-// }
-
-// Todo List:
-// Handle CMD: DONE
-// Handle PIPE
-// Hanlde REDIR: DONE
+    node = (t_exec_node *)malloc(sizeof(t_exec_node));
+    if (!node)
+        return (NULL);
+    if (type == CMD_NODE)
+    {
+        node->type = CMD_NODE;
+        node->cmd = cmd;
+        node->builting = command_type(cmd);
+        node->piped = piped;
+        node->next = NULL;
+        node->prev = NULL; // The should be reseted.
+    }
+    else 
+    {
+        node->type = PIPE_NODE;
+        node->piped = FALSE;
+        node->builting = FALSE;
+        node->cmd = NULL;
+        node->next = NULL;
+        node->prev = NULL; // This should be reseted.
+    }
+    return (node);
+}
 
 t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type)
 {
@@ -193,8 +175,18 @@ t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type)
     return (node);
 }
 
+t_cmd_node *command_node(t_redirect *redirlist, t_cmd *cmdlist)
+{
+    t_cmd_node *node;
 
-// This function will be modified to return the address of the new node.
+    node = (t_cmd_node *)malloc(sizeof(t_cmd_node));
+    if (!node)
+        return (NULL);
+    node->cmds = cmdlist;
+    node->redir_list = redirlist;
+    return (node);
+}
+
 t_redirect  *add_redirect(t_redirect **list, t_redirect *node)
 {
     t_redirect *last;
@@ -208,10 +200,6 @@ t_redirect  *add_redirect(t_redirect **list, t_redirect *node)
     last->next = node;
     return (node);
 }
-
-/** Note: This should be the first function since am 
- * sure that the first word is gonna be always a command.
- */
 
 t_cmd *new_command(char *cmd)
 {
@@ -261,27 +249,3 @@ t_cmd *last_command(t_cmd *lst)
         tmp = tmp->next;
     return (tmp);
 }
-
-
-// void    print_table(char **table)
-// {
-//     int i;
-    
-//     i = 0;
-//     while (table[i])
-//     {
-//         printf("%s\n", table[i]);
-//         i++;
-//     }
-// }
-
-
-// t_redirect *handle_redirect(lexer_node_t *token)
-// {
-//     t_redirect *redir;
-//     if (check_redirect(token))
-//     {
-//     }
-//     else
-//         return (NULL);
-// }

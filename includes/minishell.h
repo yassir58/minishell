@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <stdbool.h>
 #include "../libft/libft.h"
 
 /// defining macros
@@ -20,6 +21,16 @@
 #define OPERATORS ">|<"
 #define TRUE 1
 #define FALSE 0
+
+// Builtings
+
+#define B1 "echo"
+#define B2 "cd"
+#define B3 "pwd"
+#define B4 "export"
+#define B5 "unset"
+#define B6 "env"
+#define B7 "exit"
 
 typedef struct lexer_node_s
 {
@@ -46,12 +57,6 @@ typedef enum s_redir_type
     HEREDOC
 } t_redir_type;
 
-typedef struct s_pipe_node 
-{
-    struct s_ast_node *left;
-    struct s_ast_node *right;
-} t_pipe_node;
-
 typedef struct s_redirect 
 {
     t_redir_type type;
@@ -71,17 +76,15 @@ typedef struct s_cmd_node
     t_redirect *redir_list;
 } t_cmd_node;
 
-typedef union s_node_value
-{
-    t_pipe_node PIPE;
-    t_cmd_node CMD;
-} t_node_value;
-
-typedef struct s_ast_node 
+typedef struct s_exec_node
 {
     t_node_type type;
-    t_node_value *value;
-} t_ast_node;
+    t_cmd_node *cmd;
+    bool piped;
+    bool builting;
+    struct s_exec_node *next;
+    struct s_exec_node *prev;
+} t_exec_node;
 
 typedef struct env_list_s 
 {
@@ -127,7 +130,6 @@ void echo_function (char *argv[], int argc);
 /* ======================= Parser Functions ========================== **/
 
 void        print_commands(t_cmd *list);
-t_ast_node  *parse_command(lexer_node_t *node);
 void        add_command(t_cmd **list, t_cmd *cmd);
 t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
 t_cmd       *new_command(char *cmd);
