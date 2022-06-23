@@ -22,7 +22,7 @@ int main (int argc ,char *argv[], char *env[])
         check_word (node);
         // node = expand_variables (node);
         tmp = node;
-        handle_command(tmp);
+        parse(tmp);
         // while (tmp)
         // {
         //     testing (tmp);

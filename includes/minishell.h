@@ -81,7 +81,7 @@ typedef struct s_exec_node
     t_node_type type;
     t_cmd_node *cmd;
     bool piped;
-    bool builting;
+    bool builtin;
     struct s_exec_node *next;
     struct s_exec_node *prev;
 } t_exec_node;
@@ -137,9 +137,25 @@ t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type);
 void    handle_command(lexer_node_t *node);
 t_cmd *last_command(t_cmd *lst);
 t_redirect *last_redirect(t_redirect *lst);
+t_exec_node *parse_command(lexer_node_t **node);
+t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped);
+t_exec_node *new_exec_pipe();
+t_exec_node *last_exec_node(t_exec_node *list);
+t_exec_node   *parse(lexer_node_t *node);
+bool is_builtin(t_cmd_node *cmd);
+t_cmd_node *command_node(t_redirect *redirlist, t_cmd *cmdlist);
+int	advanced_strcmp(char *s1, char *s2);
 
 /* ======================= Helper Functions ========================== **/
 int	    ft_strcmp(const char *s1, const char *s2);
+
 char    *get_next_line(int fd);
 
 #endif
+
+/** 
+ * Node 1
+ * 
+ * 
+ * 
+*/

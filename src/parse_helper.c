@@ -1,10 +1,6 @@
 #include "../includes/minishell.h"
 #include <stdio.h>
 
-/** GRAMMAR
- *  <EXP> : <COMMAND>
- *  <COMMAND> : <EXP> | <COMMAND>
- * */
 int check_node(lexer_node_t *node, char *operator)
 {
     if (node->token == 0)
@@ -40,10 +36,6 @@ int redirect_type(lexer_node_t *node)
     }
     return (0);
 }
-/** @Function:    Arguments_number
- *  @Description: The function bellow will help me find how many spots i should allcate for
- *  the arguments.
- * */
 
 void    print_commands(t_cmd *list)
 {
@@ -89,76 +81,132 @@ void    handle_heredoc(t_redirect *node)
     }
 }
 
-t_exec_node *parse_command(lexer_node_t *node)
+t_exec_node *parse_command(lexer_node_t **node)
 {
     t_redirect *redirects;
-    t_cmd *cmds;
     t_redirect *tmp;
+    t_cmd *cmds;
     int i;
 
     i = 0;
     cmds = NULL;
     tmp = NULL;
     redirects = NULL;
-    while (node != NULL && !check_node(node, "|"))
+    while ((*node != NULL) && !check_node(*node, "|"))
     {
-        while (node && (node->token == WORD || node->token == DOUBLE_QUOTED_SEQUENCE || node->token == SINGLE_QUOTED_SEQUENCE))
+        while (*node && ((*node)->token == WORD || (*node)->token == DOUBLE_QUOTED_SEQUENCE || (*node)->token == SINGLE_QUOTED_SEQUENCE))
         {
-            add_command(&cmds, new_command(ft_strdup(node->start)));
-            node = node->next;
+            add_command(&cmds, new_command(ft_strdup((*node)->start)));
+            (*node) = (*node)->next;
         }
-        if (node && check_redirect(node))
+        if ((*node) && check_redirect((*node)))
         {
-            tmp = add_redirect(&redirects, new_redirect(ft_strdup(node->next->start), NULL ,redirect_type(node)));
-            if (redirect_type(node) == HEREDOC)
+            tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
+            if (redirect_type((*node)) == HEREDOC)
                 handle_heredoc(tmp);
-            node = node->next->next;
+            (*node) = (*node)->next->next;
         }
     }
-    if (check_node(node, "|"))
-        return (new_exec_node(CMD_NODE, command_node(redirects, cmds), TRUE));
-    return (new_exec_node(CMD_NODE, command_node(redirects, cmds), FALSE));
+    if (cmds && (*node))
+    {
+        if (check_node(*node, "|"))
+        {
+            return (new_exec_cmd(command_node(redirects, cmds), TRUE));
+        }
+    }
+    else if ((*node))
+    {
+        (*node) = (*node)->next;
+        return (new_exec_pipe());
+    }
+    print_commands(cmds);
+    print_redirects(redirects);
+    return (new_exec_cmd(command_node(redirects, cmds), FALSE));
 }
 
-bool command_type(t_cmd_node *cmd)
+bool is_builtin(t_cmd_node *cmd)
 {
-    if (cmd->cmds->cmd)
+    char *arg;
+
+    arg = cmd->cmds->cmd;
+    if (!advanced_strcmp(arg, B1) || !advanced_strcmp(arg, B2) || !advanced_strcmp(arg, B3) \
+    || !advanced_strcmp(arg, B4) || !advanced_strcmp(arg, B5) ||!advanced_strcmp(arg, B6) || advanced_strcmp(arg, B7))
+        return (true);
+    return (false);
 }
 
-void    parse(lexer_node_t *node)
+t_exec_node   *parse(lexer_node_t *node)
 {
-    // Handling the command
-    printf("%d\n", node->token);
+   t_exec_node *list;
+   t_exec_node *exec_node;
+   t_exec_node *last_node;
+   lexer_node_t *token;
 
-    // In case of pipe creating a new pipe command that will point on the next command
+   token = node;
+   list = NULL;
+   if (token && !check_node(node, "|"))
+   {
+       while (token)
+       {
+            exec_node = parse_command(&token);
+            if (!list)
+            {
+                exec_node->prev = NULL;
+                list = exec_node;
+            }
+            else 
+            {
+                last_node = last_exec_node(list);
+                last_node->next = exec_node;
+                exec_node->prev = last_node;
+            }
+       }
+   }
+   return (list);
 }
 
-t_exec_node *new_exec_node(t_node_type type, t_cmd_node *cmd, bool piped)
+t_exec_node *new_exec_pipe()
 {
     t_exec_node *node;
 
     node = (t_exec_node *)malloc(sizeof(t_exec_node));
     if (!node)
         return (NULL);
-    if (type == CMD_NODE)
-    {
-        node->type = CMD_NODE;
-        node->cmd = cmd;
-        node->builting = command_type(cmd);
-        node->piped = piped;
-        node->next = NULL;
-        node->prev = NULL; // The should be reseted.
-    }
-    else 
-    {
-        node->type = PIPE_NODE;
-        node->piped = FALSE;
-        node->builting = FALSE;
-        node->cmd = NULL;
-        node->next = NULL;
-        node->prev = NULL; // This should be reseted.
-    }
+    node->type = PIPE_NODE;
+    node->cmd = NULL;
+    node->builtin = FALSE;
+    node->piped = FALSE;
+    node->next = NULL;
+    node->prev = NULL;
     return (node);
+}
+
+t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped)
+{
+    t_exec_node *node;
+
+    node = (t_exec_node *)malloc(sizeof(t_exec_node));
+    if (!node)
+        return (NULL);
+    node->type = CMD_NODE;
+    node->cmd = cmd;
+    node->builtin = is_builtin(cmd);
+    node->piped = piped;
+    node->next = NULL;
+    node->prev = NULL;
+    return (node);
+}
+
+t_exec_node *last_exec_node(t_exec_node *list)
+{
+    t_exec_node *tmp;
+
+    tmp = list;
+    if (list)
+        return (NULL);
+    while (tmp->next != NULL)
+        tmp = tmp->next;
+    return (tmp);
 }
 
 t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type)
