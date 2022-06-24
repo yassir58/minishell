@@ -40,13 +40,16 @@ int redirect_type(lexer_node_t *node)
 void    print_commands(t_cmd *list)
 {
     t_cmd *tmp;
+    int i;
 
     tmp = list;
+    i = 0;
     printf("Commands:\n");
     while (tmp != NULL)
     {
-        printf("Command args: %s\n", tmp->cmd);
+        printf("args[%d]: %s\n", i,tmp->cmd);
         tmp = tmp->next;
+        i++;
     }
 }
 
@@ -58,7 +61,47 @@ void    print_redirects(t_redirect *list)
     printf("Redirections:\n");
     while (tmp != NULL)
     {
-        printf("Redirect file: %s Type: %d Redirect Content: %s\n", tmp->filename, tmp->type, tmp->heredoc_content);
+        printf("File: %s ", tmp->filename);
+        if (tmp->type == APPEND)
+            printf("Type: Append ");
+        else if (tmp->type == HEREDOC)
+            printf("Type: Heredoc ");
+        else if (tmp->type == REDIRIN)
+            printf("Type: Redir Input ");
+        else if (tmp->type == REDIROUT)
+            printf("Type: Redir Output ");
+        if (tmp->heredoc_content)
+            printf("Redirect Content: %s\n", tmp->heredoc_content);
+        else
+            printf("\n");
+        tmp = tmp->next;
+    }
+}
+
+void    print_exec_node(t_exec_node *list)
+{
+    t_exec_node *tmp;
+
+    tmp = list;
+    while (tmp != NULL)
+    {
+        if (tmp->type == CMD_NODE)
+        {
+            printf("===================================\n");
+            printf("CMD NODE\n");
+            if (tmp->builtin)
+                printf("BUILTIN\n");
+            else if (tmp->piped)
+                printf("PIPED\n");
+            print_commands(tmp->cmd->cmds);
+            if (tmp->cmd->redir_list)
+                print_redirects(tmp->cmd->redir_list);
+        }
+        else
+        {
+            printf("===================================\n");
+            printf("PIPE NODE\n");
+        }
         tmp = tmp->next;
     }
 }
@@ -107,20 +150,17 @@ t_exec_node *parse_command(lexer_node_t **node)
             (*node) = (*node)->next->next;
         }
     }
+    // printf("This is not a redirect or a word: %s\n", (*node)->start); 
     if (cmds && (*node))
     {
         if (check_node(*node, "|"))
-        {
             return (new_exec_cmd(command_node(redirects, cmds), TRUE));
-        }
     }
     else if ((*node))
     {
         (*node) = (*node)->next;
         return (new_exec_pipe());
     }
-    print_commands(cmds);
-    print_redirects(redirects);
     return (new_exec_cmd(command_node(redirects, cmds), FALSE));
 }
 
@@ -130,7 +170,7 @@ bool is_builtin(t_cmd_node *cmd)
 
     arg = cmd->cmds->cmd;
     if (!advanced_strcmp(arg, B1) || !advanced_strcmp(arg, B2) || !advanced_strcmp(arg, B3) \
-    || !advanced_strcmp(arg, B4) || !advanced_strcmp(arg, B5) ||!advanced_strcmp(arg, B6) || advanced_strcmp(arg, B7))
+    || !advanced_strcmp(arg, B4) || !advanced_strcmp(arg, B5) ||!advanced_strcmp(arg, B6) || !advanced_strcmp(arg, B7))
         return (true);
     return (false);
 }
@@ -162,6 +202,7 @@ t_exec_node   *parse(lexer_node_t *node)
             }
        }
    }
+   print_exec_node(list);
    return (list);
 }
 
@@ -297,3 +338,5 @@ t_cmd *last_command(t_cmd *lst)
         tmp = tmp->next;
     return (tmp);
 }
+
+
