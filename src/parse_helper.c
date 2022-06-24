@@ -78,6 +78,27 @@ void    print_redirects(t_redirect *list)
     }
 }
 
+void    print_one_node(t_exec_node *node)
+{
+    if (node->type == CMD_NODE)
+    {
+        printf("===================================\n");
+        printf("CMD NODE\n");
+        if (node->builtin)
+            printf("BUILTIN\n");
+        else if (node->piped)
+            printf("PIPED\n");
+        print_commands(node->cmd->cmds);
+        if (node->cmd->redir_list)
+            print_redirects(node->cmd->redir_list);
+    }
+    else
+    {
+        printf("===================================\n");
+        printf("PIPE NODE\n");
+    }
+}
+
 void    print_exec_node(t_exec_node *list)
 {
     t_exec_node *tmp;
@@ -150,7 +171,7 @@ t_exec_node *parse_command(lexer_node_t **node)
             (*node) = (*node)->next->next;
         }
     }
-    // printf("This is not a redirect or a word: %s\n", (*node)->start); 
+    /// Seems that there is a problem with the logic here.
     if (cmds && (*node))
     {
         if (check_node(*node, "|"))
