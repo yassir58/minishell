@@ -106,23 +106,14 @@ void    print_exec_node(t_exec_node *list)
     tmp = list;
     while (tmp != NULL)
     {
-        if (tmp->type == CMD_NODE)
-        {
-            printf("===================================\n");
-            printf("CMD NODE\n");
-            if (tmp->builtin)
-                printf("BUILTIN\n");
-            else if (tmp->piped)
-                printf("PIPED\n");
-            print_commands(tmp->cmd->cmds);
-            if (tmp->cmd->redir_list)
-                print_redirects(tmp->cmd->redir_list);
-        }
-        else
-        {
-            printf("===================================\n");
-            printf("PIPE NODE\n");
-        }
+        printf("===================================\n");
+        if (tmp->builtin)
+            printf("BUILTIN\n");
+        if (tmp->piped)
+            printf("PIPED\n");
+        print_commands(tmp->cmd->cmds);
+        if (tmp->cmd->redir_list)
+            print_redirects(tmp->cmd->redir_list);
         tmp = tmp->next;
     }
 }
@@ -171,16 +162,13 @@ t_exec_node *parse_command(lexer_node_t **node)
             (*node) = (*node)->next->next;
         }
     }
-    /// Seems that there is a problem with the logic here.
     if (cmds && (*node))
     {
         if (check_node(*node, "|"))
+        {
+            (*node) = (*node)->next;
             return (new_exec_cmd(command_node(redirects, cmds), TRUE));
-    }
-    else if ((*node))
-    {
-        (*node) = (*node)->next;
-        return (new_exec_pipe());
+        }
     }
     return (new_exec_cmd(command_node(redirects, cmds), FALSE));
 }
@@ -264,7 +252,7 @@ t_exec_node *last_exec_node(t_exec_node *list)
     t_exec_node *tmp;
 
     tmp = list;
-    if (list)
+    if (!list)
         return (NULL);
     while (tmp->next != NULL)
         tmp = tmp->next;
