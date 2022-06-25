@@ -9,7 +9,7 @@ OBJS=$(addprefix $(SRCDIR), $(SRCS:.c=.o))
 PROGNAME=minishell
 LIBNAME=libft.a
 CFALGS=-Wall -Wextra -Werror -g
-LDFLAGS= -L./libft -lft -L/usr/include  -lreadline 
+LDFLAGS= -L./libft -lft -L/usr/include -lreadline 
 CC=gcc
 
 all:$(PROGNAME)

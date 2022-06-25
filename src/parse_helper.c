@@ -215,21 +215,6 @@ t_exec_node   *parse(lexer_node_t *node)
    return (list);
 }
 
-t_exec_node *new_exec_pipe()
-{
-    t_exec_node *node;
-
-    node = (t_exec_node *)malloc(sizeof(t_exec_node));
-    if (!node)
-        return (NULL);
-    node->type = PIPE_NODE;
-    node->cmd = NULL;
-    node->builtin = FALSE;
-    node->piped = FALSE;
-    node->next = NULL;
-    node->prev = NULL;
-    return (node);
-}
 
 t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped)
 {
@@ -240,7 +225,10 @@ t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped)
         return (NULL);
     node->type = CMD_NODE;
     node->cmd = cmd;
-    node->builtin = is_builtin(cmd);
+    if (node->cmd->cmds)
+        node->builtin = is_builtin(cmd);
+    else
+        node->builtin = NULL;
     node->piped = piped;
     node->next = NULL;
     node->prev = NULL;
