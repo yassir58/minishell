@@ -27,7 +27,11 @@ int cd_function (char *arg, int flag, env_list_t **env_list)
         {
             err = chdir (arg);
             if (err == -1)
+            {
+                err  = check_for_dots (arg, *env_list);
+                if (err == -1)
                     printf ("no such file or directory : %s\n", arg);
+            }
         }
         update_pwd_env (env_list);
     }

@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <stdbool.h>
 #include "../libft/libft.h"
 
 /// defining macros
@@ -20,6 +21,17 @@
 #define OPERATORS ">|<"
 #define TRUE 1
 #define FALSE 0
+
+// Builtings
+
+#define B1 "echo"
+#define B2 "cd"
+#define B3 "pwd"
+#define B4 "export"
+#define B5 "unset"
+#define B6 "env"
+#define B7 "exit"
+
 
 
 typedef struct lexer_node_s
@@ -34,12 +46,79 @@ typedef struct lexer_node_s
 } lexer_node_t;
 
 
+
+typedef enum s_node_type
+{
+    CMD_NODE,
+    PIPE_NODE
+} t_node_type;
+
+
+
+typedef enum s_redir_type 
+{
+    REDIRIN,
+    REDIROUT,
+    APPEND,
+    HEREDOC
+} t_redir_type;
+
+
+
+typedef struct s_redirect 
+{
+    t_redir_type type;
+    char *filename;
+    char *heredoc_content;
+    struct s_redirect *next;
+} t_redirect;
+
+
+
+typedef struct s_cmd {
+    char *cmd;
+    struct s_cmd *next;
+} t_cmd;
+
+
+
+typedef struct s_cmd_node 
+{
+    t_cmd *cmds;
+    t_redirect *redir_list;
+} t_cmd_node;
+
+
+
+typedef struct s_exec_node
+{
+    t_node_type type;
+    t_cmd_node *cmd;
+    bool piped;
+    bool builtin;
+    struct s_exec_node *next;
+    struct s_exec_node *prev;
+} t_exec_node;
+
+
+
 typedef struct env_list_s 
 {
     char *variable_name;
     char *value;
     struct env_list_s *next;
 } env_list_t;
+
+
+typedef struct shell_args_s
+{
+    char *prompt;
+    char *line;
+    int fds[2];
+    env_list_t *env_list;
+    lexer_node_t *lexer_list;
+    t_exec_node *exec_node;
+} shell_args_t;
 
 lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
@@ -74,6 +153,40 @@ char *get_pwd_env (env_list_t *list);
 int update_pwd_env (env_list_t **list);
 char *get_pwd (env_list_t *env_list);
 void echo_function (char *argv[], int argc);
-char *test_cd (lexer_node_t *node, env_list_t *list);
+
+/* ======================= Parser Functions ========================== **/
+
+void        print_commands(t_cmd *list);
+void        add_command(t_cmd **list, t_cmd *cmd);
+t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
+t_cmd       *new_command(char *cmd);
+t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type);
+void    handle_command(lexer_node_t *node);
+t_cmd *last_command(t_cmd *lst);
+t_redirect *last_redirect(t_redirect *lst);
+t_exec_node *parse_command(lexer_node_t **node);
+t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped);
+t_exec_node *new_exec_pipe();
+t_exec_node *last_exec_node(t_exec_node *list);
+t_exec_node   *parse(lexer_node_t *node);
+bool is_builtin(t_cmd_node *cmd);
+t_cmd_node *command_node(t_redirect *redirlist, t_cmd *cmdlist);
+int	advanced_strcmp(char *s1, char *s2);
+
+/* ======================= Helper Functions ========================== **/
+int	    ft_strcmp(const char *s1, const char *s2);
+
+char    *get_next_line(int fd);
 
 #endif
+
+/** 
+ * Node 1
+ * 
+ * 
+ * 
+*/
+
+/* ============================= exection ================================= */
+
+int builtin_routine (shell_args_t *args);

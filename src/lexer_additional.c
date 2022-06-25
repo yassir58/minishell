@@ -61,7 +61,6 @@ lexer_node_t *expand_variables (lexer_node_t *tokens_list)
         (tmp->token == WORD && ft_strchr(tmp->start , '$')))
         {
             res = handle_variables (tmp->start);
-            printf ("%s \n", res);
             free (tmp->start);
             tmp->start = res;
         }

@@ -1,6 +1,6 @@
- #include "../includes/minishell.h"
+#include "../includes/minishell.h"
 
-/*
+
 void print_token (int token)
 {
     if (token == OPERATOR)
@@ -51,74 +51,4 @@ void test_env_list (env_list_t *list)
         tmp = tmp->next;
         free (ptr);
     }
-}
-
-char *test_cd (lexer_node_t *node, env_list_t *list)
-{
-    char *buffer;
-    buffer = NULL;
-    if (node->next)
-    {
-        cd_function (node->next->start, 0, &list);
-        buffer = getcwd (NULL, 0); 
-    }
-    else
-    {
-        cd_function (NULL, 0, &list);
-        buffer = getcwd (NULL, 0); 
-    }
-    return (buffer);
-}
-
-
-*/
-/// testing
-
-
-int main (int argc, char *argv[])
-{
-    char *ping_path = "/bin/ls";
-    char *grep_path = "/bin/echo";
-    int fds[2];
-    int id1;
-    int id2;
-
-    id1 = 0;
-    id2 = 0;
-    char *first_command[5]  = {"ls",  NULL};
-    char *second_command[3] = {"echo", NULL};
-    (void)argv;
-    if (argc > 1)
-    {
-        if (!pipe (fds))
-        {
-            id1 = fork ();
-            if (id1 == 0)
-            {
-                close (fds[0]);
-                printf ("process : %d writes \n", getpid());
-                dup2 (fds[1], STDOUT_FILENO);
-                close (fds[1]);
-                execve (ping_path, first_command, NULL);
-                exit (EXIT_SUCCESS);
-            }
-            else
-            {
-                id2 = fork ();
-                if (id2 == 0)
-                {
-                    dup2 (fds[0], STDIN_FILENO);
-                    close (fds[0]);
-                    close (fds[1]);
-                    execve (grep_path, second_command, NULL);
-                    exit (EXIT_SUCCESS);
-                }
-            }
-        }
-    }
-    close (fds[0]);
-    close (fds[1]);
-    waitpid (id1,  NULL, 0);
-    waitpid (id2,   NULL, 0);
-    return (0);
 }
