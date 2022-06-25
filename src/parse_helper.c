@@ -177,6 +177,8 @@ bool is_builtin(t_cmd_node *cmd)
 {
     char *arg;
 
+    printf("Arguments:\n");
+    display(get_commands(cmd->cmds));
     arg = cmd->cmds->cmd;
     if (!advanced_strcmp(arg, B1) || !advanced_strcmp(arg, B2) || !advanced_strcmp(arg, B3) \
     || !advanced_strcmp(arg, B4) || !advanced_strcmp(arg, B5) ||!advanced_strcmp(arg, B6) || !advanced_strcmp(arg, B7))
@@ -215,21 +217,21 @@ t_exec_node   *parse(lexer_node_t *node)
    return (list);
 }
 
-t_exec_node *new_exec_pipe()
-{
-    t_exec_node *node;
+// t_exec_node *new_exec_pipe()
+// {
+//     t_exec_node *node;
 
-    node = (t_exec_node *)malloc(sizeof(t_exec_node));
-    if (!node)
-        return (NULL);
-    node->type = PIPE_NODE;
-    node->cmd = NULL;
-    node->builtin = FALSE;
-    node->piped = FALSE;
-    node->next = NULL;
-    node->prev = NULL;
-    return (node);
-}
+//     node = (t_exec_node *)malloc(sizeof(t_exec_node));
+//     if (!node)
+//         return (NULL);
+//     node->type = PIPE_NODE;
+//     node->cmd = NULL;
+//     node->builtin = FALSE;
+//     node->piped = FALSE;
+//     node->next = NULL;
+//     node->prev = NULL;
+//     return (node);
+// }
 
 t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped)
 {
@@ -240,7 +242,10 @@ t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped)
         return (NULL);
     node->type = CMD_NODE;
     node->cmd = cmd;
-    node->builtin = is_builtin(cmd);
+    if (node->cmd->cmds)
+        node->builtin = is_builtin(cmd);
+    else
+        node->builtin = NULL;
     node->piped = piped;
     node->next = NULL;
     node->prev = NULL;
@@ -348,4 +353,63 @@ t_cmd *last_command(t_cmd *lst)
     return (tmp);
 }
 
+int commands_number(t_cmd *list)
+{
+    t_cmd   *tmp;
+    int     i;
 
+    i = 0;
+    tmp = list;
+    if (!list)
+        return (0);
+    while (tmp)
+    {
+        tmp = tmp->next;
+        i++;
+    }
+    return (i);
+}
+
+char    **get_commands(t_cmd *cmds)
+{
+    t_cmd *tmp;
+    int i;
+    char **commands;
+
+    i = 0;
+    tmp = cmds;
+    commands = (char **)malloc(sizeof(char *) * (commands_number(cmds) + 1));
+    if (!commands)
+        return (NULL);
+    while (tmp)
+    {
+        commands[i++] = tmp->cmd;
+        tmp = tmp->next;
+    }
+    commands[i] = NULL;
+    return (commands);
+}
+
+int number_of_el(char **cmds)
+{
+    int i;
+
+    i = 0;
+    while (cmds[i] != NULL)
+        i++;
+    return (i);
+}
+
+void    display(char **cmds)
+{
+    int i;
+    int number;
+
+    i = 0;
+    number = number_of_el(cmds);
+    while (i < number)
+    {
+        printf("%s\n", cmds[i]);
+        i++;
+    }
+}

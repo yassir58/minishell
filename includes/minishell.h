@@ -148,7 +148,8 @@ int	advanced_strcmp(char *s1, char *s2);
 
 /* ======================= Helper Functions ========================== **/
 int	    ft_strcmp(const char *s1, const char *s2);
-
+void    display(char **cmds);
+char    **get_commands(t_cmd *cmds);
 char    *get_next_line(int fd);
 
 #endif
