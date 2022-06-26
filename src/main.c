@@ -14,8 +14,9 @@ int main (int argc ,char *argv[], char *env[])
         args->line = readline (args->prompt);
         args->lexer_list = lexer (args->line);
         check_word (args->lexer_list);
+        syntax_validation (args->lexer_list);
         args->exec_node = parse (args->lexer_list);
-        builtin_routine (args);
+        //builtin_routine (args);
         args->prompt = ft_strjoin (get_pwd (args->env_list), "$");
         printf ("pwd:%s\n", buffer);
         free (args->line);
