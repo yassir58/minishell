@@ -61,7 +61,7 @@ void    print_redirects(t_redirect *list)
     printf("Redirections:\n");
     while (tmp != NULL)
     {
-        printf("File: %s ", tmp->filename);
+        printf("File: %s ", tmp->filenames[0]);
         if (tmp->type == APPEND)
             printf("Type: Append ");
         else if (tmp->type == HEREDOC)
@@ -80,8 +80,6 @@ void    print_redirects(t_redirect *list)
 
 void    print_one_node(t_exec_node *node)
 {
-    if (node->type == CMD_NODE)
-    {
         printf("===================================\n");
         printf("CMD NODE\n");
         if (node->builtin)
@@ -91,12 +89,6 @@ void    print_one_node(t_exec_node *node)
         print_commands(node->cmd->cmds);
         if (node->cmd->redir_list)
             print_redirects(node->cmd->redir_list);
-    }
-    else
-    {
-        printf("===================================\n");
-        printf("PIPE NODE\n");
-    }
 }
 
 void    print_exec_node(t_exec_node *list)
@@ -125,7 +117,7 @@ void    handle_heredoc(t_redirect *node)
     input = readline("heredoc>");
     while (input != NULL)
     {
-        if (ft_strcmp(input, node->filename))
+        if (ft_strcmp(input, node->filenames[0]))
         {
             node->heredoc_content = ft_strjoin(node->heredoc_content, input);
             node->heredoc_content = ft_strjoin(node->heredoc_content, "\n");
@@ -135,6 +127,42 @@ void    handle_heredoc(t_redirect *node)
         input = readline("heredoc>");
     }
 }
+
+int     count_filenames(lexer_node_t *node)
+{
+    int i;
+
+    i = 0;
+    while (node->token != OPERATOR)
+    {
+        i += 1;
+        node = node->next;
+    }
+    return (i);
+}
+
+char   **filenames_table(lexer_node_t **node, int files)
+{
+    int i;
+    char **filenames;
+
+    i = 0;
+    filenames = (char **)malloc(sizeof(char *) * (files + 1));
+    if (!filenames)
+        return (NULL);
+    while (i < files)
+    {
+        filenames[i++] = ft_strdup((*node)->start);
+        (*node) = (*node)->next;
+    }
+    filenames[i] = NULL;
+    return (filenames);
+}
+
+// void    handle_redirect_input(lexer_node_t **node, t_redirect *redirects)
+// {
+
+// }
 
 t_exec_node *parse_command(lexer_node_t **node)
 {
@@ -156,7 +184,14 @@ t_exec_node *parse_command(lexer_node_t **node)
         }
         if ((*node) && check_redirect((*node)))
         {
-            tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
+            if (redirect_type((*node)) == REDIRIN)
+            {
+                printf("The type of this redirection is redir in\n");
+                tmp = add_redirect(&redirects, new_redirect(filenames_table((node), count_filenames((*node))), NULL ,redirect_type((*node))));
+            }
+            else
+                tmp = add_redirect(&redirects, new_redirect(filenames_table(&(*node)->next, 1), NULL ,redirect_type((*node))));
+            // The value that should be passed as the node should be changed here from node to node->next.
             if (redirect_type((*node)) == HEREDOC)
                 handle_heredoc(tmp);
             (*node) = (*node)->next->next;
@@ -177,8 +212,9 @@ bool is_builtin(t_cmd_node *cmd)
 {
     char *arg;
 
-    printf("Arguments:\n");
-    display(get_commands(cmd->cmds));
+    // These are the tests for the get_command function.
+    // printf("Arguments:\n");
+    // display(get_commands(cmd->cmds));
     arg = cmd->cmds->cmd;
     if (!advanced_strcmp(arg, B1) || !advanced_strcmp(arg, B2) || !advanced_strcmp(arg, B3) \
     || !advanced_strcmp(arg, B4) || !advanced_strcmp(arg, B5) ||!advanced_strcmp(arg, B6) || !advanced_strcmp(arg, B7))
@@ -264,15 +300,17 @@ t_exec_node *last_exec_node(t_exec_node *list)
     return (tmp);
 }
 
-t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type)
+t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type)
 {
     t_redirect *node;
+    int i;
 
+    i = 0;
     node = (t_redirect *)malloc(sizeof(t_redirect));
     if (!node)
         return (NULL);
     node->type = type;
-    node->filename = name;
+    node->filenames = names;
     node->heredoc_content = heredoc;
     node->next = NULL;
     return (node);

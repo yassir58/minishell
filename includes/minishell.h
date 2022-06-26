@@ -60,7 +60,7 @@ typedef enum s_redir_type
 typedef struct s_redirect 
 {
     t_redir_type type;
-    char *filename;
+    char **filenames;
     char *heredoc_content;
     struct s_redirect *next;
 } t_redirect;
@@ -133,7 +133,7 @@ void        print_commands(t_cmd *list);
 void        add_command(t_cmd **list, t_cmd *cmd);
 t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
 t_cmd       *new_command(char *cmd);
-t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type);
+t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type);
 void    handle_command(lexer_node_t *node);
 t_cmd *last_command(t_cmd *lst);
 t_redirect *last_redirect(t_redirect *lst);
