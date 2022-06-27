@@ -3,7 +3,7 @@
 
 int check_node(lexer_node_t *node, char *operator)
 {
-    if (node->token == 0)
+    if (node && node->token == 0)
     {
         if (ft_strcmp(node->start, operator) == 0)
             return (1);
@@ -13,7 +13,7 @@ int check_node(lexer_node_t *node, char *operator)
 
 int check_redirect(lexer_node_t *node)
 {
-    if (node->token == OPERATOR)
+    if (node && node->token == OPERATOR)
     {
         if (!check_node(node, "|"))
             return (1);
@@ -23,7 +23,7 @@ int check_redirect(lexer_node_t *node)
 
 int redirect_type(lexer_node_t *node)
 {
-    if (node->token == OPERATOR)
+    if (node && node->token == OPERATOR)
     {
         if (check_node(node, "<"))
             return (REDIRIN);
@@ -34,7 +34,7 @@ int redirect_type(lexer_node_t *node)
         else if (check_node(node, "<<"))
             return (HEREDOC);
     }
-    return (0);
+    return (-1);
 }
 
 void    print_commands(t_cmd *list)
@@ -61,7 +61,8 @@ void    print_redirects(t_redirect *list)
     printf("Redirections:\n");
     while (tmp != NULL)
     {
-        printf("File: %s ", tmp->filenames[0]);
+        printf("Files: \n");
+        display(tmp->filenames);
         if (tmp->type == APPEND)
             printf("Type: Append ");
         else if (tmp->type == HEREDOC)
@@ -104,6 +105,7 @@ void    print_exec_node(t_exec_node *list)
         if (tmp->piped)
             printf("PIPED\n");
         print_commands(tmp->cmd->cmds);
+        // display(get_commands(tmp->cmd->cmds));
         if (tmp->cmd->redir_list)
             print_redirects(tmp->cmd->redir_list);
         tmp = tmp->next;
@@ -133,7 +135,7 @@ int     count_filenames(lexer_node_t *node)
     int i;
 
     i = 0;
-    while (node->token != OPERATOR)
+    while (node && node->token != OPERATOR)
     {
         i += 1;
         node = node->next;
@@ -150,10 +152,18 @@ char   **filenames_table(lexer_node_t **node, int files)
     filenames = (char **)malloc(sizeof(char *) * (files + 1));
     if (!filenames)
         return (NULL);
-    while (i < files)
+    if (files == 1)
     {
-        filenames[i++] = ft_strdup((*node)->start);
-        (*node) = (*node)->next;
+        filenames[i++] = ft_strdup((*node)->next->start);
+        (*node) = (*node)->next->next;
+    }
+    else 
+    {
+        while (i < files)
+        {
+            filenames[i++] = ft_strdup((*node)->start);
+            (*node) = (*node)->next;
+        }
     }
     filenames[i] = NULL;
     return (filenames);
@@ -184,17 +194,15 @@ t_exec_node *parse_command(lexer_node_t **node)
         }
         if ((*node) && check_redirect((*node)))
         {
-            if (redirect_type((*node)) == REDIRIN)
+            if ((*node) && redirect_type((*node)) == REDIRIN)
             {
-                printf("The type of this redirection is redir in\n");
-                tmp = add_redirect(&redirects, new_redirect(filenames_table((node), count_filenames((*node))), NULL ,redirect_type((*node))));
+                (*node) = (*node)->next;
+                tmp = add_redirect(&redirects, new_redirect(filenames_table(node, count_filenames((*node))), NULL , REDIRIN));
             }
             else
-                tmp = add_redirect(&redirects, new_redirect(filenames_table(&(*node)->next, 1), NULL ,redirect_type((*node))));
-            // The value that should be passed as the node should be changed here from node to node->next.
-            if (redirect_type((*node)) == HEREDOC)
+                tmp = add_redirect(&redirects, new_redirect(filenames_table(node, 1), NULL ,redirect_type((*node))));
+            if ((*node) && redirect_type((*node)) == HEREDOC)
                 handle_heredoc(tmp);
-            (*node) = (*node)->next->next;
         }
     }
     if (cmds && (*node))
@@ -421,7 +429,7 @@ char    **get_commands(t_cmd *cmds)
         return (NULL);
     while (tmp)
     {
-        commands[i++] = tmp->cmd;
+        commands[i++] = ft_strdup(tmp->cmd);
         tmp = tmp->next;
     }
     commands[i] = NULL;
@@ -447,7 +455,7 @@ void    display(char **cmds)
     number = number_of_el(cmds);
     while (i < number)
     {
-        printf("%s\n", cmds[i]);
+        printf("File[%d]: %s\n",i,cmds[i]);
         i++;
     }
 }

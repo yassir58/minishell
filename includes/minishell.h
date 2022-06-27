@@ -22,8 +22,7 @@
 #define TRUE 1
 #define FALSE 0
 
-// Builtings
-
+// Builtins
 #define B1 "echo"
 #define B2 "cd"
 #define B3 "pwd"
