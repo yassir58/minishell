@@ -1,15 +1,16 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <string.h>
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdbool.h>
-#include "../libft/libft.h"
+# include <unistd.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <string.h>
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdbool.h>
+# include "../libft/libft.h"
+# include <paths.h>
 
 /// defining macros
 #define OPERATOR 0
@@ -156,6 +157,9 @@ void echo_function (char *argv[], int argc);
 void validate_first_node (lexer_node_t *node);
 void invalid_operator (lexer_node_t *node);
 void validate_last_node (lexer_node_t *node);
+void validate_first_node (lexer_node_t *node);
+void invalid_operator (lexer_node_t *node);
+void validate_last_node (lexer_node_t *node);
 
 /* ======================= Parser Functions ========================== **/
 
@@ -175,7 +179,15 @@ t_exec_node   *parse(lexer_node_t *node);
 bool is_builtin(t_cmd_node *cmd);
 t_cmd_node *command_node(t_redirect *redirlist, t_cmd *cmdlist);
 int	advanced_strcmp(char *s1, char *s2);
-
+int commands_number(t_cmd *list);
+char    **get_commands(t_cmd *cmds);
+int number_of_el(char **cmds);
+void    display(char **cmds);
+void    print_exec_node(t_exec_node *list);
+void handle_nonbuiltin (shell_args_t *args, t_exec_node *exec_node);
+void handle_builtin (shell_args_t *args, t_exec_node *exec_node);
+int execution_function (shell_args_t *args);
+int builtin_routine (shell_args_t *args, t_exec_node *exec_node);
 /* ======================= Helper Functions ========================== **/
 int	    ft_strcmp(const char *s1, const char *s2);
 
@@ -192,4 +204,7 @@ char    *get_next_line(int fd);
 
 /* ============================= exection ================================= */
 
-int builtin_routine (shell_args_t *args);
+///////// testing ////////
+void test_exec_node (t_exec_node *node);
+char	*check_access(char *command);
+char	**paths_table(char *path);

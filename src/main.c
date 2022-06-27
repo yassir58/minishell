@@ -9,6 +9,7 @@ int main (int argc ,char *argv[], char *env[])
     args->env_list = get_env_list (env);
     args->prompt = ft_strjoin (get_pwd (args->env_list), "$");
     args->line = "";
+    args->fds = pipe ();
     while (strcmp(args->line, "quit") != 0)
     {
         args->line = readline (args->prompt);
@@ -16,9 +17,8 @@ int main (int argc ,char *argv[], char *env[])
         check_word (args->lexer_list);
         syntax_validation (args->lexer_list);
         args->exec_node = parse (args->lexer_list);
-        //builtin_routine (args);
+        execution_function (args);
         args->prompt = ft_strjoin (get_pwd (args->env_list), "$");
-        printf ("pwd:%s\n", buffer);
         free (args->line);
     }
     return (0);

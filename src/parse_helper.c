@@ -3,9 +3,9 @@
 
 int check_node(lexer_node_t *node, char *operator)
 {
-    if (node->token == 0)
+    if (node->token == OPERATOR)
     {
-        if (ft_strcmp(node->start, operator) == 0)
+        if (!ft_strcmp(node->start, operator))
             return (1);
     }
     return (0);
@@ -35,87 +35,6 @@ int redirect_type(lexer_node_t *node)
             return (HEREDOC);
     }
     return (0);
-}
-
-void    print_commands(t_cmd *list)
-{
-    t_cmd *tmp;
-    int i;
-
-    tmp = list;
-    i = 0;
-    printf("Commands:\n");
-    while (tmp != NULL)
-    {
-        printf("args[%d]: %s\n", i,tmp->cmd);
-        tmp = tmp->next;
-        i++;
-    }
-}
-
-void    print_redirects(t_redirect *list)
-{
-    t_redirect *tmp;
-
-    tmp = list;
-    printf("Redirections:\n");
-    while (tmp != NULL)
-    {
-        printf("File: %s ", tmp->filename);
-        if (tmp->type == APPEND)
-            printf("Type: Append ");
-        else if (tmp->type == HEREDOC)
-            printf("Type: Heredoc ");
-        else if (tmp->type == REDIRIN)
-            printf("Type: Redir Input ");
-        else if (tmp->type == REDIROUT)
-            printf("Type: Redir Output ");
-        if (tmp->heredoc_content)
-            printf("Redirect Content: %s\n", tmp->heredoc_content);
-        else
-            printf("\n");
-        tmp = tmp->next;
-    }
-}
-
-void    print_one_node(t_exec_node *node)
-{
-    if (node->type == CMD_NODE)
-    {
-        printf("===================================\n");
-        printf("CMD NODE\n");
-        if (node->builtin)
-            printf("BUILTIN\n");
-        else if (node->piped)
-            printf("PIPED\n");
-        print_commands(node->cmd->cmds);
-        if (node->cmd->redir_list)
-            print_redirects(node->cmd->redir_list);
-    }
-    else
-    {
-        printf("===================================\n");
-        printf("PIPE NODE\n");
-    }
-}
-
-void    print_exec_node(t_exec_node *list)
-{
-    t_exec_node *tmp;
-
-    tmp = list;
-    while (tmp != NULL)
-    {
-        printf("===================================\n");
-        if (tmp->builtin)
-            printf("BUILTIN\n");
-        if (tmp->piped)
-            printf("PIPED\n");
-        print_commands(tmp->cmd->cmds);
-        if (tmp->cmd->redir_list)
-            print_redirects(tmp->cmd->redir_list);
-        tmp = tmp->next;
-    }
 }
 
 void    handle_heredoc(t_redirect *node)
@@ -177,6 +96,8 @@ bool is_builtin(t_cmd_node *cmd)
 {
     char *arg;
 
+    // printf("Arguments:\n");
+    // display(get_commands(cmd->cmds));
     arg = cmd->cmds->cmd;
     if (!advanced_strcmp(arg, B1) || !advanced_strcmp(arg, B2) || !advanced_strcmp(arg, B3) \
     || !advanced_strcmp(arg, B4) || !advanced_strcmp(arg, B5) ||!advanced_strcmp(arg, B6) || !advanced_strcmp(arg, B7))
@@ -211,10 +132,25 @@ t_exec_node   *parse(lexer_node_t *node)
             }
        }
    }
-   print_exec_node(list);
+//    print_exec_node(list);
    return (list);
 }
 
+// t_exec_node *new_exec_pipe()
+// {
+//     t_exec_node *node;
+
+//     node = (t_exec_node *)malloc(sizeof(t_exec_node));
+//     if (!node)
+//         return (NULL);
+//     node->type = PIPE_NODE;
+//     node->cmd = NULL;
+//     node->builtin = FALSE;
+//     node->piped = FALSE;
+//     node->next = NULL;
+//     node->prev = NULL;
+//     return (node);
+// }
 
 t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped)
 {
@@ -336,4 +272,63 @@ t_cmd *last_command(t_cmd *lst)
     return (tmp);
 }
 
+int commands_number(t_cmd *list)
+{
+    t_cmd   *tmp;
+    int     i;
 
+    i = 0;
+    tmp = list;
+    if (!list)
+        return (0);
+    while (tmp)
+    {
+        tmp = tmp->next;
+        i++;
+    }
+    return (i);
+}
+
+char    **get_commands(t_cmd *cmds)
+{
+    t_cmd *tmp;
+    int i;
+    char **commands;
+
+    i = 0;
+    tmp = cmds;
+    commands = (char **)malloc(sizeof(char *) * (commands_number(cmds) + 1));
+    if (!commands)
+        return (NULL);
+    while (tmp)
+    {
+        commands[i++] = ft_strdup(tmp->cmd);
+        tmp = tmp->next;
+    }
+    commands[i] = NULL;
+    return (commands);
+}
+
+int number_of_el(char **cmds)
+{
+    int i;
+
+    i = 0;
+    while (cmds[i] != NULL)
+        i++;
+    return (i);
+}
+
+void    display(char **cmds)
+{
+    int i;
+    int number;
+
+    i = 0;
+    number = number_of_el(cmds);
+    while (i < number)
+    {
+        printf("%s\n", cmds[i]);
+        i++;
+    }
+}
