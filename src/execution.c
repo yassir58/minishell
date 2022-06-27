@@ -7,6 +7,7 @@ int execution_function (shell_args_t *args)
     int status;
     id = 0;
     tmp = args->exec_node;
+    handle_piped_command (args);
     while (tmp)
     {
         if (tmp->builtin == true)
@@ -53,8 +54,6 @@ int builtin_routine (shell_args_t *args, t_exec_node *exec_node)
 
 void handle_builtin (shell_args_t *args, t_exec_node *exec_node)
 {
-     if (args->exec_node->piped)
-        printf ("<====== piped builtin ========>");
     builtin_routine (args, exec_node);   
 }
 
@@ -68,6 +67,7 @@ void handle_nonbuiltin (shell_args_t *args, t_exec_node *exec_node)
     if (path != NULL)
     {
         execve (path, command, NULL);
+        close (exec_node->write_end);
         free_tab (command);
         exit (EXIT_SUCCESS);
     }

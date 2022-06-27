@@ -99,8 +99,9 @@ typedef struct s_exec_node
     bool builtin;
     struct s_exec_node *next;
     struct s_exec_node *prev;
+    int read_end ;
+    int write_end ;
 } t_exec_node;
-
 
 
 typedef struct env_list_s 
@@ -208,3 +209,8 @@ char    *get_next_line(int fd);
 void test_exec_node (t_exec_node *node);
 char	*check_access(char *command);
 char	**paths_table(char *path);
+
+/// pipes
+void link_pipes (shell_args_t *args);
+void handle_piped_command (shell_args_t *args);
+void init_fds (shell_args_t *args);
