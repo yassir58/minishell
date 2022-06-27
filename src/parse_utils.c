@@ -1,15 +1,4 @@
-#include <stdio.h>
-
-
-int	ft_strlen(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
+#include "../includes/minishell.h"
 
 /**
  * @brief This function will compare two strings regardless if one of the strings is
@@ -34,4 +23,54 @@ int	advanced_strcmp(char *s1, char *s2)
 			return (1);
 	}
 	return (0);
+}
+
+bool is_builtin(t_cmd_node *cmd)
+{
+    char *arg;
+
+    arg = cmd->cmds->cmd;
+    if (!advanced_strcmp(arg, B1) || !advanced_strcmp(arg, B2) || !advanced_strcmp(arg, B3) \
+    || !advanced_strcmp(arg, B4) || !advanced_strcmp(arg, B5) ||!advanced_strcmp(arg, B6) || !advanced_strcmp(arg, B7))
+        return (true);
+    return (false);
+}
+
+int     count_filenames(lexer_node_t *node)
+{
+    int i;
+
+    i = 0;
+    while (node && node->token != OPERATOR)
+    {
+        i += 1;
+        node = node->next;
+    }
+    return (i);
+}
+
+char   **filenames_table(lexer_node_t **node, int files)
+{
+    int i;
+    char **filenames;
+
+    i = 0;
+    filenames = (char **)malloc(sizeof(char *) * (files + 1));
+    if (!filenames)
+        return (NULL);
+    if (files == 1)
+    {
+        filenames[i++] = ft_strdup((*node)->next->start);
+        (*node) = (*node)->next->next;
+    }
+    else 
+    {
+        while (i < files)
+        {
+            filenames[i++] = ft_strdup((*node)->start);
+            (*node) = (*node)->next;
+        }
+    }
+    filenames[i] = NULL;
+    return (filenames);
 }
