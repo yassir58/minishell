@@ -129,27 +129,48 @@ void echo_function (char *argv[], int argc);
 /* ======================= Parser Functions ========================== **/
 
 void        print_commands(t_cmd *list);
-void        add_command(t_cmd **list, t_cmd *cmd);
-t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
-t_cmd       *new_command(char *cmd);
-t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type);
-void    handle_command(lexer_node_t *node);
-t_cmd *last_command(t_cmd *lst);
-t_redirect *last_redirect(t_redirect *lst);
-t_exec_node *parse_command(lexer_node_t **node);
-t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped);
-t_exec_node *new_exec_pipe();
-t_exec_node *last_exec_node(t_exec_node *list);
-t_exec_node   *parse(lexer_node_t *node);
-bool is_builtin(t_cmd_node *cmd);
-t_cmd_node *command_node(t_redirect *redirlist, t_cmd *cmdlist);
-int	advanced_strcmp(char *s1, char *s2);
+
 
 /* ======================= Helper Functions ========================== **/
+
+// - Function that should be added to the libft library.
 int	    ft_strcmp(const char *s1, const char *s2);
-void    display(char **cmds);
+
+// - Function related to string convesion.
+int     commands_number(t_cmd *list);
 char    **get_commands(t_cmd *cmds);
-char    *get_next_line(int fd);
+int     number_of_el(char **cmds);
+void    display(char **cmds);
+
+// - Function related to redirection lists.
+t_redirect *last_redirect(t_redirect *lst);
+t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
+t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type);
+
+// - Function realted to commands lists.
+void        add_command(t_cmd **list, t_cmd *cmd);
+t_cmd       *new_command(char *cmd);
+t_cmd       *last_command(t_cmd *lst);
+t_cmd_node *command_node(t_redirect *redirlist, t_cmd *cmdlist);
+
+// - Functions related to parsing core.
+t_exec_node *parse(lexer_node_t *node);
+t_exec_node *parse_command(lexer_node_t **node);
+
+// - Functions related to execution node.
+t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped);
+t_exec_node *last_exec_node(t_exec_node *list);
+
+// - Functions can be used as utility.
+bool is_builtin(t_cmd_node *cmd);
+int	advanced_strcmp(char *s1, char *s2);
+int     count_filenames(lexer_node_t *node);
+char   **filenames_table(lexer_node_t **node, int files);
+
+// - Functions can be used as helpers.
+int check_node(lexer_node_t *node, char *operator);
+int check_redirect(lexer_node_t *node);
+int redirect_type(lexer_node_t *node);
 
 #endif
 
