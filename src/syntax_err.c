@@ -31,7 +31,6 @@ void syntax_validation (lexer_node_t *node)
     }
 }
 
-
 void validate_first_node (lexer_node_t *node)
 {
     if (node->token == OPERATOR)
@@ -42,7 +41,6 @@ void validate_first_node (lexer_node_t *node)
             syntax_error (node);
     }
 }
-
 
 void invalid_operator (lexer_node_t *node)
 {
