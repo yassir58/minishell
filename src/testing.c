@@ -32,107 +32,95 @@ void test_env_list (env_list_t *list)
     env_list_t *tmp;
     env_list_t *ptr;
 
-
     tmp = list;
     while (tmp)
     {
-        if (!strcmp (tmp->variable_name, "PWD") || !strcmp (tmp->variable_name, "OLDPWD"))
-        {
-            printf ("{name:%s}\n", tmp->variable_name);
-            printf ("{value:%s}\n", tmp->value);
-        }
-        tmp = tmp->next;
-    }
-    tmp = list;
-    while (tmp)
-    {
-        ptr = tmp;
-        tmp = tmp->next;
-        free (ptr);
-    }
-}
-
-void    print_commands(t_cmd *list)
-{
-    t_cmd *tmp;
-    int i;
-
-    tmp = list;
-    i = 0;
-    printf("Commands:\n");
-    while (tmp != NULL)
-    {
-        printf("args[%d]: %s\n", i,tmp->cmd);
-        tmp = tmp->next;
-        i++;
-    }
-}
-
-void    print_redirects(t_redirect *list)
-{
-    t_redirect *tmp;
-
-    tmp = list;
-    printf("Redirections:\n");
-    while (tmp != NULL)
-    {
-        printf("File: %s ", tmp->filename);
-        if (tmp->type == APPEND)
-            printf("Type: Append ");
-        else if (tmp->type == HEREDOC)
-            printf("Type: Heredoc ");
-        else if (tmp->type == REDIRIN)
-            printf("Type: Redir Input ");
-        else if (tmp->type == REDIROUT)
-            printf("Type: Redir Output ");
-        if (tmp->heredoc_content)
-            printf("Redirect Content: %s\n", tmp->heredoc_content);
-        else
-            printf("\n");
+        printf ("%s=%s\n", tmp->variable_name, tmp->value);
         tmp = tmp->next;
     }
 }
 
+// void    print_commands(t_cmd *list)
+// {
+//     t_cmd *tmp;
+//     int i;
 
-void    print_one_node(t_exec_node *node)
-{
-    if (node->type == CMD_NODE)
-    {
-        printf("===================================\n");
-        printf("CMD NODE\n");
-        if (node->builtin)
-            printf("BUILTIN\n");
-        else if (node->piped)
-            printf("PIPED\n");
-        print_commands(node->cmd->cmds);
-        if (node->cmd->redir_list)
-            print_redirects(node->cmd->redir_list);
-    }
-    else
-    {
-        printf("===================================\n");
-        printf("PIPE NODE\n");
-    }
-}
+//     tmp = list;
+//     i = 0;
+//     printf("Commands:\n");
+//     while (tmp != NULL)
+//     {
+//         printf("args[%d]: %s\n", i,tmp->cmd);
+//         tmp = tmp->next;
+//         i++;
+//     }
+// }
 
-void    print_exec_node(t_exec_node *list)
-{
-    t_exec_node *tmp;
+// void    print_redirects(t_redirect *list)
+// {
+//     t_redirect *tmp;
 
-    tmp = list;
-    while (tmp != NULL)
-    {
-        printf("===================================\n");
-        if (tmp->builtin)
-            printf("BUILTIN\n");
-        if (tmp->piped)
-            printf("PIPED\n");
-        print_commands(tmp->cmd->cmds);
-        if (tmp->cmd->redir_list)
-            print_redirects(tmp->cmd->redir_list);
-        tmp = tmp->next;
-    }
-}
+//     tmp = list;
+//     printf("Redirections:\n");
+//     while (tmp != NULL)
+//     {
+//         printf("File: %s ", tmp->filename);
+//         if (tmp->type == APPEND)
+//             printf("Type: Append ");
+//         else if (tmp->type == HEREDOC)
+//             printf("Type: Heredoc ");
+//         else if (tmp->type == REDIRIN)
+//             printf("Type: Redir Input ");
+//         else if (tmp->type == REDIROUT)
+//             printf("Type: Redir Output ");
+//         if (tmp->heredoc_content)
+//             printf("Redirect Content: %s\n", tmp->heredoc_content);
+//         else
+//             printf("\n");
+//         tmp = tmp->next;
+//     }
+// }
+
+
+// void    print_one_node(t_exec_node *node)
+// {
+//     if (node->type == CMD_NODE)
+//     {
+//         printf("===================================\n");
+//         printf("CMD NODE\n");
+//         if (node->builtin)
+//             printf("BUILTIN\n");
+//         else if (node->piped)
+//             printf("PIPED\n");
+//         print_commands(node->cmd->cmds);
+//         if (node->cmd->redir_list)
+//             print_redirects(node->cmd->redir_list);
+//     }
+//     else
+//     {
+//         printf("===================================\n");
+//         printf("PIPE NODE\n");
+//     }
+// }
+
+// void    print_exec_node(t_exec_node *list)
+// {
+//     t_exec_node *tmp;
+
+//     tmp = list;
+//     while (tmp != NULL)
+//     {
+//         printf("===================================\n");
+//         if (tmp->builtin)
+//             printf("BUILTIN\n");
+//         if (tmp->piped)
+//             printf("PIPED\n");
+//         print_commands(tmp->cmd->cmds);
+//         if (tmp->cmd->redir_list)
+//             print_redirects(tmp->cmd->redir_list);
+//         tmp = tmp->next;
+//     }
+// }
 
 void test_exec_node (t_exec_node *node)
 {

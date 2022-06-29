@@ -1,7 +1,6 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
 
-
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
@@ -28,16 +27,6 @@
 
 // Builtings
 
-#define B1 "echo"
-#define B2 "cd"
-#define B3 "pwd"
-#define B4 "export"
-#define B5 "unset"
-#define B6 "env"
-#define B7 "exit"
-
-
-// Builtins
 #define B1 "echo"
 #define B2 "cd"
 #define B3 "pwd"
@@ -100,66 +89,12 @@ typedef struct s_exec_node
     struct s_exec_node *prev;
 } t_exec_node;
 
-
-typedef enum s_node_type
-{
-    CMD_NODE,
-    PIPE_NODE
-} t_node_type;
-
-
-
-typedef enum s_redir_type 
-{
-    REDIRIN,
-    REDIROUT,
-    APPEND,
-    HEREDOC
-} t_redir_type;
-
-typedef struct s_redirect 
-{
-    t_redir_type type;
-    char *filename;
-    char *heredoc_content;
-    struct s_redirect *next;
-} t_redirect;
-
-
-typedef struct s_cmd {
-    char *cmd;
-    struct s_cmd *next;
-} t_cmd;
-
-
-
-typedef struct s_cmd_node 
-{
-    t_cmd *cmds;
-    t_redirect *redir_list;
-} t_cmd_node;
-
-
-
-typedef struct s_exec_node
-{
-    t_node_type type;
-    t_cmd_node *cmd;
-    bool piped;
-    bool builtin;
-    struct s_exec_node *next;
-    struct s_exec_node *prev;
-    int *pipe;
-} t_exec_node;
-
-
 typedef struct env_list_s 
 {
     char *variable_name;
     char *value;
     struct env_list_s *next;
 } env_list_t;
-
 
 typedef struct shell_args_s
 {
@@ -218,7 +153,7 @@ void        print_commands(t_cmd *list);
 void        add_command(t_cmd **list, t_cmd *cmd);
 t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
 t_cmd       *new_command(char *cmd);
-t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type);
+t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type);
 void    handle_command(lexer_node_t *node);
 t_cmd *last_command(t_cmd *lst);
 t_redirect *last_redirect(t_redirect *lst);
@@ -245,14 +180,6 @@ int	    ft_strcmp(const char *s1, const char *s2);
 
 char    *get_next_line(int fd);
 
-#endif
-
-/** 
- * Node 1
- * 
- * 
- * 
-*/
 
 /* ============================= exection ================================= */
 
@@ -266,12 +193,6 @@ void print_fd_table (shell_args_t *args);
 /* ======================= Parser Functions ========================== **/
 
 void        print_commands(t_cmd *list);
-
-
-/* ======================= Helper Functions ========================== **/
-
-// - Function that should be added to the libft library.
-int	    ft_strcmp(const char *s1, const char *s2);
 
 // - Function related to string convesion.
 int     commands_number(t_cmd *list);
@@ -313,20 +234,13 @@ int redirect_type(lexer_node_t *node);
 void    print_exec_node(t_exec_node *list);
 void    print_redirects(t_redirect *list);
 void    print_commands(t_cmd *list);
+void    print_env_list (env_list_t *list);
 
 // - Just a testing function.
-char    *prompt(void);
+char    *prompt(char *string);
 
-#endif
 
-/** 
- * Node 1
- * 
- * 
- * 
-*/
-=======
-/// pipes
+
 void link_pipes (shell_args_t *args);
 void handle_piped_command (shell_args_t *args);
 void init_fds (shell_args_t *args);
@@ -339,3 +253,5 @@ int nodes_number (shell_args_t *args);
 void close_fd_table (int **fd_table);
 void link_pipes (shell_args_t *args);
 void exec_command (shell_args_t *args, t_exec_node *exec_node);
+
+#endif

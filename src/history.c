@@ -5,7 +5,7 @@ int     check_space(char *str)
     int i;
 
     i = 0;
-    while (str[i] && ft_isspace(str[i]))
+    while (str[i])
     {
         if (!ft_isspace(str[i]))
             return (1);
@@ -14,20 +14,22 @@ int     check_space(char *str)
     return (0);
 }
 
-char    *prompt(void)
+char    *prompt(char *string)
 {
     char *line;
 
-    line = readline("@minishell>>");
+    line = readline(string);
     if (line)
     {
         if (ft_strlen(line) > 0)
         {
-            if (!check_space(line))
+            if (check_space(line))
                 add_history(line);
             else
-                line = prompt();
+                line = prompt(string);
         }
+        else
+            line = prompt(string);
     }
     else
         exit(1);

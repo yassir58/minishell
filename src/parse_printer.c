@@ -13,7 +13,6 @@ void    print_exec_node(t_exec_node *list)
         if (tmp->piped)
             printf("PIPED\n");
         print_commands(tmp->cmd->cmds);
-        // display(get_commands(tmp->cmd->cmds));
         if (tmp->cmd->redir_list)
             print_redirects(tmp->cmd->redir_list);
         tmp = tmp->next;

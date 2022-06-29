@@ -15,3 +15,4 @@ The following list contains the tasks that should be performed by collaborators:
 - [x]  Shell history
 - [ ] Builtins (**unset exit export env**)
 - [ ] $? Expansion
+- [ ] Handle signals
