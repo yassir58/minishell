@@ -2,9 +2,9 @@
 
 int check_node(lexer_node_t *node, char *operator)
 {
-    if (node && node->token == 0)
+    if (node->token == OPERATOR)
     {
-        if (ft_strcmp(node->start, operator) == 0)
+        if (!ft_strcmp(node->start, operator))
             return (1);
     }
     return (0);
@@ -35,8 +35,3 @@ int redirect_type(lexer_node_t *node)
     }
     return (-1);
 }
-
-
-
-
-
