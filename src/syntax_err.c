@@ -1,7 +1,5 @@
 #include "../includes/minishell.h"
 
-
-
 void syntax_error (lexer_node_t *node)
 {
     write (2, "Syntax error \n", 14);
