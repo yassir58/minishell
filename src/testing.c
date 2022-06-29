@@ -149,3 +149,39 @@ void test_exec_node (t_exec_node *node)
         tmp = tmp->next;
     }
 }
+
+
+char *update_prompt (shell_args_t *args)
+{
+    char *pwd;
+    char **tab;
+    char *res;
+    char *elm;
+
+    elm = ":\033[0;31m$ \033[0m";
+    res = NULL;
+    pwd= get_pwd (args->env_list);
+    if (pwd && ft_strcmp (pwd, "/"))
+    {
+        tab = ft_split (pwd, '/');
+        res = tab[number_of_el(tab) - 1];
+        res = ft_strjoin (res, elm);
+        free_tab (tab);
+        return (res);
+    }
+    else
+        return (ft_strjoin(pwd, elm));
+}
+
+void print_fd_table (shell_args_t *args)
+{
+    int i;
+
+    i = 0;
+    while (args->fds_table[i])
+    {
+       
+        printf ("[ %d : %d ]\n", args->fds_table[i][0], args->fds_table[i][1]);    
+        i++;
+    }
+}

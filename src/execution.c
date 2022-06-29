@@ -4,27 +4,78 @@ int execution_function (shell_args_t *args)
 {
     t_exec_node *tmp;
     int id;
-    int status;
-    id = 0;
+    int **fds;
+    int i;
+    int len;
+    int indx;
+
+    i = 0;
+    indx = 0;
+    len = nodes_number(args);
     tmp = args->exec_node;
-    handle_piped_command (args);
-    while (tmp)
-    {
-        if (tmp->builtin == true)
-            handle_builtin (args, tmp);
-        else
+   
+    // if (!tmp->next)
+    // {
+    //     if (tmp->builtin == true)
+    //             builtin_routine (args, tmp);
+    //     else
+    //     {
+    //         id = fork ();
+    //         if (id == 0)
+    //             exec_command (args, tmp);
+    //     }
+    // }
+    // else
+    // {
+        fds = malloc (sizeof (int *) * (len - 1));
+        fds[len - 1] = NULL;
+        while (i < (len - 1))
         {
-            id = fork ();
-            if (!id)
-                handle_nonbuiltin (args, tmp);
-            else 
-            {
-                waitpid (id, &status, 0);
-                printf ("child %d  exited \n", id);
-            }
+            fds[i] = malloc (sizeof (int)  * 2);
+            if (pipe (fds[i]) == -1)
+                printf ("pipe failed \n");
+            i++;
         }
-        tmp = tmp->next;
+    //     while (tmp)
+    //     {
+    //         if (tmp->builtin == true)
+    //             builtin_routine (args, tmp);
+    //         else
+    //         {
+    //             id = fork ();
+    //             if (!id)
+    //             {
+    //                 if (tmp->next)
+    //                 {
+    //                     close (fds[indx][READ_END]);
+    //                     dup2 (fds[indx][WRITE_END], STDOUT_FILENO);
+    //                     close (fds[indx][WRITE_END]);
+    //                 }
+    //                 if (tmp->prev)   
+    //                 {
+    //                     close (fds[indx - 1][WRITE_END]);
+    //                     dup2 (fds[indx - 1][READ_END], STDIN_FILENO) ;
+    //                     close (fds[indx - 1][READ_END]);
+    //                 }
+    //                 exec_command (args, tmp);
+    //                 printf ("indx:%d\n", indx);
+    //             }
+    //         }
+    //         indx++;
+    //         tmp = tmp->next;
+    //     }
+    // }
+    i = 0;
+    while (i < len)
+    {
+        if (close (fds[i][READ_END] == -))
+            printf ("close fd failed !\n");
+        if (close (fds[i][WRITE_END]) == -1)
+            printf ("close fd failed !\n");
+        i++;
     }
+    free_tab (fds);
+    // while (waitpid (-1, NULL, 0) != -1);
     return (0);
 }
 
@@ -57,23 +108,15 @@ void handle_builtin (shell_args_t *args, t_exec_node *exec_node)
     builtin_routine (args, exec_node);   
 }
 
-void handle_nonbuiltin (shell_args_t *args, t_exec_node *exec_node)
+void exec_command (shell_args_t *args, t_exec_node *exec_node)
 {
     char **command;
     char *path;
 
     command = get_commands (exec_node->cmd->cmds);
     path = check_access (command[0]);
-    if (path != NULL)
-    {
-        execve (path, command, NULL);
-        close (exec_node->write_end);
-        free_tab (command);
-        exit (EXIT_SUCCESS);
-    }
+    if (path == NULL)
+        printf ("%s: command not found\n", command[0]);
     else
-    {
-        exit (EXIT_FAILURE);
-        free_tab (command);
-    }
+        execve (path, command, NULL);  
 }
