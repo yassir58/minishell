@@ -210,7 +210,7 @@ void    test_exec_node (t_exec_node *node);
 char	*check_access(char *command);
 char	**paths_table(char *path);
 char    *update_prompt (shell_args_t *args);
-void print_fd_table (shell_args_t *args);
+void print_fd_table (int **fds_table);
 
 /// pipes
 void link_pipes (shell_args_t *args);
@@ -220,8 +220,16 @@ void handle_first_command (shell_args_t *args, t_exec_node *exec_node);
 void handle_last_command (shell_args_t *args, t_exec_node *exec_node);
 void handle_doubly_piped (shell_args_t *args, t_exec_node *exec_node);
 void handle_simple_command (shell_args_t *args, t_exec_node *exec_node);
-int **get_fd_table(shell_args_t *args);
 int nodes_number (shell_args_t *args);
 void close_fd_table (int **fd_table);
-void link_pipes (shell_args_t *args);
+int **open_fd_table (int size , shell_args_t *args);
 void exec_command (shell_args_t *args, t_exec_node *exec_node);
+void close_unused_fds (int **fds_table , int used);
+
+
+//////// general utils
+void *allocation_err (void);
+void open_pipe (int *fd, shell_args_t *args);
+void close_fd (int fd);
+void exit_with_failure (shell_args_t *args, char *err_message);
+int fork_child (shell_args_t *args);

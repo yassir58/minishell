@@ -173,15 +173,15 @@ char *update_prompt (shell_args_t *args)
         return (ft_strjoin(pwd, elm));
 }
 
-void print_fd_table (shell_args_t *args)
+void print_fd_table (int **fds_table)
 {
     int i;
 
     i = 0;
-    while (args->fds_table[i])
+    while (fds_table[i])
     {
        
-        printf ("[ %d : %d ]\n", args->fds_table[i][0], args->fds_table[i][1]);    
+        printf ("[ %d : %d ]\n", fds_table[i][0], fds_table[i][1]);    
         i++;
     }
 }
