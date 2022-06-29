@@ -172,6 +172,14 @@ int check_node(lexer_node_t *node, char *operator);
 int check_redirect(lexer_node_t *node);
 int redirect_type(lexer_node_t *node);
 
+// - Function can be used for printing.
+void    print_exec_node(t_exec_node *list);
+void    print_redirects(t_redirect *list);
+void    print_commands(t_cmd *list);
+
+// - Just a testing function.
+char    *prompt(void);
+
 #endif
 
 /** 

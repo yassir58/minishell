@@ -20,12 +20,11 @@ void    handle_heredoc(t_redirect *node)
 
 t_exec_node *parse_command(lexer_node_t **node)
 {
+    t_redir_type type;
     t_redirect *redirects;
     t_redirect *tmp;
     t_cmd *cmds;
-    int i;
 
-    i = 0;
     cmds = NULL;
     tmp = NULL;
     redirects = NULL;
@@ -44,8 +43,11 @@ t_exec_node *parse_command(lexer_node_t **node)
                 tmp = add_redirect(&redirects, new_redirect(filenames_table(node, count_filenames((*node))), NULL , REDIRIN));
             }
             else
-                tmp = add_redirect(&redirects, new_redirect(filenames_table(node, 1), NULL ,redirect_type((*node))));
-            if ((*node) && redirect_type((*node)) == HEREDOC)
+            {
+                type = redirect_type(*node);
+                tmp = add_redirect(&redirects, new_redirect(filenames_table(node, 1), NULL ,type));
+            }
+            if (type == HEREDOC)
                 handle_heredoc(tmp);
         }
     }
@@ -87,5 +89,6 @@ t_exec_node   *parse(lexer_node_t *node)
             }
        }
    }
+   print_exec_node(list);
    return (list);
 }
