@@ -40,13 +40,27 @@ int **open_fd_table (int size , shell_args_t *args)
 
 void close_unused_fds (int **fds_table , int used)
 {
-
     int i;
 
     i = 0;
     while (fds_table[i])
     {   
         if (i != used)
+        {
+            close_fd (fds_table[i][READ_END]);
+            close_fd (fds_table[i][WRITE_END]);
+        }
+        i++;
+    }
+}
+void close_unused_fds_2 (int **fds_table , int used1, int used2)
+{
+    int i;
+
+    i = 0;
+    while (fds_table[i])
+    {   
+        if (i != used1 && i != used2)
         {
             close_fd (fds_table[i][READ_END]);
             close_fd (fds_table[i][WRITE_END]);

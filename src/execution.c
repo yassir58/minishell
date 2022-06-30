@@ -6,68 +6,39 @@ int execution_function (shell_args_t *args)
     int id;
     int **fds;
     int indx;
+    int err;
 
     indx = 0;
+    err = 0;
     tmp = args->exec_node;
-   
+    printf ("im in \n");
     if (!tmp->next)
     {
-        /// hadnle riderictions
-        if (tmp->builtin == true)
-                builtin_routine (args, tmp);
-        else
+        if (tmp->cmd->cmds  != NULL)
         {
-            id = fork ();
-            if (id == 0)
-                exec_command (args, tmp);
-        }
-    }
-    else
-    {
-        fds =  open_fd_table (nodes_number(args), args);
-        while (tmp)
-        {
-            if (tmp->builtin)
+            if (tmp->builtin == true)
                 builtin_routine (args, tmp);
             else
             {
-                id = fork_child (args);
+                err = 1;
+                id = fork ();
                 if (id == 0)
-                {
-                    if (tmp->prev != NULL && tmp->next != NULL)
-                    {
-                        close_fd (fds[0][WRITE_END]);
-                        close_fd (fds[1][READ_END]);
-                        dup2 (fds[0][READ_END], STDIN_FILENO);
-                        dup2 (fds[1][WRITE_END], STDOUT_FILENO);
-                        close_fd (fds[0][READ_END]);
-                        close_fd (fds[1][WRITE_END]);
-                    }
-                    else if (tmp->next == NULL && tmp->prev != NULL)
-                    {
-                        close_fd (fds[1][WRITE_END]);
-                        close_fd (fds[0][READ_END]);
-                        close_fd (fds[0][WRITE_END]);
-                        dup2 (fds[1][READ_END], STDIN_FILENO);
-                        close_fd (fds[1][READ_END]);
-                    }
-                    else if (tmp->next != NULL && tmp->prev == NULL)
-                    {
-                        close_fd (fds[0][READ_END]);
-                        close_fd (fds[1][WRITE_END]);
-                        close_fd (fds[1][READ_END]);
-                        dup2 (fds[0][WRITE_END], STDOUT_FILENO);
-                        close_fd (fds[0][WRITE_END]);
-                    }
                     exec_command (args, tmp);
-                }
             }
-            indx++;
-            tmp = tmp->next;
         }
-        close_fd_table (fds);
+        else
+            printf ("command is NULL \n");
     }
-    while (waitpid (-1, NULL, 0) != -1);
+    else
+    {
+        printf ("hy this is weired \n");
+        print_exec_node (tmp);
+    }
+    if (err == 1)
+    {
+        while (waitpid (-1, NULL, 0) != -1)
+            printf ("hell \n");
+    }
     return (0);
 }
 

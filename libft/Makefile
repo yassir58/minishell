@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yelatman <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 16:58:49 by yelatman          #+#    #+#              #
-#    Updated: 2021/11/12 18:55:38 by yelatman         ###   ########.fr        #
+#    Updated: 2022/06/30 17:35:50 by yelatman         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC=gcc
 CFLAGS= -Wall -Wextra -Werror
 RM=rm -f
 SRC = ft_atoi.c ft_isalpha.c  ft_itoa.c ft_memmove.c ft_putnbr_fd.c \
-	  ft_strdup.c ft_strlcpy.c ft_strnstr.c  ft_tolower.c \
+	  ft_strdup.c ft_strlcpy.c ft_strnstr.c  ft_tolower.c ft_isspace.c \
       ft_bzero.c ft_isascii.c ft_memchr.c ft_memset.c ft_putstr_fd.c \
 	  ft_striteri.c ft_strlen.c ft_strrchr.c ft_toupper.c \
       ft_calloc.c ft_isdigit.c ft_memcmp.c ft_putchar_fd.c ft_split.c \

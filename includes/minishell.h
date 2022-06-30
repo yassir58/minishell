@@ -69,7 +69,7 @@ typedef enum s_redir_type
 typedef struct s_redirect 
 {
     t_redir_type type;
-    char *filename;
+    char **filenames;
     char *heredoc_content;
     struct s_redirect *next;
 } t_redirect;
@@ -98,7 +98,6 @@ typedef struct s_exec_node
     bool builtin;
     struct s_exec_node *next;
     struct s_exec_node *prev;
-    int *pipe;
 } t_exec_node;
 
 
@@ -160,14 +159,14 @@ void validate_first_node (lexer_node_t *node);
 void invalid_operator (lexer_node_t *node);
 void validate_last_node (lexer_node_t *node);
 void handle_piped_command (shell_args_t *args);
-
+int check_for_valid_option (char *option);
 /* ======================= Parser Functions ========================== **/
 
 void        print_commands(t_cmd *list);
 void        add_command(t_cmd **list, t_cmd *cmd);
 t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
 t_cmd       *new_command(char *cmd);
-t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type);
+t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type);
 void    handle_command(lexer_node_t *node);
 t_cmd *last_command(t_cmd *lst);
 t_redirect *last_redirect(t_redirect *lst);
@@ -189,12 +188,16 @@ void handle_builtin (shell_args_t *args, t_exec_node *exec_node);
 int execution_function (shell_args_t *args);
 int builtin_routine (shell_args_t *args, t_exec_node *exec_node);
 void exec_command (shell_args_t *args, t_exec_node *exec_node);
+int check_node(lexer_node_t *node, char *operator);
+int check_redirect(lexer_node_t *node);
+int redirect_type(lexer_node_t *node);
+char   **filenames_table(lexer_node_t **node, int files);
+int     count_filenames(lexer_node_t *node);
 /* ======================= Helper Functions ========================== **/
 int	    ft_strcmp(const char *s1, const char *s2);
-
 char    *get_next_line(int fd);
 
-#endif
+
 
 /** 
  * Node 1
@@ -211,20 +214,21 @@ char	*check_access(char *command);
 char	**paths_table(char *path);
 char    *update_prompt (shell_args_t *args);
 void print_fd_table (int **fds_table);
+void    print_redirects(t_redirect *list);
 
 /// pipes
 void link_pipes (shell_args_t *args);
 void handle_piped_command (shell_args_t *args);
 void init_fds (shell_args_t *args);
-void handle_first_command (shell_args_t *args, t_exec_node *exec_node);
-void handle_last_command (shell_args_t *args, t_exec_node *exec_node);
-void handle_doubly_piped (shell_args_t *args, t_exec_node *exec_node);
-void handle_simple_command (shell_args_t *args, t_exec_node *exec_node);
+void handle_first_command (int indx, int **fds_table);
+void handle_last_command (int indx, int **fds_table);
+void handle_doubly_piped (int indx, int **fds_table);
 int nodes_number (shell_args_t *args);
 void close_fd_table (int **fd_table);
 int **open_fd_table (int size , shell_args_t *args);
 void exec_command (shell_args_t *args, t_exec_node *exec_node);
 void close_unused_fds (int **fds_table , int used);
+void close_unused_fds_2 (int **fds_table, int used1, int used2);
 
 
 //////// general utils
@@ -233,3 +237,5 @@ void open_pipe (int *fd, shell_args_t *args);
 void close_fd (int fd);
 void exit_with_failure (shell_args_t *args, char *err_message);
 int fork_child (shell_args_t *args);
+
+#endif

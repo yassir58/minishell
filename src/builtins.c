@@ -46,11 +46,11 @@ void echo_function (char *argv[], int argc)
     thrilling = '\n';
     if (argc > 1)
     {
-        if (!strcmp (argv[i], "-n"))
+        if (check_for_valid_option (argv[i]) == 1)
         {
-            thrilling = '\0';
-            while (argv[i] && !strcmp (argv[i], "-n"))
+            while (argv[i] && (check_for_valid_option (argv[i]) == 1))
                 i++;
+            thrilling = '\0';
         }
         while (argv[i])
         {

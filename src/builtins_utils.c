@@ -95,3 +95,19 @@ char *get_pwd (env_list_t *env_list)
         buffer = get_pwd_env (env_list);
     return (buffer);
 }
+
+int check_for_valid_option (char *option)
+{
+    int i;
+
+    i = 0;
+    if (option[i] == '-')
+    {
+        i++;
+        while (option [i] && option[i] == 'n')
+            i++;
+        if (option[i] == 0)
+            return (1);
+    }
+    return (0);
+}

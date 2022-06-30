@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 11:49:12 by yelatman          #+#    #+#             */
-/*   Updated: 2021/11/12 18:55:24 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/06/30 17:39:17 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef LIBFT_H
+
+# ifndef LIBFT_H
 # define LIBFT_H
 
 # include <stdlib.h>
@@ -57,6 +58,7 @@ void	ft_putendl_fd(char const *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 int		ft_islower(int c);
 int		ft_isupper(int c);
+int ft_isspace(char c);
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_front(t_list **lst, t_list *new);
 int		ft_lstsize(t_list *lst);
