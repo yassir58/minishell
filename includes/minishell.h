@@ -63,7 +63,7 @@ typedef enum s_redir_type
 typedef struct s_redirect 
 {
     t_redir_type type;
-    char **filenames;
+    char *filename;
     char *heredoc_content;
     struct s_redirect *next;
 } t_redirect;
@@ -149,27 +149,26 @@ void handle_piped_command (shell_args_t *args);
 
 /* ======================= Parser Functions ========================== **/
 
-void        print_commands(t_cmd *list);
-void        add_command(t_cmd **list, t_cmd *cmd);
-t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
-t_cmd       *new_command(char *cmd);
-t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type);
-void    handle_command(lexer_node_t *node);
-t_cmd *last_command(t_cmd *lst);
-t_redirect *last_redirect(t_redirect *lst);
-t_exec_node *parse_command(lexer_node_t **node);
-t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped);
-t_exec_node *new_exec_pipe();
-t_exec_node *last_exec_node(t_exec_node *list);
-t_exec_node   *parse(lexer_node_t *node);
-bool is_builtin(t_cmd_node *cmd);
-t_cmd_node *command_node(t_redirect *redirlist, t_cmd *cmdlist);
-int	advanced_strcmp(char *s1, char *s2);
-int commands_number(t_cmd *list);
-char    **get_commands(t_cmd *cmds);
-int number_of_el(char **cmds);
-void    display(char **cmds);
-void    print_exec_node(t_exec_node *list);
+// void        print_commands(t_cmd *list);
+// void        add_command(t_cmd **list, t_cmd *cmd);
+// t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
+// t_cmd       *new_command(char *cmd);
+// void    handle_command(lexer_node_t *node);
+// t_cmd *last_command(t_cmd *lst);
+// t_redirect *last_redirect(t_redirect *lst);
+// t_exec_node *parse_command(lexer_node_t **node);
+// t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped);
+// t_exec_node *new_exec_pipe();
+// t_exec_node *last_exec_node(t_exec_node *list);
+// t_exec_node   *parse(lexer_node_t *node);
+// bool is_builtin(t_cmd_node *cmd);
+// t_cmd_node *command_node(t_redirect *redirlist, t_cmd *cmdlist);
+// int	advanced_strcmp(char *s1, char *s2);
+// int commands_number(t_cmd *list);
+// char    **get_commands(t_cmd *cmds);
+// int number_of_el(char **cmds);
+// void    display(char **cmds);
+// void    print_exec_node(t_exec_node *list);
 void handle_nonbuiltin (shell_args_t *args, t_exec_node *exec_node);
 void handle_builtin (shell_args_t *args, t_exec_node *exec_node);
 int execution_function (shell_args_t *args);
@@ -203,9 +202,9 @@ void    display(char **cmds);
 // - Function related to redirection lists.
 t_redirect *last_redirect(t_redirect *lst);
 t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
-t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type);
+t_redirect  *new_redirect(char *name, char *heredoc, t_redir_type type);
 
-// - Function realted to commands lists.
+// - Function related to commands lists.
 void        add_command(t_cmd **list, t_cmd *cmd);
 t_cmd       *new_command(char *cmd);
 t_cmd       *last_command(t_cmd *lst);

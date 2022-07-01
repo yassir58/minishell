@@ -27,8 +27,7 @@ void    print_redirects(t_redirect *list)
     printf("Redirections:\n");
     while (tmp != NULL)
     {
-        printf("Files: \n");
-        display(tmp->filenames);
+        printf("Filename: %s\n", tmp->filename);
         if (tmp->type == APPEND)
             printf("Type: Append ");
         else if (tmp->type == HEREDOC)

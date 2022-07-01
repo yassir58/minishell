@@ -26,7 +26,7 @@ t_redirect  *add_redirect(t_redirect **list, t_redirect *node)
     return (node);
 }
 
-t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type)
+t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type)
 {
     t_redirect *node;
     int i;
@@ -36,7 +36,7 @@ t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type)
     if (!node)
         return (NULL);
     node->type = type;
-    node->filenames = names;
+    node->filename = name;
     node->heredoc_content = heredoc;
     node->next = NULL;
     return (node);
