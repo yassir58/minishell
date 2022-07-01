@@ -7,16 +7,17 @@ void *allocation_err (void)
     return (NULL);
 }
 
-void open_pipe (int *fd, shell_args_t *args)
+int open_pipe (int *fd, shell_args_t *args)
 {
     int err;
 
     err = pipe (fd);
     if (err == -1)
-        exit_with_failure (args, "pipe failed !\n");
+        return (exit_with_failure (args, "pipe failed !\n"));
+    return (err);
 }
 
-void close_fd (int fd)
+int close_fd (int fd)
 {
     int err;
 
@@ -26,11 +27,10 @@ void close_fd (int fd)
 }
 
 
-void exit_with_failure (shell_args_t *args, char *err_message)
+int exit_with_failure (shell_args_t *args, char *err_message)
 {
-    free (args);
     write (2, err_message ,ft_strlen (err_message));
-    exit (EXIT_FAILURE);
+    return (EXIT_FAILURE);
 }
 
 

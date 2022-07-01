@@ -69,7 +69,7 @@ typedef enum s_redir_type
 typedef struct s_redirect 
 {
     t_redir_type type;
-    char **filenames;
+    char *filename;
     char *heredoc_content;
     struct s_redirect *next;
 } t_redirect;
@@ -86,6 +86,8 @@ typedef struct s_cmd_node
 {
     t_cmd *cmds;
     t_redirect *redir_list;
+    // source_of_input
+    // destenation 
 } t_cmd_node;
 
 
@@ -166,7 +168,7 @@ void        print_commands(t_cmd *list);
 void        add_command(t_cmd **list, t_cmd *cmd);
 t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
 t_cmd       *new_command(char *cmd);
-t_redirect *new_redirect(char **names, char *heredoc, t_redir_type type);
+t_redirect  *new_redirect(char *name, char *heredoc, t_redir_type type);
 void    handle_command(lexer_node_t *node);
 t_cmd *last_command(t_cmd *lst);
 t_redirect *last_redirect(t_redirect *lst);
@@ -231,11 +233,17 @@ void close_unused_fds (int **fds_table , int used);
 void close_unused_fds_2 (int **fds_table, int used1, int used2);
 
 
+/// redirections
+int handle_redir_input (shell_args_t *args, t_redirect *redirect_node);
+int handle_redir_output (shell_args_t *args, t_redirect *redirect_node);
+int handle_redir_append (shell_args_t *args, t_redirect *redirect_node);
+int handle_herdoc (shell_args_t *args ,t_redirect *redirect_node);
+int handle_redirections (t_redirect *redir_list);
 //////// general utils
 void *allocation_err (void);
-void open_pipe (int *fd, shell_args_t *args);
-void close_fd (int fd);
-void exit_with_failure (shell_args_t *args, char *err_message);
+int open_pipe (int *fd, shell_args_t *args);
+int close_fd (int fd);
+int exit_with_failure (shell_args_t *args, char *err_message);
 int fork_child (shell_args_t *args);
 
 #endif

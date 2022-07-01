@@ -7,7 +7,7 @@ void    handle_heredoc(t_redirect *node)
     input = readline("heredoc>");
     while (input != NULL)
     {
-        if (ft_strcmp(input, node->filenames[0]))
+        if (ft_strcmp(input, node->filename))
         {
             node->heredoc_content = ft_strjoin(node->heredoc_content, input);
             node->heredoc_content = ft_strjoin(node->heredoc_content, "\n");
@@ -37,18 +37,10 @@ t_exec_node *parse_command(lexer_node_t **node)
         }
         if ((*node) && check_redirect((*node)))
         {
-            if ((*node) && redirect_type((*node)) == REDIRIN)
-            {
-                (*node) = (*node)->next;
-                tmp = add_redirect(&redirects, new_redirect(filenames_table(node, count_filenames((*node))), NULL , REDIRIN));
-            }
-            else
-            {
-                type = redirect_type(*node);
-                tmp = add_redirect(&redirects, new_redirect(filenames_table(node, 1), NULL ,type));
-            }
-            if (type == HEREDOC)
+            tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
+            if (redirect_type((*node)) == HEREDOC)
                 handle_heredoc(tmp);
+            (*node) = (*node)->next->next;
         }
     }
     if (cmds && (*node))
@@ -89,6 +81,6 @@ t_exec_node   *parse(lexer_node_t *node)
             }
        }
    }
-    //print_exec_node(list);
+   print_exec_node(list);
    return (list);
 }

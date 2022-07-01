@@ -18,7 +18,7 @@ int main (int argc ,char *argv[], char *env[])
             check_word (args->lexer_list);
             syntax_validation (args->lexer_list);
             args->exec_node = parse (args->lexer_list);
-            execution_function (args);
+            //execution_function (args);
             args->prompt = update_prompt (args);
             free (args->line);
         }
