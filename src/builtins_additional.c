@@ -1,14 +1,86 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_additional.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
+/*   Updated: 2022/07/02 14:12:04 by ochoumou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-void    ft_unset(char *str)
+int    ft_unset(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
 {
-    // This function will contain the code that will unset a variable.
+    int i;
+    int size;
+    char **cmds;
+
+    i = 1;
+    cmds = get_commands(exec_node->cmd);
+    size = number_of_el(cmds);
+    args->exit_code = 0;
+    while (i < size)
+    {
+        if (cmds[i] && !ft_isdigit(cmds[i][1]))
+            delete_env_variable(cmds[i], list);
+        else
+        {
+            printf("Minishell: unset: %s: not a valid identifier\n", cmds[i]);
+            args->exit_code = 1;
+            return (1);
+        }
+    }
+    return (0);
 }
 
-void    ft_env(char **cmds, env_list_t *list)
+int ft_env(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
 {
+    char **cmds;
+
+    cmds = get_commands(exec_node->cmd);
     if (number_of_el(cmds) == 1)
+    {
         print_env_list(list);
+        args->exit_code = 0;
+    }
     else
-        perror("illegal option\n");
+    {
+        args->exit_code = 1;
+        perror("Minishell: env: illegal option\n");
+        return (1);
+    }
+    return (0);
+}  
+
+void handle_exit(char **cmds, shell_args_t *args)
+{
+    if (number_of_el(cmds) > 2)
+    {
+        perror("Minishell: exit: too many arguments\n");
+        args->exit_code = 1;
+    }
+    else if (number_of_el(cmds) == 2) 
+        args->exit_code = ft_atoi(cmds[1]);
+}
+
+int ft_exit(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
+{
+    char **cmds;
+
+    cmds = get_commands(exec_node->cmd);
+    // Free up the lexer and the parser
+    
+    // Set the status 
+    args->exit_code = 0;
+    // Print exit
+    printf("exit\n");
+    // Check the arguments
+    handle_exit(cmds, args);
+    // Exit with the global status code
+    exit(args->exit_code);
+    // Return the exit status
+    return (1);
 }

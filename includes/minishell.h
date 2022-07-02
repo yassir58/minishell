@@ -101,6 +101,7 @@ typedef struct shell_args_s
     char *prompt;
     char *line;
     int **fds_table;
+    unsigned char exit_code;
     env_list_t *env_list;
     lexer_node_t *lexer_list;
     t_exec_node *exec_node;
@@ -238,7 +239,13 @@ void    print_env_list (env_list_t *list);
 // - Just a testing function.
 char    *prompt(char *string);
 
+// - Function related to the ENV variables.
+env_list_t  *search_env_variable(char *var, env_list_t *list);
+bool        delete_env_variable(char *var, env_list_t *list);
+void        print_env_list (env_list_t *list);
 
+// - Functions related to the parser clean up.
+void	free_parser(t_exec_node **lst);
 
 void link_pipes (shell_args_t *args);
 void handle_piped_command (shell_args_t *args);

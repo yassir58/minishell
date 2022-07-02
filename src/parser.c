@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
+/*   Updated: 2022/07/02 14:14:58 by ochoumou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-void    handle_heredoc(t_redirect *node)
+void    handle_heredoc(t_redirect *node, lexer_node_t *wp)
 {
     char *input;
 
@@ -39,7 +51,7 @@ t_exec_node *parse_command(lexer_node_t **node)
         {
             tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
             if (redirect_type((*node)) == HEREDOC)
-                handle_heredoc(tmp);
+                handle_heredoc(tmp, (*node));
             (*node) = (*node)->next->next;
         }
     }

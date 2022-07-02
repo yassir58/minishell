@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_list.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/02 14:14:04 by ochoumou          #+#    #+#             */
+/*   Updated: 2022/07/02 14:14:05 by ochoumou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 env_list_t *search_env_variable(char *var, env_list_t *list)
@@ -12,7 +24,6 @@ env_list_t *search_env_variable(char *var, env_list_t *list)
         node = node->next;
     }
     return (NULL);
-    // This function will return the before node if it exists.
 }
 
 bool    delete_env_variable(char *var, env_list_t *list)
