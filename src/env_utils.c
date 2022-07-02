@@ -12,6 +12,8 @@ env_list_t *get_env_list (char *env[])
         push_env_node (&head, create_env_node (env[i]));
         i++;
     }
+    push_env_node (&head, create_path_node ());
+    init_old_pwd (&head);
     return (head);
 }
 
@@ -57,4 +59,30 @@ void free_tab (char *tab[])
         i++;
     }
     free (tab);
+}
+
+env_list_t *create_path_node (void)
+{
+    env_list_t *path_node;
+
+    path_node = malloc (sizeof (env_list_t));
+    if (!path_node)
+        return (allocation_err ());
+    path_node->variable_name = "SPATH";
+    path_node->value = ft_strdup (_PATH_STDPATH);
+    path_node->next = NULL;
+    return (path_node);
+}
+
+void init_old_pwd (env_list_t **env_list)
+{
+    env_list_t *tmp;
+
+    tmp = *env_list;
+    while (tmp)
+    {
+        if (!ft_strcmp (tmp->variable_name, "OLDPWD"))
+            tmp->value = ft_strdup ("");
+        tmp= tmp->next;
+    }
 }

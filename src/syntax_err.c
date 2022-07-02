@@ -46,6 +46,8 @@ void invalid_operator (lexer_node_t *node)
 {
     if (node->token == OPERATOR)
     {
+        if (node->invalid == TRUE)
+            syntax_error (node);
         if (ft_strcmp (node->start, "|"))
         {
             if (node->next && node->next->token == OPERATOR)

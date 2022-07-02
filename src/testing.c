@@ -30,6 +30,8 @@ void testing (lexer_node_t *node)
             printf ("%s \n", tmp->start);
             if (tmp->joinable)
                 printf ("JOINABLE\n");
+            if (tmp->invalid == TRUE)
+                printf ("invalid \n");
             tmp = tmp->next;
         }
     }
@@ -44,11 +46,8 @@ void test_env_list (env_list_t *list)
     tmp = list;
     while (tmp)
     {
-        if (!strcmp (tmp->variable_name, "PWD") || !strcmp (tmp->variable_name, "OLDPWD"))
-        {
-            printf ("{name:%s}\n", tmp->variable_name);
-            printf ("{value:%s}\n", tmp->value);
-        }
+        printf ("%s ::", tmp->variable_name);
+        printf ("%s\n", tmp->value);
         tmp = tmp->next;
     }
     tmp = list;

@@ -55,7 +55,7 @@ int handle_herdoc (shell_args_t *args ,t_redirect *redirect_node)
     return (0);
 }
 
-int handle_redirections (t_redirect *redir_list)
+int handle_redirections (shell_args_t *args ,t_redirect *redir_list)
 {
     t_redirect *tmp;
     int err;
@@ -66,13 +66,13 @@ int handle_redirections (t_redirect *redir_list)
     while (tmp)
     {
         if (tmp->type == REDIRIN)
-            err = handle_redir_input (tmp);
+            err = handle_redir_input (args, tmp);
         else if (tmp->type == REDIROUT)
-            err = handle_redir_output (tmp);
+            err = handle_redir_output (args, tmp);
         else if (tmp->type == APPEND)
-            err = handle_redir_append (redir_list);
+            err = handle_redir_append (args, tmp);
         else if (tmp->type == HEREDOC)
-            err =handle_herdoc (redir_list);
+            err =handle_herdoc (args, tmp);
         if (err == EXIT_FAILURE)
             break;
         tmp = tmp->next;

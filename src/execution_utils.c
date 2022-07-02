@@ -42,9 +42,16 @@ int nodes_number (shell_args_t *args)
     return (len);
 }
 
-
-
-void handle_riderictions (t_exec_node *node)
+void get_childer_status (void)
 {
-    
+   int flag;
+   int status;
+
+   flag = 0;
+   while (flag != -1)
+   {
+      flag = waitpid (-1 , &status, 0);
+      if (WIFEXITED(status) && flag != -1)
+         printf ("%d exit status %d\n",flag, WEXITSTATUS(status));
+   }
 }

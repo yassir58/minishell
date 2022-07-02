@@ -1,46 +1,50 @@
 #include "../includes/minishell.h"
 
-int execution_function (shell_args_t *args)
-{
-    t_exec_node *tmp;
-    int id;
-    int **fds;
-    int indx;
-    int err;
 
-    indx = 0;
-    err = 0;
-    tmp = args->exec_node;
-    printf ("im in \n");
-    if (!tmp->next)
-    {
-        if (tmp->cmd->cmds  != NULL)
-        {
-            if (tmp->builtin == true)
-                builtin_routine (args, tmp);
-            else
-            {
-                err = 1;
-                id = fork ();
-                if (id == 0)
-                    exec_command (args, tmp);
-            }
-        }
+int execution_chain (shell_args_t *args)
+{
+   t_exec_node *tmp;
+   int id;
+   int **fds;
+   int indx;
+   int err;
+
+   indx = 0;
+   err = 0;
+   tmp = args->exec_node;
+   fds = open_fd_table (nodes_number(args), args);
+   if (!fds)
+    return (-1);
+   while (tmp)
+   {
+        if (tmp->builtin)
+           handle_builtin (args, tmp, fds, indx);
         else
-            printf ("command is NULL \n");
-    }
-    else
-    {
-        printf ("hy this is weired \n");
-        print_exec_node (tmp);
-    }
-    if (err == 1)
-    {
-        while (waitpid (-1, NULL, 0) != -1)
-            printf ("hell \n");
-    }
-    return (0);
+        {
+            id = fork_child (args);
+            if (!id)
+                handle_redirected_command (args, tmp, fds, indx);
+        }
+        indx++;
+        tmp = tmp->next;
+   }
+    close_fd_table (fds);
+    get_childer_status ();
+   return (0);
 }
+
+void handle_redirected_command (shell_args_t *args, t_exec_node *tmp, int **fds, int indx)
+{
+      //handle_redirections (args, tmp->cmd->redir_list);
+      if (tmp->prev != NULL && tmp->next != NULL)
+         handle_doubly_piped (indx, fds);
+      else if (tmp->next == NULL && tmp->prev != NULL)
+         handle_last_command (indx, fds);
+      else if (tmp->next != NULL && tmp->prev == NULL)
+         handle_first_command (indx, fds);
+      exec_command (args, tmp);
+}
+
 
 int builtin_routine (shell_args_t *args, t_exec_node *exec_node)
 {
@@ -64,11 +68,6 @@ int builtin_routine (shell_args_t *args, t_exec_node *exec_node)
         echo_function (command, number_of_el (command));
     free_tab (command);
     return (0);
-}
-
-void handle_builtin (shell_args_t *args, t_exec_node *exec_node)
-{
-    builtin_routine (args, exec_node);   
 }
 
 void exec_command (shell_args_t *args, t_exec_node *exec_node)
