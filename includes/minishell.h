@@ -6,6 +6,7 @@
 # include <fcntl.h>
 # include <string.h>
 # include <stdio.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdbool.h>

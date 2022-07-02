@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/02 14:12:04 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/02 14:54:00 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,10 @@ int ft_exit(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
 {
     char **cmds;
 
-    cmds = get_commands(exec_node->cmd);
-    // Free up the lexer and the parser
-    
-    // Set the status 
+    cmds = get_commands(exec_node->cmd);    
     args->exit_code = 0;
-    // Print exit
     printf("exit\n");
-    // Check the arguments
     handle_exit(cmds, args);
-    // Exit with the global status code
     exit(args->exit_code);
-    // Return the exit status
     return (1);
 }
