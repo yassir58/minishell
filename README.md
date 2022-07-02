@@ -13,6 +13,6 @@ The following list contains the tasks that should be performed by collaborators:
 **lhaj-matich:**
 - [x]  Create execution nodes (**Parse**)
 - [x]  Shell history
-- [ ] Builtins (**unset exit export env**)
+- [x] Builtins (**unset exit export env**)
 - [ ] $? Expansion
 - [ ] Handle signals
