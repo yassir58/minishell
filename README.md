@@ -6,8 +6,8 @@ The following list contains the tasks that should be performed by collaborators:
 - [x] Code the tokenizer (**Lexer**)
 - [x] Create a syntax validator
 - [ ] Create an execution chain
-- [ ] Handle the redirections
-- [ ] Handle the pipes
+- [x] Handle the redirections
+- [x] Handle the pipes
 - [x] Builtins (**cd echo pwd**)
 
 **lhaj-matich:**
