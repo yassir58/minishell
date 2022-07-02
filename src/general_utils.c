@@ -24,6 +24,7 @@ int close_fd (int fd)
     err = close (fd);
     if (err == -1)
         write (2, "failed to close fd !\n", 21);
+    return (err);
 }
 
 

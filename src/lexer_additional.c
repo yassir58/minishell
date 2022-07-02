@@ -7,7 +7,6 @@ void create_token_list (lexer_node_t **head, lexer_node_t *temp)
 
     node = *head;
     ptr = node;
-    
     if (temp)
     {
         if (temp->joinable)
