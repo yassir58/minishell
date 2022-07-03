@@ -117,7 +117,12 @@ typedef struct shell_args_s
     env_list_t *env_list;
     lexer_node_t *lexer_list;
     t_exec_node *exec_node;
+    int exit_code;
+    int shell_level;
+    char **env;
 } shell_args_t;
+
+
 
 lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
@@ -197,23 +202,26 @@ char    *get_next_line(int fd);
 
 
 
-/** 
- * Node 1
- * 
- * 
- * 
-*/
-
-/* ============================= exection ================================= */
+int    ft_unset(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
+int ft_env(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
+void handle_exit(char **cmds, shell_args_t *args);
+int ft_exit(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
+env_list_t *search_env_variable(char *var, env_list_t *list);
+bool    delete_env_variable(char *var, env_list_t *list);
+void print_env_list (env_list_t *list);
+int     check_space(char *str);
+char    *prompt(char *string);
 
 ///////// testing ////////
 void    test_exec_node (t_exec_node *node);
-char	*check_access(char *command);
+char	*check_access(char *command, char *path);
 char	**paths_table(char *path);
 char    *update_prompt (shell_args_t *args);
 void print_fd_table (int **fds_table);
 void    print_redirects(t_redirect *list);
-
+char **check_for_path (char *cmd);
+char **handle_relative_path (char **paths_table);
+char **handle_absolue_path (char **paths_table);
 /// pipes
 void link_pipes (shell_args_t *args);
 void handle_piped_command (shell_args_t *args);
@@ -244,5 +252,6 @@ int open_pipe (int *fd, shell_args_t *args);
 int close_fd (int fd);
 int exit_with_failure (shell_args_t *args, char *err_message);
 int fork_child (shell_args_t *args);
+
 
 #endif

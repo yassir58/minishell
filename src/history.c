@@ -32,6 +32,6 @@ char    *prompt(char *string)
             line = prompt(string);
     }
     else
-        exit(1);
+        exit(EXIT_FAILURE);
     return (line);
 }
