@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sn4r7 <sn4r7@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:22 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/02 14:14:23 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/04 17:23:14 by sn4r7            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char    *prompt(char *string)
 {
     char *line;
 
+    rl_replace_line("",0);
     line = readline(string);
     if (line)
     {

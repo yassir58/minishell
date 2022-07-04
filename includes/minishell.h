@@ -237,7 +237,7 @@ void    print_redirects(t_redirect *list);
 void    print_commands(t_cmd *list);
 void    print_env_list (env_list_t *list);
 
-// - Just a testing function.
+// - History function.
 char    *prompt(char *string);
 
 // - Function related to the ENV variables.
@@ -247,6 +247,14 @@ void        print_env_list (env_list_t *list);
 
 // - Functions related to the parser clean up.
 void	free_parser(t_exec_node **lst);
+
+// - Util functions for builtins
+
+int is_number(char *str);
+
+// - Functions related to the signals handling
+
+void    init_signals(void);
 
 void link_pipes (shell_args_t *args);
 void handle_piped_command (shell_args_t *args);
@@ -260,5 +268,6 @@ int nodes_number (shell_args_t *args);
 void close_fd_table (int **fd_table);
 void link_pipes (shell_args_t *args);
 void exec_command (shell_args_t *args, t_exec_node *exec_node);
+
 
 #endif

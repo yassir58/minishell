@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_additional.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sn4r7 <sn4r7@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/02 14:54:00 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/04 17:46:48 by sn4r7            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,14 @@ void handle_exit(char **cmds, shell_args_t *args)
         perror("Minishell: exit: too many arguments\n");
         args->exit_code = 1;
     }
-    else if (number_of_el(cmds) == 2) 
-        args->exit_code = ft_atoi(cmds[1]);
+    else if (number_of_el(cmds) == 2)
+    {
+        if (is_number(cmds[1]))
+            args->exit_code = ft_atoi(cmds[1]);
+        else
+            perror("Minishell: exit: numeric argument required\n");
+    }
+    
 }
 
 int ft_exit(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)

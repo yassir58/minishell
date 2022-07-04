@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sn4r7 <sn4r7@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/02 14:14:58 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/04 17:41:51 by sn4r7            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+/// In case of heredoc i should add some state that the terminal is in heredoc so it can quit when the handler is called
 
 void    handle_heredoc(t_redirect *node, lexer_node_t *wp)
 {

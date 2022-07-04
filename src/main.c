@@ -1,10 +1,13 @@
 #include "../includes/minishell.h"
 
+
+
 int main (int argc ,char *argv[], char *env[])
 {
     shell_args_t *args;
     char *buffer;
 
+    init_signals();
     args = malloc (sizeof (shell_args_t));
     args->env_list = get_env_list (env);
     args->line = NULL;
