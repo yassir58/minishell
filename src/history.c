@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:22 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/02 14:14:23 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/03 20:58:07 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char    *prompt(char *string)
     line = readline(string);
     if (line)
     {
+        rl_replace_line("", 0);
         if (ft_strlen(line) > 0)
         {
             if (check_space(line))

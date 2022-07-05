@@ -7,11 +7,11 @@
 # include <string.h>
 # include <stdio.h>
 # include <signal.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 # include <stdbool.h>
 # include "../libft/libft.h"
 # include <paths.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 /// defining macros
 #define OPERATOR 0

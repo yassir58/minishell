@@ -10,13 +10,13 @@ OBJS=$(addprefix $(SRCDIR), $(SRCS:.c=.o))
 PROGNAME=minishell
 LIBNAME=libft.a
 CFALGS=-Wall -Wextra -Werror -g
-LDFLAGS= -L./libft -lft -L/usr/include -lreadline 
+LDFLAGS= -L./libft -lft -L/usr/include -lreadline
 CC=gcc
 
 all:$(PROGNAME)
 
 %.o:$(SRCDIR)/%.c
-	$(CC) -c $(CFALGS) -o $(SRCDIR)/$@ $<
+	$(CC) -I $(shell brew --prefix readline)/include -c $(CFALGS) -o $(SRCDIR)/$@ $<
 
 $(PROGNAME):$(OBJS) $(INCLUDE)/minishell.h
 	@printf "${RED}building libft ...${NC}\n"
