@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/03 21:08:37 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/05 15:03:26 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void handle_exit(char **cmds, shell_args_t *args)
         perror("Minishell: exit: too many arguments\n");
         args->exit_code = 1;
     }
+<<<<<<< HEAD
     else if (!ft_isdigit(cmds[1][0]))
     {
         perror("Minishell: exit: numeric argument required\n");
@@ -69,6 +70,16 @@ void handle_exit(char **cmds, shell_args_t *args)
     }
     else if (number_of_el(cmds) == 2)
         args->exit_code = ft_atoi(cmds[1]);
+=======
+    else if (number_of_el(cmds) == 2)
+    {
+        if (is_number(cmds[1]))
+            args->exit_code = ft_atoi(cmds[1]);
+        else
+            perror("Minishell: exit: numeric argument required\n");
+    }
+    
+>>>>>>> 32ede9cfb2612c9c017877469756adb387b7a94f
 }
 
 int ft_exit(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)

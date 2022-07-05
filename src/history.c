@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:22 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/03 20:58:07 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/05 15:03:30 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char    *prompt(char *string)
 {
     char *line;
 
+    rl_replace_line("",0);
     line = readline(string);
     if (line)
     {

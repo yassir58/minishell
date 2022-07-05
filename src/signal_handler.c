@@ -1,19 +1,18 @@
 #include "../includes/minishell.h"
 
-// void	handler(int signum, siginfo_t *info, void *p)
-// {
+void	handler(int signum)
+{
+    if (signum == SIGINT)
+    {
+        printf("\n");
+        rl_on_new_line();
+        rl_replace_line("",0);
+        rl_redisplay();
+    }
+}
 
-// }
-
-
-// void    handle_signals(void)
-// {
-//     struct sigaction sa;
-
-//     sa.__sigaction_u.__sa_sigaction = &handler;
-//     sa.sa_flags = SA_SIGINFO;
-//     sa.sa_mask = NULL; // I should use this field to add the set of signals that needs to be blocked.
-//     sigemptyset(&sa.sa_mask);
-//     sigaddset(&sa, SIGTERM);
-//     sigaction(SIGINT, &sa, );
-// }
+void    init_signals(void)
+{
+    signal(SIGINT, handler);
+    signal(SIGSTOP, SIG_IGN);
+}
