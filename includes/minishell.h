@@ -94,6 +94,7 @@ typedef struct env_list_s
 {
     char *variable_name;
     char *value;
+    int index;
     struct env_list_s *next;
 } env_list_t;
 
@@ -129,7 +130,7 @@ char *get_variable_value (char *str, int *i);
 char *push_char (char *str, char c);
 void expand_single (lexer_node_t *head, lexer_node_t *temp);
 env_list_t *get_env_list (char *env[]);
-env_list_t *create_env_node (char *envStr);
+env_list_t *create_env_node (char *envStr, int index);
 void push_env_node (env_list_t **head, env_list_t *node);
 void free_tab (char *tab[]);
 void pwd_function (env_list_t *env_list);
@@ -244,6 +245,7 @@ char    *prompt(char *string);
 env_list_t  *search_env_variable(char *var, env_list_t *list);
 bool        delete_env_variable(char *var, env_list_t *list);
 void        print_env_list (env_list_t *list);
+void    ft_order_list(env_list_t *list);
 
 // - Functions related to the parser clean up.
 void	free_parser(t_exec_node **lst);

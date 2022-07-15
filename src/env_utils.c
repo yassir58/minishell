@@ -5,17 +5,18 @@ env_list_t *get_env_list (char *env[])
     int i;
     env_list_t *head;
 
-    i = 0;
+    i = 1;
     head = NULL;
+    printf("%s:%s = %d\n", env[i], env[i + 1], ft_strcmp(env[i], env[i + 1]));
     while (env[i])
     {
-        push_env_node (&head, create_env_node (env[i]));
+        push_env_node (&head, create_env_node (env[i], i));
         i++;
     }
     return (head);
 }
 
-env_list_t *create_env_node (char *envStr)
+env_list_t *create_env_node (char *envStr, int index)
 {
     char **envTab;
     env_list_t *node;
@@ -27,6 +28,7 @@ env_list_t *create_env_node (char *envStr)
     envTab = ft_split (envStr, '=');
     node->variable_name = envTab[0];
     node->value = envTab[1];
+    node->index = index;
     node->next = NULL;
     return (node);
 }

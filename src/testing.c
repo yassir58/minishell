@@ -32,10 +32,12 @@ void test_env_list (env_list_t *list)
     env_list_t *tmp;
     env_list_t *ptr;
 
+
     tmp = list;
+    printf("\n\n\n\n\n");
     while (tmp)
     {
-        printf ("%s=%s\n", tmp->variable_name, tmp->value);
+        printf ("%s=%s order: %d\n", tmp->variable_name, tmp->value, tmp->index);
         tmp = tmp->next;
     }
 }
