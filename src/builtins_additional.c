@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_additional.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sn4r7 <sn4r7@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/16 00:14:55 by sn4r7            ###   ########.fr       */
+/*   Updated: 2022/07/18 19:08:28 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@
 // {
 //     char **cmds;
 
-//     cmds = get_commands(exec_node->cmd);    
+//     cmds = get_commands(exec_node->cmd);
 //     args->exit_code = 0;
 //     printf("exit\n");
 //     handle_exit(cmds, args);

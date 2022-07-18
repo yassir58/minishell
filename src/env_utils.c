@@ -7,7 +7,6 @@ env_list_t *get_env_list (char *env[])
 
     i = 1;
     head = NULL;
-    printf("%s:%s = %d\n", env[i], env[i + 1], ft_strcmp(env[i], env[i + 1]));
     while (env[i])
     {
         push_env_node (&head, create_env_node (env[i], i));

@@ -12,6 +12,7 @@
 # include <paths.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <dirent.h>
 
 /// defining macros
 #define OPERATOR 0

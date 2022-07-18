@@ -1,34 +1,27 @@
-
-
-SRCS=main.c lexer.c lexer_additional.c utils.c  syntax_err.c lexer_utils.c testing.c  execution.c env_utils.c builtins.c builtins_utils.c builtins_additional.c check_cmd.c execution_utils.c command_list.c exec_list.c parse_helper.c parse_printer.c parse_utils.c parser.c redir_list.c string_convert.c history.c signal_handler.c
-RED=\033[0;31m
-NC=\033[0m
-LIBFTDIR=./libft/
 SRCDIR=./src/
-INCLUDE=./includes
+SRCS = main.c lexer.c lexer_additional.c utils.c  syntax_err.c lexer_utils.c testing.c  execution.c env_utils.c builtins.c builtins_utils.c builtins_additional.c check_cmd.c execution_utils.c command_list.c exec_list.c parse_helper.c parse_printer.c parse_utils.c parser.c redir_list.c string_convert.c history.c signal_handler.c
 OBJS=$(addprefix $(SRCDIR), $(SRCS:.c=.o))
-PROGNAME=minishell
-LIBNAME=libft.a
-CFALGS=-Wall -Wextra -Werror -g
-LDFLAGS= -L./libft -lft -L/usr/include -lreadline
-CC=gcc
+NAME = minishell
+HEADERS = ./includes/minishell.h
+LIBNAME = ./libft/libft.a
+INCLUDES= -I/Users/ochoumou/.brew/opt/readline/include
+READLINE= -lreadline -L/Users/ochoumou/.brew/opt/readline/lib
 
-all:$(PROGNAME)
+CC = gcc
+# FLAGS = -Wall -Wextra -Werror
 
-%.o:$(SRCDIR)/%.c
-	$(CC) -I $(shell brew --prefix readline)/include -c $(CFALGS) -o $(SRCDIR)/$@ $<
+all: $(NAME)
 
-$(PROGNAME):$(OBJS) $(INCLUDE)/minishell.h
-	@printf "${RED}building libft ...${NC}\n"
-	@cd ./libft && make && cd ..
-	$(CC) $(CFALGS) $(OBJS) $(LDFLAGS) -o $@
+$(NAME): $(OBJS) $(HEADERS)
+	$(CC) $(FLAGS) $(OBJS) -o $(NAME) $(READLINE) $(LIBNAME)
+
+%.o : %.c $(HEADERS)
+	$(CC) $(FLAGS)  -c $< -o $@ $(INCLUDES)
 
 clean:
-	@cd ./libft && make clean && cd ..
-	rm -rf $(OBJS)
+	rm -f $(OBJS)
 
-fclean:clean
-	@cd ./libft && make fclean && cd ..
-	rm -rf $(PROGNAME)  $(LIBNAME)
+fclean: clean
+	rm -f $(NAME)
 
-re:fclean all
+re: fclean all
