@@ -246,7 +246,8 @@ char    *prompt(char *string);
 env_list_t  *search_env_variable(char *var, env_list_t *list);
 bool        delete_env_variable(char *var, env_list_t *list);
 void        print_env_list (env_list_t *list);
-void    ft_order_list(env_list_t *list);
+void        order_env_list(env_list_t *list);
+void    print_unsorted_env(env_list_t *list);
 
 // - Functions related to the parser clean up.
 void	free_parser(t_exec_node **lst);

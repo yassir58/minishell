@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/18 19:08:28 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/19 21:27:13 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,43 @@
 //     return (1);
 // }
 
-void    ft_order_list(env_list_t *list)
+void    swap_nodes(env_list_t *a, env_list_t *b)
+{
+    char *key;
+    char *value;
+    int index;
+
+    key = a->variable_name;
+    value = a->value;
+    index = a->index;
+    a->variable_name = b->variable_name;
+    a->value = b->value;
+    a->index = b->index;
+    b->variable_name = key;
+    b->value = value;
+    b->index = index;
+}
+
+int env_list_size(env_list_t *list)
+{
+    env_list_t *tmp;
+    int i;
+
+    i = 0;
+    tmp = list;
+    while (tmp != NULL)
+    {
+        i += 1;
+        tmp = tmp->next;
+    }
+    return (i);
+}
+
+void    order_env_list(env_list_t *list)
 {
     env_list_t *tmp_i;
     env_list_t *tmp_j;
-    int         tmp_index;
+    int         tmp;
 
     tmp_i = list;
     while (tmp_i != NULL)
@@ -104,14 +136,41 @@ void    ft_order_list(env_list_t *list)
         while (tmp_j != NULL)
         {
             if (ft_strcmp(tmp_i->variable_name, tmp_j->variable_name) > 0)
-            {
-                tmp_index = tmp_i->index;
-                tmp_i->index = tmp_j->index;
-                tmp_j->index = tmp_index;
-            }
+                swap_nodes(tmp_i, tmp_j);
             tmp_j = tmp_j->next;
         }
         tmp_i = tmp_i->next;
+    }
+}
+
+void    print_unsorted_env(env_list_t *list)
+{
+    int i;
+    env_list_t *tmp;
+
+    i = 1;
+    tmp = list;
+    while (tmp != NULL)
+    {
+        while (tmp != NULL)
+        {
+            if (i == tmp->index)
+            {
+                printf("%s=%s order: %d\n",tmp->variable_name, tmp->value, tmp->index);
+                if (i == env_list_size(list))
+                    break;
+                i += 1;
+            }
+            else
+                tmp = tmp->next;
+        }
+        if (i != env_list_size(list))
+            tmp = list;
+        else
+        {
+            if (tmp)
+                tmp = tmp->next;
+        }
     }
 }
 
