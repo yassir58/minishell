@@ -278,6 +278,6 @@ void link_pipes (shell_args_t *args);
 void exec_command (shell_args_t *args, t_exec_node *exec_node);
 
 
-char	*get_next_line(int fd);
+char	*advanced_get_next_line(int fd, int status);
 
 #endif

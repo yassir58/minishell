@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 
 int 	ft_strlen(char *str)
 {
@@ -29,7 +30,7 @@ char *ft_strdup(char *str)
 	return (new);
 }
 
-char	*get_next_line(int fd)
+char	*advanced_get_next_line(int fd, int status)
 {
     if (fd < 0)
         return (NULL);
@@ -41,9 +42,15 @@ char	*get_next_line(int fd)
     while ((n = read(fd, buff, 1)) && n > 0)
     {
         line[i++] = buff[0];
-        line[i] = '\0';
+		line[i] = '\0';
         if (buff[0] == '\n')
+		{
+			if (status == 0)
+				line[i - 1] = '\0';
+			else
+				line[i] = '\0';
             return (ft_strdup(line));
+		}
     }
     if (!line[0])
         return (NULL);

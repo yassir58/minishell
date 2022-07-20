@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/20 19:40:00 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/20 21:48:48 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,21 @@ void    handle_heredoc(t_redirect *node, lexer_node_t *wp, int fd)
 {
     char *input;
 
-    printf(">");
-    input = get_next_line(0);
+    printf("heredoc>");
+    input = advanced_get_next_line(0, 0);
     if (input == NULL)
         exit(1);
     while (input != NULL)
     {
-            if (ft_strcmp(input, node->filename))
-                node->heredoc_content = ft_strjoin(node->heredoc_content, input);
-            else
-                exit (1);
-            printf(">");
-            input = get_next_line(0);
+        if (ft_strcmp(input, node->filename))
+        {
+            node->heredoc_content = ft_strjoin(node->heredoc_content, input);
+            node->heredoc_content = ft_strjoin(node->heredoc_content, "\n");
+        }
+        else
+            break;
+        printf("heredoc>");
+        input = advanced_get_next_line(0, 0);
     }
     write(fd, node->heredoc_content, ft_strlen(node->heredoc_content));
     exit(0);
@@ -69,24 +72,22 @@ t_exec_node *parse_command(lexer_node_t **node)
                 else
                 {
                     heredoc_status = pid;
-                    wait(&status);
+                    wait(NULL);
                 }
-                if (heredoc_status && WEXITSTATUS(status) == 1)
+                if (heredoc_status)
                 {
                     char *content;
                     fd = open("/tmp/.minishell", O_RDWR);
-                    content = get_next_line(fd);
+                    content = advanced_get_next_line(fd, 1);
                     while (content != NULL)
                     {
                         tmp->heredoc_content = ft_strjoin(tmp->heredoc_content, content);
                         free(content);
-                        content = get_next_line(fd);
+                        content = advanced_get_next_line(fd, 1);
                     }
                 }
                 else
-                {
                     return (new_exec_cmd(command_node(redirects, cmds), TRUE, TRUE));
-                }
             }
             (*node) = (*node)->next->next;
         }
