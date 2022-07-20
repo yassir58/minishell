@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/20 21:48:48 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/20 22:25:20 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void    handle_heredoc(t_redirect *node, lexer_node_t *wp, int fd)
 {
     char *input;
 
-    printf("heredoc>");
+    write(1, ">", 1);
     input = advanced_get_next_line(0, 0);
     if (input == NULL)
         exit(1);
@@ -32,7 +32,7 @@ void    handle_heredoc(t_redirect *node, lexer_node_t *wp, int fd)
         }
         else
             break;
-        printf("heredoc>");
+        write(1, ">", 1);
         input = advanced_get_next_line(0, 0);
     }
     write(fd, node->heredoc_content, ft_strlen(node->heredoc_content));
