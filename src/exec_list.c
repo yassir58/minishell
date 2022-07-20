@@ -6,13 +6,13 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:14 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/02 14:14:15 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/20 19:29:39 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped)
+t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped, bool status)
 {
     t_exec_node *node;
 
@@ -26,6 +26,7 @@ t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped)
     else
         node->builtin = NULL;
     node->piped = piped;
+    node->status = status;
     node->next = NULL;
     node->prev = NULL;
     return (node);

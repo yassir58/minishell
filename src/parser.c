@@ -6,28 +6,34 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/18 20:45:40 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/20 19:40:00 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void    handle_heredoc(t_redirect *node, lexer_node_t *wp)
+// We should be aware that in the case of ctrl c the minishell should not complete its job. we should add a condition
+// That will stop that from happening
+
+void    handle_heredoc(t_redirect *node, lexer_node_t *wp, int fd)
 {
     char *input;
 
-    input = readline("heredoc>");
+    printf(">");
+    input = get_next_line(0);
+    if (input == NULL)
+        exit(1);
     while (input != NULL)
     {
-        if (ft_strcmp(input, node->filename))
-        {
-            node->heredoc_content = ft_strjoin(node->heredoc_content, input);
-            node->heredoc_content = ft_strjoin(node->heredoc_content, "\n");
-        }
-        else
-            break;
-        input = readline("heredoc>");
+            if (ft_strcmp(input, node->filename))
+                node->heredoc_content = ft_strjoin(node->heredoc_content, input);
+            else
+                exit (1);
+            printf(">");
+            input = get_next_line(0);
     }
+    write(fd, node->heredoc_content, ft_strlen(node->heredoc_content));
+    exit(0);
 }
 
 t_exec_node *parse_command(lexer_node_t **node)
@@ -51,7 +57,37 @@ t_exec_node *parse_command(lexer_node_t **node)
         {
             tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
             if (redirect_type((*node)) == HEREDOC)
-                handle_heredoc(tmp, (*node));
+            {
+                int pid;
+                int fd;
+                int status;
+                
+                fd = open("/tmp/.minishell", O_CREAT | O_RDWR | O_TRUNC, 0644);
+                pid = fork();
+                if (pid == 0)
+                    handle_heredoc(tmp, (*node), fd);
+                else
+                {
+                    heredoc_status = pid;
+                    wait(&status);
+                }
+                if (heredoc_status && WEXITSTATUS(status) == 1)
+                {
+                    char *content;
+                    fd = open("/tmp/.minishell", O_RDWR);
+                    content = get_next_line(fd);
+                    while (content != NULL)
+                    {
+                        tmp->heredoc_content = ft_strjoin(tmp->heredoc_content, content);
+                        free(content);
+                        content = get_next_line(fd);
+                    }
+                }
+                else
+                {
+                    return (new_exec_cmd(command_node(redirects, cmds), TRUE, TRUE));
+                }
+            }
             (*node) = (*node)->next->next;
         }
     }
@@ -60,12 +96,12 @@ t_exec_node *parse_command(lexer_node_t **node)
         if (check_node(*node, "|"))
         {
             (*node) = (*node)->next;
-            return (new_exec_cmd(command_node(redirects, cmds), TRUE));
+            return (new_exec_cmd(command_node(redirects, cmds), TRUE, FALSE));
         }
     }
     if ((*node) && check_node(*node, "|"))
         (*node) = (*node)->next;
-    return (new_exec_cmd(command_node(redirects, cmds), FALSE));
+    return (new_exec_cmd(command_node(redirects, cmds), FALSE, FALSE));
 }
 
 t_exec_node   *parse(lexer_node_t *node)
@@ -82,6 +118,8 @@ t_exec_node   *parse(lexer_node_t *node)
        while (token)
        {
             exec_node = parse_command(&token);
+            if (exec_node->status)
+                break;
             if (!list)
             {
                 exec_node->prev = NULL;

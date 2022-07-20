@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:38 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/02 14:14:39 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/20 19:01:05 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ void    print_redirects(t_redirect *list)
     {
         printf("Filename: %s\n", tmp->filename);
         if (tmp->type == APPEND)
-            printf("Type: Append ");
+            printf("Type: Append\n");
         else if (tmp->type == HEREDOC)
-            printf("Type: Heredoc ");
+            printf("Type: Heredoc\n");
         else if (tmp->type == REDIRIN)
-            printf("Type: Redir Input ");
+            printf("Type: Redir Input\n");
         else if (tmp->type == REDIROUT)
-            printf("Type: Redir Output ");
+            printf("Type: Redir Output\n");
         if (tmp->heredoc_content)
             printf("Redirect Content: %s\n", tmp->heredoc_content);
         else

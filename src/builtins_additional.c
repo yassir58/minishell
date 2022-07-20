@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/19 21:27:13 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/20 18:22:18 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 //     cmds = get_commands(exec_node->cmd);
 //     if (number_of_el(cmds) == 1)
 //     {
-//         print_env_list(list);
+//         print_unsorted_env(list);
 //         args->exit_code = 0;
 //     }
 //     else
@@ -91,92 +91,137 @@
 //     return (1);
 // }
 
-void    swap_nodes(env_list_t *a, env_list_t *b)
-{
-    char *key;
-    char *value;
-    int index;
+// void    swap_nodes(env_list_t *a, env_list_t *b)
+// {
+//     char *key;
+//     char *value;
+//     int index;
 
-    key = a->variable_name;
-    value = a->value;
-    index = a->index;
-    a->variable_name = b->variable_name;
-    a->value = b->value;
-    a->index = b->index;
-    b->variable_name = key;
-    b->value = value;
-    b->index = index;
-}
+//     key = a->variable_name;
+//     value = a->value;
+//     index = a->index;
+//     a->variable_name = b->variable_name;
+//     a->value = b->value;
+//     a->index = b->index;
+//     b->variable_name = key;
+//     b->value = value;
+//     b->index = index;
+// }
 
-int env_list_size(env_list_t *list)
-{
-    env_list_t *tmp;
-    int i;
+// int env_list_size(env_list_t *list)
+// {
+//     env_list_t *tmp;
+//     int i;
 
-    i = 0;
-    tmp = list;
-    while (tmp != NULL)
-    {
-        i += 1;
-        tmp = tmp->next;
-    }
-    return (i);
-}
+//     i = 0;
+//     tmp = list;
+//     while (tmp != NULL)
+//     {
+//         i += 1;
+//         tmp = tmp->next;
+//     }
+//     return (i);
+// }
 
-void    order_env_list(env_list_t *list)
-{
-    env_list_t *tmp_i;
-    env_list_t *tmp_j;
-    int         tmp;
+// void    order_env_list(env_list_t *list)
+// {
+//     env_list_t *tmp_i;
+//     env_list_t *tmp_j;
+//     int         tmp;
 
-    tmp_i = list;
-    while (tmp_i != NULL)
-    {
-        tmp_j = tmp_i->next;
-        while (tmp_j != NULL)
-        {
-            if (ft_strcmp(tmp_i->variable_name, tmp_j->variable_name) > 0)
-                swap_nodes(tmp_i, tmp_j);
-            tmp_j = tmp_j->next;
-        }
-        tmp_i = tmp_i->next;
-    }
-}
+//     tmp_i = list;
+//     while (tmp_i != NULL)
+//     {
+//         tmp_j = tmp_i->next;
+//         while (tmp_j != NULL)
+//         {
+//             if (ft_strcmp(tmp_i->variable_name, tmp_j->variable_name) > 0)
+//                 swap_nodes(tmp_i, tmp_j);
+//             tmp_j = tmp_j->next;
+//         }
+//         tmp_i = tmp_i->next;
+//     }
+// }
 
-void    print_unsorted_env(env_list_t *list)
-{
-    int i;
-    env_list_t *tmp;
+// void    print_unsorted_env(env_list_t *list)
+// {
+//     int i;
+//     env_list_t *tmp;
 
-    i = 1;
-    tmp = list;
-    while (tmp != NULL)
-    {
-        while (tmp != NULL)
-        {
-            if (i == tmp->index)
-            {
-                printf("%s=%s order: %d\n",tmp->variable_name, tmp->value, tmp->index);
-                if (i == env_list_size(list))
-                    break;
-                i += 1;
-            }
-            else
-                tmp = tmp->next;
-        }
-        if (i != env_list_size(list))
-            tmp = list;
-        else
-        {
-            if (tmp)
-                tmp = tmp->next;
-        }
-    }
-}
+//     i = 1;
+//     tmp = list;
+//     while (tmp != NULL)
+//     {
+//         while (tmp != NULL)
+//         {
+//             if (i == tmp->index)
+//             {
+//                 printf("%s=%s order: %d\n",tmp->variable_name, tmp->value, tmp->index);
+//                 if (i == env_list_size(list))
+//                     break;
+//                 i += 1;
+//             }
+//             else
+//                 tmp = tmp->next;
+//         }
+//         if (i != env_list_size(list))
+//             tmp = list;
+//         else
+//         {
+//             if (tmp)
+//                 tmp = tmp->next;
+//         }
+//     }
+// }
+
+// int    validate_export_args(char **cmds)
+// {
+//     int i;
+
+//     i = 1;
+//     while (cmds[i])
+//     {
+//         if (ft_isalpha(cmds[i][0]))
+//             i++;
+//         else
+//         {
+//             perror("bash: export: not a valid identifier\n");
+//             return (1);
+//         }
+//     }
+//     return (0);
+// }
+
+// void    add_export_variable(char **cmds, env_list_t *list)
+// {
+//     int i;
+//     char *splitted;
+    
+//     i = 1;
+//     while (cmds[i])
+//     {
+//         splitted = ft_split(cmds[i], '=');
+        
+//     }
+// }
 
 // void    ft_export(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
 // {
-//     env_list_t *copy;
+//     char **cmds;
+//     int i;
 
-    
+//     i = 0;
+//     cmds = get_commands(exec_node->cmd->cmds);
+//     // if there is no argument just print the list of env sorted.
+//     if (!cmds[1])
+//         print_env_list(list);
+//     // validate that the arguments are valid.
+//     else if (number_of_el(cmds) > 1)
+//     {
+//         if(!validate_export_args(cmds))
+//         {
+            
+//         }
+//     }
+//     // add the nodes entered into the linked list.
 // }

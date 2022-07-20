@@ -9,7 +9,9 @@ int main (int argc ,char *argv[], char *env[])
     init_signals();
     args = malloc (sizeof (shell_args_t));
     args->env_list = get_env_list (env);
+    rl_getc_function = getc;
     args->line = NULL;
+    heredoc_status = 0;
     while (1)
     {
         args->prompt = update_prompt (args);

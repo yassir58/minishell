@@ -37,6 +37,8 @@
 #define B6 "env"
 #define B7 "exit"
 
+int heredoc_status;
+
 typedef struct lexer_node_s
 {
     int token;
@@ -87,6 +89,7 @@ typedef struct s_exec_node
     t_cmd_node *cmd;
     bool piped;
     bool builtin;
+    bool status;
     struct s_exec_node *next;
     struct s_exec_node *prev;
 } t_exec_node;
@@ -109,6 +112,7 @@ typedef struct shell_args_s
     lexer_node_t *lexer_list;
     t_exec_node *exec_node;
 } shell_args_t;
+
 
 lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
@@ -219,7 +223,7 @@ t_exec_node *parse(lexer_node_t *node);
 t_exec_node *parse_command(lexer_node_t **node);
 
 // - Functions related to execution node.
-t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped);
+t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped, bool status);
 t_exec_node *last_exec_node(t_exec_node *list);
 
 // - Functions can be used as utility.
@@ -273,5 +277,7 @@ void close_fd_table (int **fd_table);
 void link_pipes (shell_args_t *args);
 void exec_command (shell_args_t *args, t_exec_node *exec_node);
 
+
+char	*get_next_line(int fd);
 
 #endif
