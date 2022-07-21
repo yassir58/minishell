@@ -9,7 +9,6 @@ int main (int argc ,char *argv[], char *env[])
     init_signals();
     args = malloc (sizeof (shell_args_t));
     args->env_list = get_env_list (env);
-    rl_getc_function = getc;
     args->line = NULL;
     heredoc_status = 0;
     while (1)
@@ -22,7 +21,7 @@ int main (int argc ,char *argv[], char *env[])
         args->exec_node = parse (args->lexer_list);
         // execution_function (args);
         args->prompt = update_prompt (args);
-        // test_env_list(args->env_list);
+        test_env_list(args->env_list);
         free (args->line);
     }
     return (0);

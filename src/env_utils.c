@@ -19,6 +19,7 @@ env_list_t *create_env_node (char *envStr, int index)
 {
     char **envTab;
     env_list_t *node;
+    int shell;
 
     node = malloc (sizeof (env_list_t));
     envTab = NULL;
@@ -26,7 +27,13 @@ env_list_t *create_env_node (char *envStr, int index)
        return (NULL);
     envTab = ft_split (envStr, '=');
     node->variable_name = envTab[0];
-    node->value = envTab[1];
+    if (!ft_strcmp(node->variable_name, "SHLVL"))
+    {
+        shell = ft_atoi(envTab[1]) + 1;
+        node->value = ft_itoa(shell);
+    } 
+    else
+        node->value = envTab[1];
     node->index = index;
     node->next = NULL;
     return (node);

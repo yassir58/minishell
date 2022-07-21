@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/20 18:22:18 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/21 16:33:08 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,13 +195,12 @@
 // void    add_export_variable(char **cmds, env_list_t *list)
 // {
 //     int i;
-//     char *splitted;
     
 //     i = 1;
 //     while (cmds[i])
 //     {
-//         splitted = ft_split(cmds[i], '=');
-        
+//         create_env_node(cmds[i],i);
+//         i++;
 //     }
 // }
 
@@ -216,12 +215,10 @@
 //     if (!cmds[1])
 //         print_env_list(list);
 //     // validate that the arguments are valid.
+//     // add the nodes entered into the linked list.
 //     else if (number_of_el(cmds) > 1)
 //     {
 //         if(!validate_export_args(cmds))
-//         {
-            
-//         }
+//             add_export_variable(cmds, list);
 //     }
-//     // add the nodes entered into the linked list.
 // }
