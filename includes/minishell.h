@@ -255,6 +255,7 @@ void    print_unsorted_env(env_list_t *list);
 
 // - Functions related to the parser clean up.
 void	free_parser(t_exec_node **lst);
+void	free_string_table(char **table);
 
 // - Util functions for builtins
 

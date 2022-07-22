@@ -15,6 +15,7 @@ env_list_t *get_env_list (char *env[])
     return (head);
 }
 
+
 env_list_t *create_env_node (char *envStr, int index)
 {
     char **envTab;
@@ -31,7 +32,7 @@ env_list_t *create_env_node (char *envStr, int index)
     {
         shell = ft_atoi(envTab[1]) + 1;
         node->value = ft_itoa(shell);
-    } 
+    }
     else
         node->value = envTab[1];
     node->index = index;
