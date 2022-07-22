@@ -203,6 +203,7 @@ void        print_commands(t_cmd *list);
 
 // - Function related to parser handler
 
+
 void    handle_heredoc(t_redirect *node, int fd);
 
 // - Function related to string convesion.
@@ -232,6 +233,13 @@ t_exec_node *last_exec_node(t_exec_node *list);
 
 // - Functions can be used as utility.
 bool is_builtin(t_cmd_node *cmd);
+/**
+ * @brief This function will compare two strings regardless if one of the strings is
+ * capitale letters
+ * @param s1 The source string that you want to compare
+ * @param s2 The destination string that you want to compare
+ * @return int 
+ */
 int	advanced_strcmp(char *s1, char *s2);
 int     count_filenames(lexer_node_t *node);
 char   **filenames_table(lexer_node_t **node, int files);

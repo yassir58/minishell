@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/22 10:39:22 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/22 13:54:21 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,22 @@
 // We should be aware that in the case of ctrl c the minishell should not complete its job. we should add a condition
 // That will stop that from happening
 
-void    handle_ctrl(t_redirect *redirects, t_cmd *cmds, t_redirect *tmp)
+void    get_file_content(t_redirect *tmp)
+{
+    int fd;
+    char *content;
+
+    fd = open("/tmp/.minishell", O_RDWR);
+    content = advanced_get_next_line(fd, 1);
+    while (content != NULL)
+    {
+        tmp->heredoc_content = ft_strjoin(tmp->heredoc_content, content);
+        free(content);
+        content = advanced_get_next_line(fd, 1);    
+    }
+}
+
+t_exec_node *handle_ctrl(t_redirect *redirects, t_cmd *cmds, t_redirect *tmp)
 {
     int pid;
     int fd;
@@ -31,17 +46,8 @@ void    handle_ctrl(t_redirect *redirects, t_cmd *cmds, t_redirect *tmp)
         wait(NULL);
     }
     if (heredoc_status)
-    {
-        char *content;
-        fd = open("/tmp/.minishell", O_RDWR);
-        content = advanced_get_next_line(fd, 1);
-        while (content != NULL)
-        {
-            tmp->heredoc_content = ft_strjoin(tmp->heredoc_content, content);
-            free(content);
-            content = advanced_get_next_line(fd, 1);
-        }
-    }
+        get_file_content(tmp);
+    return (new_exec_cmd(command_node(redirects, cmds), TRUE, TRUE));
 }
 
 void    handle_heredoc(t_redirect *node, int fd)
