@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/22 13:54:21 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/22 16:40:49 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void    get_file_content(t_redirect *tmp)
     }
 }
 
-t_exec_node *handle_ctrl(t_redirect *redirects, t_cmd *cmds, t_redirect *tmp)
+int handle_ctrl(t_redirect *redirects, t_cmd *cmds, t_redirect *tmp)
 {
     int pid;
     int fd;
@@ -47,7 +47,9 @@ t_exec_node *handle_ctrl(t_redirect *redirects, t_cmd *cmds, t_redirect *tmp)
     }
     if (heredoc_status)
         get_file_content(tmp);
-    return (new_exec_cmd(command_node(redirects, cmds), TRUE, TRUE));
+    else
+        return (0);
+    return (1);
 }
 
 void    handle_heredoc(t_redirect *node, int fd)
@@ -90,12 +92,13 @@ t_exec_node *parse_command(lexer_node_t **node)
         {
             add_command(&cmds, new_command(ft_strdup((*node)->start)));
             (*node) = (*node)->next;
-        }
+        } 
         if ((*node) && check_redirect((*node)))
         {
             tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
             if (redirect_type((*node)) == HEREDOC)
-                handle_ctrl(redirects, cmds, tmp);
+                if(!handle_ctrl(redirects, cmds, tmp))
+                    return (new_exec_cmd(command_node(redirects, cmds), TRUE, TRUE));
             (*node) = (*node)->next->next;
         }
     }
