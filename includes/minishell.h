@@ -201,6 +201,10 @@ void print_fd_table (shell_args_t *args);
 
 void        print_commands(t_cmd *list);
 
+// - Function related to parser handler
+
+void    handle_heredoc(t_redirect *node, int fd);
+
 // - Function related to string convesion.
 int     commands_number(t_cmd *list);
 char    **get_commands(t_cmd *cmds);

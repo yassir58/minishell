@@ -36,7 +36,7 @@ void test_env_list (env_list_t *list)
     tmp = list;
     while (tmp)
     {
-        printf ("%s=%s order: %d\n", tmp->variable_name, tmp->value, tmp->index);
+        printf ("%s=%s\n", tmp->variable_name, tmp->value);
         tmp = tmp->next;
     }
 }

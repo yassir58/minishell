@@ -21,7 +21,7 @@ int main (int argc ,char *argv[], char *env[])
         args->exec_node = parse (args->lexer_list);
         // execution_function (args);
         args->prompt = update_prompt (args);
-        test_env_list(args->env_list);
+        // test_env_list(args->env_list);
         free (args->line);
     }
     return (0);

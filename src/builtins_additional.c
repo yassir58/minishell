@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/22 09:53:49 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/22 10:23:15 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,75 +174,75 @@
 //     }
 // }
 
-int    validate_export_args(char **cmds)
-{
-    int i;
+// int    validate_export_args(char **cmds)
+// {
+//     int i;
 
-    i = 1;
-    while (cmds[i])
-    {
-        if (ft_isalpha(cmds[i][0]))
-            i++;
-        else
-        {
-            perror("bash: export: not a valid identifier\n");
-            return (1);
-        }
-    }
-    return (0);
-}
+//     i = 1;
+//     while (cmds[i])
+//     {
+//         if (ft_isalpha(cmds[i][0]))
+//             i++;
+//         else
+//         {
+//             perror("bash: export: not a valid identifier\n");
+//             return (1);
+//         }
+//     }
+//     return (0);
+// }
 
-int   check_existing_variable(char *argument, env_list_t *list)
-{
-    env_list_t *node;
-    char *object;
+// int   check_existing_variable(char *argument, env_list_t *list)
+// {
+//     env_list_t *node;
+//     char *object;
 
-    object = ft_split(argument, '=');
-    if (object[0])
-    {
-        node = search_env_variable(object[0], list);
-        if (node)
-        {
-            if (object[1])
-                node->value = object[1];
-            else
-                return (0);
-        }
-    }
-    free_string_table(object);
-    return (1);
-}
+//     object = ft_split(argument, '=');
+//     if (object[0])
+//     {
+//         node = search_env_variable(object[0], list);
+//         if (node)
+//         {
+//             if (object[1])
+//                 node->value = object[1];
+//             else
+//                 return (0);
+//         }
+//     }
+//     free_string_table(object);
+//     return (1);
+// }
 
-void    add_export_variable(char **cmds, env_list_t *list)
-{
-    int i;
+// void    add_export_variable(char **cmds, env_list_t *list)
+// {
+//     int i;
     
-    i = 1;
-    while (cmds[i])
-    {
-        if (!check_existing_variable(cmds[i], list))
-            create_env_node(cmds[i],i);
-        i++;
-    }
-}
+//     i = 1;
+//     while (cmds[i])
+//     {
+//         if (!check_existing_variable(cmds[i], list))
+//             create_env_node(cmds[i],i);
+//         i++;
+//     }
+// }
 
-void    ft_export(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
-{
-    char **cmds;
+// void    ft_export(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
+// {
+//     char **cmds;
     
-    int i;
+//     int i;
 
-    i = 0;
-    cmds = get_commands(exec_node->cmd->cmds);
-    // if there is no argument just print the list of env sorted.
-    if (!cmds[1])
-        print_env_list(list);
-    // validate that the arguments are valid.
-    // add the nodes entered into the linked list.
-    else if (number_of_el(cmds) > 1)
-    {
-        if(!validate_export_args(cmds))
-            add_export_variable(cmds, list);
-    }
-    // Overwrite the value that is already been written by export. 
-}
+//     i = 0;
+//     cmds = get_commands(exec_node->cmd->cmds);
+//     // if there is no argument just print the list of env sorted.
+//     if (!cmds[1])
+//         print_env_list(list);
+//     // validate that the arguments are valid.
+//     // add the nodes entered into the linked list.
+//     else if (number_of_el(cmds) > 1)
+//     {
+//         if(!validate_export_args(cmds))
+//             add_export_variable(cmds, list);
+//     }
+//     // Overwrite the value that is already been written by export. 
+// }

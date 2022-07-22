@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/20 22:25:20 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/22 10:39:22 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,40 @@
 // We should be aware that in the case of ctrl c the minishell should not complete its job. we should add a condition
 // That will stop that from happening
 
-void    handle_heredoc(t_redirect *node, lexer_node_t *wp, int fd)
+void    handle_ctrl(t_redirect *redirects, t_cmd *cmds, t_redirect *tmp)
+{
+    int pid;
+    int fd;
+    int status;
+    
+    fd = open("/tmp/.minishell", O_CREAT | O_RDWR | O_TRUNC, 0644);
+    pid = fork();
+    if (pid == 0)
+        handle_heredoc(tmp, fd);
+    else
+    {
+        heredoc_status = pid;
+        wait(NULL);
+    }
+    if (heredoc_status)
+    {
+        char *content;
+        fd = open("/tmp/.minishell", O_RDWR);
+        content = advanced_get_next_line(fd, 1);
+        while (content != NULL)
+        {
+            tmp->heredoc_content = ft_strjoin(tmp->heredoc_content, content);
+            free(content);
+            content = advanced_get_next_line(fd, 1);
+        }
+    }
+}
+
+void    handle_heredoc(t_redirect *node, int fd)
 {
     char *input;
 
-    write(1, ">", 1);
+    write(1, "> ", 2);
     input = advanced_get_next_line(0, 0);
     if (input == NULL)
         exit(1);
@@ -32,7 +61,7 @@ void    handle_heredoc(t_redirect *node, lexer_node_t *wp, int fd)
         }
         else
             break;
-        write(1, ">", 1);
+        write(1, "> ", 2);
         input = advanced_get_next_line(0, 0);
     }
     write(fd, node->heredoc_content, ft_strlen(node->heredoc_content));
@@ -60,35 +89,7 @@ t_exec_node *parse_command(lexer_node_t **node)
         {
             tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
             if (redirect_type((*node)) == HEREDOC)
-            {
-                int pid;
-                int fd;
-                int status;
-                
-                fd = open("/tmp/.minishell", O_CREAT | O_RDWR | O_TRUNC, 0644);
-                pid = fork();
-                if (pid == 0)
-                    handle_heredoc(tmp, (*node), fd);
-                else
-                {
-                    heredoc_status = pid;
-                    wait(NULL);
-                }
-                if (heredoc_status)
-                {
-                    char *content;
-                    fd = open("/tmp/.minishell", O_RDWR);
-                    content = advanced_get_next_line(fd, 1);
-                    while (content != NULL)
-                    {
-                        tmp->heredoc_content = ft_strjoin(tmp->heredoc_content, content);
-                        free(content);
-                        content = advanced_get_next_line(fd, 1);
-                    }
-                }
-                else
-                    return (new_exec_cmd(command_node(redirects, cmds), TRUE, TRUE));
-            }
+                handle_ctrl(redirects, cmds, tmp);
             (*node) = (*node)->next->next;
         }
     }
