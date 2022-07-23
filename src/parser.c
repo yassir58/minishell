@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/22 16:40:49 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/23 09:39:24 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,15 @@ void    handle_heredoc(t_redirect *node, int fd)
     exit(0);
 }
 
+void    parse_cmd_args(t_cmd **cmds, lexer_node_t **node)
+{
+    while (*node && ((*node)->token == WORD || (*node)->token == DOUBLE_QUOTED_SEQUENCE || (*node)->token == SINGLE_QUOTED_SEQUENCE))
+    {
+        add_command(cmds, new_command(ft_strdup((*node)->start)));
+        (*node) = (*node)->next;
+    }
+}
+
 t_exec_node *parse_command(lexer_node_t **node)
 {
     t_redir_type type;
@@ -88,11 +97,7 @@ t_exec_node *parse_command(lexer_node_t **node)
     redirects = NULL;
     while ((*node != NULL) && !check_node(*node, "|"))
     {
-        while (*node && ((*node)->token == WORD || (*node)->token == DOUBLE_QUOTED_SEQUENCE || (*node)->token == SINGLE_QUOTED_SEQUENCE))
-        {
-            add_command(&cmds, new_command(ft_strdup((*node)->start)));
-            (*node) = (*node)->next;
-        } 
+        parse_cmd_args(&cmds, node);
         if ((*node) && check_redirect((*node)))
         {
             tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
