@@ -204,7 +204,7 @@ void        print_commands(t_cmd *list);
 // - Function related to parser handler
 
 
-void    handle_heredoc(t_redirect *node, int fd);
+void    handle_heredoc(t_redirect *node, int fd, lexer_node_t *word);
 
 // - Function related to string convesion.
 int     commands_number(t_cmd *list);

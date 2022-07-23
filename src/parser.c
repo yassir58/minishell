@@ -6,14 +6,12 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/23 09:39:24 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/23 11:06:40 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// We should be aware that in the case of ctrl c the minishell should not complete its job. we should add a condition
-// That will stop that from happening
 
 void    get_file_content(t_redirect *tmp)
 {
@@ -30,7 +28,7 @@ void    get_file_content(t_redirect *tmp)
     }
 }
 
-int handle_ctrl(t_redirect *redirects, t_cmd *cmds, t_redirect *tmp)
+int handle_ctrl(t_redirect *tmp, lexer_node_t *word)
 {
     int pid;
     int fd;
@@ -39,7 +37,7 @@ int handle_ctrl(t_redirect *redirects, t_cmd *cmds, t_redirect *tmp)
     fd = open("/tmp/.minishell", O_CREAT | O_RDWR | O_TRUNC, 0644);
     pid = fork();
     if (pid == 0)
-        handle_heredoc(tmp, fd);
+        handle_heredoc(tmp, fd, word);
     else
     {
         heredoc_status = pid;
@@ -52,7 +50,7 @@ int handle_ctrl(t_redirect *redirects, t_cmd *cmds, t_redirect *tmp)
     return (1);
 }
 
-void    handle_heredoc(t_redirect *node, int fd)
+void    handle_heredoc(t_redirect *node, int fd, lexer_node_t *word)
 {
     char *input;
 
@@ -64,6 +62,9 @@ void    handle_heredoc(t_redirect *node, int fd)
     {
         if (ft_strcmp(input, node->filename))
         {
+            printf("%s: %d", word->next->start,word->next->token);
+            if (word->next->token == WORD)
+                printf("This should be expanded\n");
             node->heredoc_content = ft_strjoin(node->heredoc_content, input);
             node->heredoc_content = ft_strjoin(node->heredoc_content, "\n");
         }
@@ -85,6 +86,21 @@ void    parse_cmd_args(t_cmd **cmds, lexer_node_t **node)
     }
 }
 
+t_exec_node *check_piped(lexer_node_t **node, t_cmd *cmds, t_redirect *redirects)
+{
+    if (cmds && (*node))
+    {
+        if (check_node(*node, "|"))
+        {
+            (*node) = (*node)->next;
+            return (new_exec_cmd(command_node(redirects, cmds), TRUE, FALSE));
+        }
+    }
+    if ((*node) && check_node(*node, "|"))
+        (*node) = (*node)->next;
+    return (new_exec_cmd(command_node(redirects, cmds), FALSE, FALSE));
+}
+
 t_exec_node *parse_command(lexer_node_t **node)
 {
     t_redir_type type;
@@ -102,22 +118,12 @@ t_exec_node *parse_command(lexer_node_t **node)
         {
             tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
             if (redirect_type((*node)) == HEREDOC)
-                if(!handle_ctrl(redirects, cmds, tmp))
+                if(!handle_ctrl(tmp, (*node)))
                     return (new_exec_cmd(command_node(redirects, cmds), TRUE, TRUE));
             (*node) = (*node)->next->next;
         }
     }
-    if (cmds && (*node))
-    {
-        if (check_node(*node, "|"))
-        {
-            (*node) = (*node)->next;
-            return (new_exec_cmd(command_node(redirects, cmds), TRUE, FALSE));
-        }
-    }
-    if ((*node) && check_node(*node, "|"))
-        (*node) = (*node)->next;
-    return (new_exec_cmd(command_node(redirects, cmds), FALSE, FALSE));
+    return (check_piped(node, cmds, redirects));
 }
 
 t_exec_node   *parse(lexer_node_t *node)
