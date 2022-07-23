@@ -81,6 +81,5 @@ t_exec_node   *parse(lexer_node_t *node)
             }
        }
    }
-   //print_exec_node(list);
    return (list);
 }

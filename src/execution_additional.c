@@ -71,11 +71,11 @@ void close_unused_fds_2 (int **fds_table , int used1, int used2)
 void handle_builtin (shell_args_t *args, t_exec_node *tmp, int **fds, int indx)
 {
       //handle_redirections (args, tmp->cmd->redir_list);
-    //   if (tmp->prev != NULL && tmp->next != NULL)
-    //      handle_doubly_piped (indx, fds);
-    //   else if (tmp->next == NULL && tmp->prev != NULL)
-    //      handle_last_command (indx, fds);
-    //   else if (tmp->next != NULL && tmp->prev == NULL)
-    //      handle_first_command (indx, fds);
+      if (tmp->prev != NULL && tmp->next != NULL)
+         handle_doubly_piped (indx, fds);
+      else if (tmp->next == NULL && tmp->prev != NULL)
+         handle_last_command (indx, fds);
+      else if (tmp->next != NULL && tmp->prev == NULL)
+         handle_first_command (indx, fds);
       builtin_routine (args, tmp);
 }

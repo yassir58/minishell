@@ -6,9 +6,10 @@ void pwd_function (env_list_t *env_list)
     
     pwd = get_pwd (env_list);
     printf ("%s\n", pwd);
+    exit (EXIT_SUCCESS);
 }
 
-int cd_function (char *arg, int flag, env_list_t **env_list)
+void cd_function (char *arg, int flag, env_list_t **env_list)
 {
     int i;
     int err;
@@ -16,7 +17,7 @@ int cd_function (char *arg, int flag, env_list_t **env_list)
     i = 0;
     err = 0;
     if (flag == -1)
-        write (2 ,"cd: Arguments Err \n", 19);
+        builtin_err ("cd: Arguments Err \n", NULL);
     else
     {
         if (arg == NULL)
@@ -27,15 +28,11 @@ int cd_function (char *arg, int flag, env_list_t **env_list)
         {
             err = chdir (arg);
             if (err == -1)
-            {
-                err  = check_for_dots (arg, *env_list);
-                if (err == -1)
-                    printf ("no such file or directory : %s\n", arg);
-            }
+                    builtin_err (" :no such file or directory\n", arg);
         }
         update_pwd_env (env_list);
     }
-    return (0);
+    exit (EXIT_SUCCESS);
 }
 
 void echo_function (char *argv[], int argc)
@@ -63,4 +60,17 @@ void echo_function (char *argv[], int argc)
     }
     if (thrilling)
         printf ("%c", thrilling);
+    exit (EXIT_SUCCESS);
+}
+
+
+void builtin_err (char *err, char *arg)
+{
+    char *res;
+    if (arg)
+        res = ft_strjoin (arg, err);
+    else
+        res = err;
+    ft_putstr_fd (res, 2);
+    exit (EXIT_FAILURE);
 }

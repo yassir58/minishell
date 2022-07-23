@@ -30,6 +30,7 @@ char	*check_access(char *command, char *path)
 	if (path)
 	{
 		temp = ft_strjoin(ft_strjoin(path, "/"), command);
+		printf ("tmp %s\n", temp);
 		if (access(temp, (F_OK & X_OK)) != -1)
 			return (temp);
 	}

@@ -11,6 +11,9 @@
 # include <stdbool.h>
 # include "../libft/libft.h"
 # include <paths.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
 
 /// defining macros
 #define OPERATOR 0
@@ -98,6 +101,7 @@ typedef struct s_exec_node
     bool builtin;
     struct s_exec_node *next;
     struct s_exec_node *prev;
+    bool valid;
 } t_exec_node;
 
 
@@ -148,7 +152,7 @@ void push_env_node (env_list_t **head, env_list_t *node);
 void free_tab (char *tab[]);
 void pwd_function (env_list_t *env_list);
 void test_env_list (env_list_t *list);
-int cd_function (char *arg, int flag, env_list_t **env_list);
+void cd_function (char *arg, int flag, env_list_t **env_list);
 void cd_to_home (env_list_t *env_list);
 int check_for_dots (char *arg, env_list_t *list);
 char *get_pwd_env (env_list_t *list);
@@ -223,7 +227,6 @@ char **check_for_path (char *cmd);
 char **handle_relative_path (char **paths_table);
 char **handle_absolue_path (char **paths_table);
 /// pipes
-void link_pipes (shell_args_t *args);
 void handle_piped_command (shell_args_t *args);
 void init_fds (shell_args_t *args);
 void handle_first_command (int indx, int **fds_table);
@@ -252,6 +255,15 @@ int open_pipe (int *fd, shell_args_t *args);
 int close_fd (int fd);
 int exit_with_failure (shell_args_t *args, char *err_message);
 int fork_child (shell_args_t *args);
-
+void init_command (shell_args_t *args);
+int get_status (int pid);
+void check_for_valid_command (t_exec_node *exec_node);
+void command_exist (t_exec_node *exec_node);
+int handle_simple_command (shell_args_t *args);
+void shell_err (char *command);
+void builtin_err (char *err, char *arg);
+void link_pipes (t_exec_node *tmp, int **fds, int indx);
+void test_piped_commands (shell_args_t *args);
+char **get_path (shell_args_t *args, char **cmds);
 
 #endif
