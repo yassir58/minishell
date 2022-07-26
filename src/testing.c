@@ -41,6 +41,12 @@ void test_env_list (env_list_t *list)
     }
 }
 
+void    print_node_lex(lexer_node_t *node)
+{
+    print_token(node->token);
+    printf("Node: %s\n", node->start);
+}
+
 // void    print_commands(t_cmd *list)
 // {
 //     t_cmd *tmp;

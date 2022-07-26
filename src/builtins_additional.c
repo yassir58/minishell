@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/22 10:23:15 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/26 14:37:16 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,8 @@
 //     return (0);
 // }
 
+// // This hole logic of checking existing nodes needs to be rechecked.
+
 // int   check_existing_variable(char *argument, env_list_t *list)
 // {
 //     env_list_t *node;
@@ -203,14 +205,18 @@
 //         node = search_env_variable(object[0], list);
 //         if (node)
 //         {
-//             if (object[1])
-//                 node->value = object[1];
-//             else
-//                 return (0);
+//             if (!object[1])
+//                 return (1);
+//             node->value = object[1];
+//         }
+//         else
+//         {
+//             if (!object[1])
+//                 return (1);
 //         }
 //     }
 //     free_string_table(object);
-//     return (1);
+//     return (0);
 // }
 
 // void    add_export_variable(char **cmds, env_list_t *list)

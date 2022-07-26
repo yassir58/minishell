@@ -265,6 +265,12 @@ void        print_env_list (env_list_t *list);
 void        order_env_list(env_list_t *list);
 void    print_unsorted_env(env_list_t *list);
 
+
+
+// - Testing
+
+void    print_node_lex(lexer_node_t *node);
+
 // - Functions related to the parser clean up.
 void	free_parser(t_exec_node **lst);
 void	free_string_table(char **table);

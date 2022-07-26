@@ -16,7 +16,8 @@ int main (int argc ,char *argv[], char *env[])
         args->prompt = update_prompt (args);
         args->line = prompt(args->prompt);
         args->lexer_list = lexer (args->line);
-        check_word (args->lexer_list);
+        // testing(args->lexer_list);lear
+        // check_word (args->lexer_list);
         syntax_validation (args->lexer_list);
         args->exec_node = parse (args->lexer_list);
         // execution_function (args);
