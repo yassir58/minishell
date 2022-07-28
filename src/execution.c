@@ -87,8 +87,6 @@ void exec_command (shell_args_t *args, t_exec_node *exec_node)
     execve (path[0], cmds, args->env);
 }
 
-
-
 char **check_for_path (char *cmd)
 {
     char **path_table;

@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:04 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/28 12:18:45 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/28 12:30:30 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool    delete_env_variable(char *var, env_list_t *list)
     env_list_t *tmp;
     env_list_t *node;
 
-    if (node = search_env_variable(var, list))
+    if (node == search_env_variable(var, list))
     {
         node->next = node->next->next;
         free(node->next);

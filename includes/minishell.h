@@ -11,6 +11,8 @@
 # include "../libft/libft.h"
 # include <paths.h>
 # include <sys/types.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
 
@@ -112,7 +114,6 @@ typedef struct shell_args_s
     env_list_t *env_list;
     lexer_node_t *lexer_list;
     t_exec_node *exec_node;
-    int exit_code;
     int shell_level;
     char **env;
 } shell_args_t;
@@ -122,6 +123,8 @@ lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
 lexer_node_t *handle_delim (char *line, int *index);
 lexer_node_t *handle_operator (char *line, int *index);
+char **handle_absolue_path (char **path_table);
+char **handle_relative_path (char **path_table);
 void handle_quote (char *line, int *index, lexer_node_t **node);
 void push_to_list (lexer_node_t **head, lexer_node_t *node);
 void create_token_list (lexer_node_t **head, lexer_node_t *temp);
@@ -286,8 +289,8 @@ void	free_parser(t_exec_node **lst);
 void	free_string_table(char **table);
 
 // - Util functions for builtins
-
-int is_number(char *str);
+char	*advanced_get_next_line(int fd, int status);
+int     is_number(char *str);
 
 // - Functions related to the signals handling
 

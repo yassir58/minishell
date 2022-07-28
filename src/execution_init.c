@@ -14,7 +14,6 @@ int init_command (shell_args_t *args)
 
     if (args->exec_node == NULL)
         return (258);
-    printf ("test\n");
     if (args->exec_node->next == NULL)
         status = handle_simple_command (args);
     else

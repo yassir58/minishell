@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:40 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/22 09:49:04 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/28 12:39:36 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	free_parser(t_exec_node **lst)
 	while (*lst)
 	{
 		tmp_node = *lst;
-        clear_redirections(tmp_node->cmd->redir_list);
-        clear_commands(tmp_node->cmd->cmds);
+        clear_redirections(&tmp_node->cmd->redir_list);
+        clear_commands(&tmp_node->cmd->cmds);
 		*lst = tmp_node->next;
 		free(tmp_node);
 	}
