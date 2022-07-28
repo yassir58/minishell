@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/28 12:44:40 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/28 15:05:45 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void    handle_heredoc(t_redirect *node, int fd, lexer_node_t *word)
         if (ft_strcmp(input, node->filename))
         {
             if (word->next->token == WORD)
-                printf("This should be expanded\n");
+                input = expand_variable(input);
             node->heredoc_content = ft_strjoin(node->heredoc_content, input);
             node->heredoc_content = ft_strjoin(node->heredoc_content, "\n");
         }

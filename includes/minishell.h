@@ -199,7 +199,7 @@ int ft_env(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
 void handle_exit(char **cmds, shell_args_t *args);
 int ft_exit(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
 env_list_t *search_env_variable(char *var, env_list_t *list);
-bool    delete_env_variable(char *var, env_list_t *list);
+void    delete_env_variable(char *var, env_list_t *list);
 void print_env_list (env_list_t *list);
 int     check_space(char *str);
 char    *prompt(char *string);
@@ -273,7 +273,6 @@ char    *prompt(char *string);
 
 // - Function related to the ENV variables.
 env_list_t  *search_env_variable(char *var, env_list_t *list);
-bool        delete_env_variable(char *var, env_list_t *list);
 void        print_env_list (env_list_t *list);
 void        order_env_list(env_list_t *list);
 void    print_unsorted_env(env_list_t *list);
