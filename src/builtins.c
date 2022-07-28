@@ -1,15 +1,15 @@
 #include "../includes/minishell.h"
 
-void pwd_function (env_list_t *env_list)
+int pwd_function (env_list_t *env_list)
 {
     char *pwd;
     
     pwd = get_pwd (env_list);
     printf ("%s\n", pwd);
-    exit (EXIT_SUCCESS);
+    return (0);
 }
 
-void cd_function (char *arg, int flag, env_list_t **env_list)
+int cd_function (char *arg, int flag, env_list_t **env_list)
 {
     int i;
     int err;
@@ -32,10 +32,10 @@ void cd_function (char *arg, int flag, env_list_t **env_list)
         }
         update_pwd_env (env_list);
     }
-    exit (EXIT_SUCCESS);
+    return (0);
 }
 
-void echo_function (char *argv[], int argc)
+int echo_function (char *argv[], int argc)
 {
     int i = 1;
     char thrilling;
@@ -60,11 +60,11 @@ void echo_function (char *argv[], int argc)
     }
     if (thrilling)
         printf ("%c", thrilling);
-    exit (EXIT_SUCCESS);
+    return (0);
 }
 
 
-void builtin_err (char *err, char *arg)
+int builtin_err (char *err, char *arg)
 {
     char *res;
     if (arg)
@@ -72,5 +72,5 @@ void builtin_err (char *err, char *arg)
     else
         res = err;
     ft_putstr_fd (res, 2);
-    exit (EXIT_FAILURE);
+    return (1);
 }

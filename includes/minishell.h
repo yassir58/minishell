@@ -11,8 +11,9 @@
 # include <stdbool.h>
 # include "../libft/libft.h"
 # include <paths.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <sys/stat.h>
 
 
 /// defining macros
@@ -139,8 +140,8 @@ void free_list(lexer_node_t *node);
 void print_token (int token);
 void testing (lexer_node_t *node);
 lexer_node_t *init_node ();
-void syntax_error (lexer_node_t *node);
-void syntax_validation (lexer_node_t *node);
+int syntax_error (shell_args_t *args);
+int syntax_validation (shell_args_t *args);
 void check_word (lexer_node_t *tokens_list);
 char *expand_variable (char *str);
 char *extract_var_name (char *str, int *index);
@@ -150,22 +151,19 @@ env_list_t *get_env_list (char *env[]);
 env_list_t *create_env_node (char *envStr);
 void push_env_node (env_list_t **head, env_list_t *node);
 void free_tab (char *tab[]);
-void pwd_function (env_list_t *env_list);
+int pwd_function (env_list_t *env_list);
 void test_env_list (env_list_t *list);
-void cd_function (char *arg, int flag, env_list_t **env_list);
+int cd_function (char *arg, int flag, env_list_t **env_list);
 void cd_to_home (env_list_t *env_list);
 int check_for_dots (char *arg, env_list_t *list);
 char *get_pwd_env (env_list_t *list);
 int update_pwd_env (env_list_t **list);
 char *get_pwd (env_list_t *env_list);
-void echo_function (char *argv[], int argc);
-void validate_first_node (lexer_node_t *node);
-void invalid_operator (lexer_node_t *node);
-void validate_last_node (lexer_node_t *node);
-void validate_first_node (lexer_node_t *node);
-void invalid_operator (lexer_node_t *node);
-void validate_last_node (lexer_node_t *node);
-void handle_piped_command (shell_args_t *args);
+int echo_function (char *argv[], int argc);
+int invalid_operator (shell_args_t *args, lexer_node_t *node);
+int validate_first_node (shell_args_t *args);
+int validate_last_node (shell_args_t *args);
+int handle_piped_command (shell_args_t *args);
 int check_for_valid_option (char *option);
 /* ======================= Parser Functions ========================== **/
 
@@ -181,7 +179,7 @@ t_exec_node *parse_command(lexer_node_t **node);
 t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped);
 t_exec_node *new_exec_pipe();
 t_exec_node *last_exec_node(t_exec_node *list);
-t_exec_node   *parse(lexer_node_t *node);
+t_exec_node   *parse(shell_args_t *args, lexer_node_t *node);
 bool is_builtin(t_cmd_node *cmd);
 t_cmd_node *command_node(t_redirect *redirlist, t_cmd *cmdlist);
 int	advanced_strcmp(char *s1, char *s2);
@@ -191,7 +189,7 @@ int number_of_el(char **cmds);
 void    display(char **cmds);
 void    print_exec_node(t_exec_node *list);
 void handle_nonbuiltin (shell_args_t *args, t_exec_node *exec_node);
-void handle_builtin (shell_args_t *args, t_exec_node *tmp, int **fds, int indx);
+int handle_builtin (shell_args_t *args, t_exec_node *tmp, int **fds, int indx);
 int execution_chain (shell_args_t *args);
 int builtin_routine (shell_args_t *args, t_exec_node *exec_node);
 void exec_command (shell_args_t *args, t_exec_node *exec_node);
@@ -218,7 +216,7 @@ char    *prompt(char *string);
 
 ///////// testing ////////
 void    test_exec_node (t_exec_node *node);
-char	*check_access(char *command, char *path);
+char	*check_access(char *command, char *path, int *status);
 char	**paths_table(char *path);
 char    *update_prompt (shell_args_t *args);
 void print_fd_table (int **fds_table);
@@ -227,7 +225,6 @@ char **check_for_path (char *cmd);
 char **handle_relative_path (char **paths_table);
 char **handle_absolue_path (char **paths_table);
 /// pipes
-void handle_piped_command (shell_args_t *args);
 void init_fds (shell_args_t *args);
 void handle_first_command (int indx, int **fds_table);
 void handle_last_command (int indx, int **fds_table);
@@ -240,9 +237,7 @@ void close_unused_fds (int **fds_table , int used);
 void close_unused_fds_2 (int **fds_table, int used1, int used2);
 env_list_t *create_path_node (void);
 void init_old_pwd (env_list_t **env_list);
-void get_childer_status (void);
-void handle_redirected_command (shell_args_t *args, t_exec_node *tmp, int **fds, int indx);
-void handle_builtin (shell_args_t *args, t_exec_node *tmp, int **fds, int indx);
+int get_childer_status (void);
 /// redirections
 int handle_redir_input (shell_args_t *args, t_redirect *redirect_node);
 int handle_redir_output (shell_args_t *args, t_redirect *redirect_node);
@@ -255,15 +250,17 @@ int open_pipe (int *fd, shell_args_t *args);
 int close_fd (int fd);
 int exit_with_failure (shell_args_t *args, char *err_message);
 int fork_child (shell_args_t *args);
-void init_command (shell_args_t *args);
+int init_command (shell_args_t *args);
 int get_status (int pid);
 void check_for_valid_command (t_exec_node *exec_node);
 void command_exist (t_exec_node *exec_node);
 int handle_simple_command (shell_args_t *args);
-void shell_err (char *command);
-void builtin_err (char *err, char *arg);
+void shell_err (char *command, int status);
+int builtin_err (char *err, char *arg);
 void link_pipes (t_exec_node *tmp, int **fds, int indx);
-void test_piped_commands (shell_args_t *args);
-char **get_path (shell_args_t *args, char **cmds);
+int test_piped_commands (shell_args_t *args);
+char **get_path (shell_args_t *args, char **cmds, int *status);
+int handle_cd (shell_args_t *args, char **cmds);
+int access_status (char *cmd, int *status);
 
 #endif

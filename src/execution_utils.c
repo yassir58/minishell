@@ -42,16 +42,25 @@ int nodes_number (shell_args_t *args)
     return (len);
 }
 
-void get_childer_status (void)
+int get_childer_status (void)
 {
    int flag;
    int status;
+   int parent_status;
+   int prev_child;
 
    flag = 0;
+   prev_child = 1;
    while (flag != -1)
    {
-      flag = waitpid (-1 , &status, 0);
-      if (WIFEXITED(status) && flag != -1)
-         printf ("%d exit status %d\n",flag, WEXITSTATUS(status));
+        flag = waitpid (-1 , &status, 0);
+        if (WIFEXITED(status) && flag != -1)
+        {
+            printf ("%d exit status %d\n",flag, WEXITSTATUS (status));
+            if (flag > prev_child)
+                parent_status = WEXITSTATUS (status);
+            prev_child = flag;
+        }
    }
+   return (parent_status);
 }

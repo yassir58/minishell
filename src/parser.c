@@ -54,32 +54,35 @@ t_exec_node *parse_command(lexer_node_t **node)
     return (new_exec_cmd(command_node(redirects, cmds), FALSE));
 }
 
-t_exec_node   *parse(lexer_node_t *node)
+t_exec_node   *parse(shell_args_t *args, lexer_node_t *node)
 {
-   t_exec_node *list;
-   t_exec_node *exec_node;
-   t_exec_node *last_node;
-   lexer_node_t *token;
+    t_exec_node *list;
+    t_exec_node *exec_node;
+    t_exec_node *last_node;
+    lexer_node_t *token;
 
-   token = node;
-   list = NULL;
-   if (token && !check_node(node, "|"))
-   {
-       while (token)
-       {
-            exec_node = parse_command(&token);
-            if (!list)
+    token = node;
+    list = NULL;
+    if (!syntax_validation (args))
+    {
+        if (token && !check_node(node, "|"))
+        {
+            while (token)
             {
-                exec_node->prev = NULL;
-                list = exec_node;
+                exec_node = parse_command(&token);
+                if (!list)
+                {
+                    exec_node->prev = NULL;
+                    list = exec_node;
+                }
+                else 
+                {
+                    last_node = last_exec_node(list);
+                    last_node->next = exec_node;
+                    exec_node->prev = last_node;
+                }
             }
-            else 
-            {
-                last_node = last_exec_node(list);
-                last_node->next = exec_node;
-                exec_node->prev = last_node;
-            }
-       }
-   }
+        }
+    }
    return (list);
 }

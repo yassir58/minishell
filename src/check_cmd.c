@@ -6,7 +6,7 @@
 /*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:45:04 by yelatman          #+#    #+#             */
-/*   Updated: 2022/07/03 13:36:54 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/07/27 13:58:32 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	**paths_table(char *path)
 	return (paths);
 }
 
-char	*check_access(char *command, char *path)
+char	*check_access(char *command, char *path, int *status)
 {
 	char **paths;
 	int 	i;
@@ -29,9 +29,8 @@ char	*check_access(char *command, char *path)
 	i = 0;
 	if (path)
 	{
-		temp = ft_strjoin(ft_strjoin(path, "/"), command);
-		printf ("tmp %s\n", temp);
-		if (access(temp, (F_OK & X_OK)) != -1)
+		temp = command;
+		if (access_status(temp, status) == 0)
 			return (temp);
 	}
 	else
@@ -40,7 +39,7 @@ char	*check_access(char *command, char *path)
 		while (paths[i])
 		{
 			temp = ft_strjoin(ft_strjoin(paths[i], "/"), command);
-			if (access(temp, (F_OK & X_OK)) != -1)
+			if (access_status (temp, status) == 0 && ft_strcmp(command, ""))
 			{
 				free_tab(paths);
 				return (temp);
@@ -52,4 +51,28 @@ char	*check_access(char *command, char *path)
 		free_tab(paths);	
 	}
 	return (NULL);
+}
+
+
+int access_status (char *cmd, int *status)
+{
+	int rt_status;
+	struct stat sfile;
+	
+	if (access (cmd, F_OK) != -1)
+	{
+			if (access (cmd, X_OK) != -1)
+			{
+				*status = 0;
+				stat (cmd, &sfile);
+				if (S_ISDIR(sfile.st_mode) == 1)
+				*status = -126;	
+			}
+			else
+				*status = 126;
+	}
+	else 
+		*status = 127;
+	rt_status = *status;
+	return (rt_status);
 }

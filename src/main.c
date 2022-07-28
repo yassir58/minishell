@@ -5,6 +5,8 @@ int main (int argc ,char *argv[], char *env[])
     shell_args_t *args;
     char *buffer;
     int id;
+    int status;
+    int g_status = 0;
 
     args = malloc (sizeof (shell_args_t));
     args->line = "";
@@ -15,11 +17,16 @@ int main (int argc ,char *argv[], char *env[])
         args->prompt = update_prompt (args);
         args->line = readline (args->prompt);
         args->lexer_list = lexer (args->line);
-        check_word (args->lexer_list);
-        syntax_validation (args->lexer_list);
-        args->exec_node = parse (args->lexer_list);
-        test_piped_commands (args);
-        get_childer_status ();
+        args->exec_node = parse (args, args->lexer_list);
+        print_exec_node (args->exec_node);
+        status = init_command (args);
+        if (status)
+            printf ("status : %d\n", status);
+        else
+        {
+            g_status = get_childer_status ();
+            printf ("g_status %d \n", g_status);
+        }
         args->prompt = update_prompt (args);
         free (args->line);
     }

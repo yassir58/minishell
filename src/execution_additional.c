@@ -1,6 +1,5 @@
 #include "../includes/minishell.h"
 
-
 void close_fd_table (int **fd_table)
 {
     int i;
@@ -15,7 +14,6 @@ void close_fd_table (int **fd_table)
     }
     free (fd_table);
 }
-
 
 int **open_fd_table (int size , shell_args_t *args)
 {
@@ -36,7 +34,6 @@ int **open_fd_table (int size , shell_args_t *args)
     return (fd_table);
 }
 
-
 void close_unused_fds (int **fds_table , int used)
 {
     int i;
@@ -52,6 +49,7 @@ void close_unused_fds (int **fds_table , int used)
         i++;
     }
 }
+
 void close_unused_fds_2 (int **fds_table , int used1, int used2)
 {
     int i;
@@ -68,14 +66,16 @@ void close_unused_fds_2 (int **fds_table , int used1, int used2)
     }
 }
 
-void handle_builtin (shell_args_t *args, t_exec_node *tmp, int **fds, int indx)
+int handle_builtin (shell_args_t *args, t_exec_node *tmp, int **fds, int indx)
 {
-      //handle_redirections (args, tmp->cmd->redir_list);
-      if (tmp->prev != NULL && tmp->next != NULL)
-         handle_doubly_piped (indx, fds);
-      else if (tmp->next == NULL && tmp->prev != NULL)
-         handle_last_command (indx, fds);
-      else if (tmp->next != NULL && tmp->prev == NULL)
-         handle_first_command (indx, fds);
-      builtin_routine (args, tmp);
+    int status;
+
+    if (tmp->prev != NULL && tmp->next != NULL)
+        handle_doubly_piped (indx, fds);
+    else if (tmp->next == NULL && tmp->prev != NULL)
+        handle_last_command (indx, fds);
+    else if (tmp->next != NULL && tmp->prev == NULL)
+        handle_first_command (indx, fds);
+    status = builtin_routine (args, tmp);
+    return (status);
 }

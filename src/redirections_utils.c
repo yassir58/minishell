@@ -3,7 +3,7 @@
 int handle_redir_input (shell_args_t *args, t_redirect *redirect_node)
 {
     int fd;
-
+  
     fd = open (redirect_node->filename, O_RDONLY, 0644);
     if (fd == -1)
         return (exit_with_failure (args, "no such file or directory\n"));

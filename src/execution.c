@@ -1,32 +1,41 @@
 #include "../includes/minishell.h"
 
-void test_piped_commands (shell_args_t *args)
+int test_piped_commands (shell_args_t *args)
 {
     t_exec_node *tmp;
     int **fds;
     int indx;
     int id;
+    int status;
 
     indx = 0;
     tmp = args->exec_node;
+    if (!tmp)
+        return (258);
     fds = open_fd_table (nodes_number(args), args);
-    while (tmp)
-    {
-        id = fork_child (args);
-        if (!id)
+
+        while (tmp)
         {
-            if (tmp->builtin)
-                handle_builtin (args, tmp, fds, indx);
-            else
+            id = fork_child (args);
+            if (!id)
             {
-                link_pipes (tmp, fds, indx);
-                exec_command (args, tmp);
+                handle_redirections (args, tmp->cmd->redir_list);
+                if (tmp->builtin)
+                {
+                    status = handle_builtin (args, tmp, fds, indx);
+                    exit (status);
+                }
+                else
+                {
+                    link_pipes (tmp, fds, indx);
+                    exec_command (args, tmp);
+                }
             }
+            indx++;
+            tmp = tmp->next;
         }
-        indx++;
-        tmp = tmp->next;
-    }
     close_fd_table (fds);
+    return (0);
 }
 
 void link_pipes (t_exec_node *tmp, int **fds, int indx)
@@ -42,42 +51,39 @@ void link_pipes (t_exec_node *tmp, int **fds, int indx)
 
 int builtin_routine (shell_args_t *args, t_exec_node *exec_node)
 {
-    char **command;
+    char **cmds;
+    int exit_status;
 
-    command = get_commands (exec_node->cmd->cmds);
-    if (!ft_strcmp (command[0], "cd"))
-    {
-        if (number_of_el (command) > 2)
-            cd_function (NULL, -1, &args->env_list);
-        else if (number_of_el (command) == 2)
-            cd_function (command[1], 1, &args->env_list);
-        else 
-            cd_function (NULL, 1, &args->env_list);
-    }
-    else if (!advanced_strcmp (command[0], "pwd"))
+    cmds = get_commands (exec_node->cmd->cmds);
+    exit_status = 0;
+    if (!ft_strcmp (cmds[0], "cd"))
+        exit_status  = handle_cd (args, cmds);
+    else if (!advanced_strcmp (cmds[0], "pwd"))
         pwd_function (args->env_list);
-    else if (!advanced_strcmp (command[0], "echo"))
-        echo_function (command, number_of_el (command));
-    else if (!advanced_strcmp (command[0], "env"))
+    else if (!advanced_strcmp (cmds[0], "echo"))
+        echo_function (cmds, number_of_el (cmds));
+    else if (!advanced_strcmp (cmds[0], "env"))
         ft_env (exec_node, args->env_list, args);
-    else if (!advanced_strcmp (command[0], "unset"))
+    else if (!advanced_strcmp (cmds[0], "unset"))
         ft_unset (exec_node, args->env_list, args);
-    else if (!advanced_strcmp (command[0], "exit"))
+    else if (!advanced_strcmp (cmds[0], "exit"))
         ft_exit (exec_node, args->env_list, args);
-    free_tab (command);
-    return (0);
+    free_tab (cmds);
+    return (exit_status);
 }
 
 void exec_command (shell_args_t *args, t_exec_node *exec_node)
 {
     char **cmds;
     char **path;
+    int status;
 
 
+    status = 0;
     cmds = get_commands (exec_node->cmd->cmds);
-    path = get_path (args, cmds);    
+    path = get_path (args, cmds, &status);    
     if (!path[0])
-        shell_err (cmds[0]);
+        shell_err (cmds[0], status);
     execve (path[0], cmds, args->env);
 }
 
@@ -162,26 +168,37 @@ char **handle_relative_path (char **path_table)
 int handle_simple_command (shell_args_t *args)
 {
     int id;
+    int status;
 
-    id = fork_child (args);
-    if (id == 0)
+    status = 0;
+    handle_redirections (args, args->exec_node->cmd->redir_list);
+    if (args->exec_node->builtin)
+        status = builtin_routine (args, args->exec_node);
+    else 
     {
-        if (args->exec_node->builtin)
-            builtin_routine (args, args->exec_node);
-        else
+        id = fork_child (args);
+        if (id == 0)
             exec_command (args, args->exec_node);
     }
-    return (id);
+    return (status);
 }
 
 
-void shell_err (char *command)
+void shell_err (char *command, int status)
 {
-    ft_putstr_fd (ft_strjoin (command, ": command not found\n"), STDERR_FILENO);
-    exit (127);
+    if (status == -126)
+    {
+        status = 126;
+        ft_putstr_fd (ft_strjoin (command, ": is a directory\n"), STDERR_FILENO);
+    }
+    else if (status == 127)
+        ft_putstr_fd (ft_strjoin (command, ": command not found\n"), STDERR_FILENO);
+    else    
+        ft_putstr_fd (ft_strjoin (command, ":  Permission denied\n"), STDERR_FILENO);
+    exit (status);
 }
 
-char **get_path (shell_args_t *args, char **cmds)
+char **get_path (shell_args_t *args, char **cmds, int *status)
 {
     char *path;
     char **path_check;
@@ -201,9 +218,22 @@ char **get_path (shell_args_t *args, char **cmds)
     }
     else
         path_table[1] = cmds[0];
-    path = check_access (path_table[1], path);
-    printf ("hello p %s \n", path);
-    printf ("hello s %s \n", path);
+    path = check_access (cmds[0], path, status);
     path_table[0] = path;
     return (path_table);
+}
+
+
+int handle_cd (shell_args_t *args, char **cmds)
+{
+    int exit_status ;
+
+    exit_status = 0;
+    if (number_of_el (cmds) > 2)
+        exit_status = cd_function (NULL, -1, &args->env_list);
+    else if (number_of_el (cmds) == 2)
+        exit_status = cd_function (cmds[1], 1, &args->env_list);
+    else 
+        exit_status = cd_function (NULL, 1, &args->env_list);
+    return (exit_status);
 }

@@ -7,12 +7,19 @@
     /// exit
     /// wait for exit status of child
 
-void init_command (shell_args_t *args)
+int init_command (shell_args_t *args)
 {
-    // if (args->exec_node->next == NULL)
-    //     handle_simple_command (args);
-    // else
-    //     test_piped_commands (args);
+    int status;
+
+
+    if (args->exec_node == NULL)
+        return (258);
+    printf ("test\n");
+    if (args->exec_node->next == NULL)
+        status = handle_simple_command (args);
+    else
+        status = test_piped_commands (args);
+    return (status);
 }
 
 
