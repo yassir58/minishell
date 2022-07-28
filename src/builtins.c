@@ -24,6 +24,8 @@ int cd_function (char *arg, int flag, env_list_t **env_list)
             cd_to_home (*env_list);
         else if (!strcmp (arg, "~"))
             cd_to_home (*env_list);
+        else if (!strcmp (arg, "-"))
+             cd_prev_pwd (*env_list);
         else
         {
             err = chdir (arg);

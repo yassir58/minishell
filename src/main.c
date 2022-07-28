@@ -18,7 +18,7 @@ int main (int argc ,char *argv[], char *env[])
         args->line = readline (args->prompt);
         args->lexer_list = lexer (args->line);
         args->exec_node = parse (args, args->lexer_list);
-        print_exec_node (args->exec_node);
+        // print_exec_node (args->exec_node);
         status = init_command (args);
         if (status)
             printf ("status : %d\n", status);

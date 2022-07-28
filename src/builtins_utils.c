@@ -1,40 +1,26 @@
 #include "../includes/minishell.h"
 
-int check_for_dots (char *arg, env_list_t *list)
+int cd_prev_pwd (env_list_t *env_list)
 {
-    int i;
-    int count;
+    env_list_t *tmp;
+    int err;
 
-    i = 0;
-    count = 0;
-    if (!ft_strncmp (arg, "..", 2))
+    tmp = env_list;
+    while (tmp)
     {
-        i = 2;
-        while (arg[i])
-        {
-            if (arg[i] != '.')
-                return (-1);
-            else
-                count++;
-            i++;
-        }
-        if (count > 5)
-            return (-1);
-        else
-        {
-            chdir ("..");
-            while (count--)
-                chdir ("..");
-            update_pwd_env (&list);
-            return (0);
-        }
+        if (!(strcmp (tmp->variable_name, "OLDPWD")))
+            break ;
+        tmp = tmp->next;
     }
-    return (-1);
+    err = chdir (tmp->value);
+    if (err == -1)
+            return (builtin_err (" :no such file or directory\n", tmp->value));
+    return (0);
 }
 
 void cd_to_home (env_list_t *env_list)
 {
-     env_list_t *tmp;
+    env_list_t *tmp;
 
     tmp = env_list;
     while (tmp)

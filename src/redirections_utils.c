@@ -3,25 +3,28 @@
 int handle_redir_input (shell_args_t *args, t_redirect *redirect_node)
 {
     int fd;
-  
+
+    if (access(redirect_node->filename, (F_OK)))
+    {
+        printf ("%s no such file or directory \n", redirect_node->filename);
+        return (-1);
+    }
     fd = open (redirect_node->filename, O_RDONLY, 0644);
     if (fd == -1)
-        return (exit_with_failure (args, "no such file or directory\n"));
-    else
-        dup2 (fd, STDIN_FILENO);
-    return (0);
+        return (exit_with_failure (args, "failed top opem file for reading\n"));
+    
+    return (fd);
 }
 
 int handle_redir_output (shell_args_t *args, t_redirect *redirect_node)
 {
     int fd;
-    
-    fd = open (redirect_node->filename, O_WRONLY | O_CREAT, 0644);
+ 
+    fd = open (redirect_node->filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
     if (fd == -1)
         return (exit_with_failure (args, "failed to open file for writing\n"));
-    else
-        dup2 (fd , STDOUT_FILENO);
-    return (0);
+
+    return (fd);
 }
 
 int handle_redir_append (shell_args_t *args, t_redirect *redirect_node)
@@ -55,27 +58,28 @@ int handle_herdoc (shell_args_t *args ,t_redirect *redirect_node)
     return (0);
 }
 
-int handle_redirections (shell_args_t *args ,t_redirect *redir_list)
+int handle_redirections (shell_args_t *args , t_exec_node *exec_node, int *infile, int *outfile)
 {
-    t_redirect *tmp;
-    int err;
+    t_redirect *temp;
 
-
-    tmp = redir_list;
-    err = 0;
-    while (tmp)
+    temp = exec_node->cmd->redir_list;
+    while (temp)
     {
-        if (tmp->type == REDIRIN)
-            err = handle_redir_input (args, tmp);
-        else if (tmp->type == REDIROUT)
-            err = handle_redir_output (args, tmp);
-        else if (tmp->type == APPEND)
-            err = handle_redir_append (args, tmp);
-        else if (tmp->type == HEREDOC)
-            err =handle_herdoc (args, tmp);
-        if (err == EXIT_FAILURE)
-            break;
-        tmp = tmp->next;
+        if (temp->type == REDIRIN)
+            *infile = handle_redir_input (args, temp);
+        else if (exec_node->cmd->redir_list->type == REDIROUT)
+            *outfile = handle_redir_output (args, temp);
+        if (*infile == -1 || *outfile == -1)
+            return (-1);
+        temp = temp->next;
     }
-    return (err);
+    // dup2 (in, STDIN_FILENO);
+    // dup2 (outfile, STDOUT_FILENO);
+    // else if (tmp->type == APPEND)
+    //     err = handle_redir_append (args, tmp);
+    // else if (tmp->type == HEREDOC)
+    //     err =handle_herdoc (args, tmp);
+    // if (err == EXIT_FAILURE)
+    return (0);
 }
+
