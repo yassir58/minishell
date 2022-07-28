@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "minishell.h": "c",
-        "cstdio": "c"
+        "cstdio": "c",
+        "__node_handle": "c"
     }
 }

@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 11:49:12 by yelatman          #+#    #+#             */
-/*   Updated: 2022/06/29 15:45:49 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/28 12:21:16 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,11 @@ void	ft_putendl_fd(char const *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 int		ft_islower(int c);
 int		ft_isupper(int c);
+<<<<<<< HEAD
 int		ft_isspace(char c);
+=======
+int ft_isspace(char c);
+>>>>>>> 7c602e638357c542f5af2feb203d99303bf919c6
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_front(t_list **lst, t_list *new);
 int		ft_lstsize(t_list *lst);

@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/26 14:04:57 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/28 12:16:42 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ t_exec_node *parse_command(lexer_node_t **node)
     return (check_piped(node, cmds, redirects));
 }
 
-t_exec_node   *parse(lexer_node_t *node)
+t_exec_node   *parse(shell_args_t *args, lexer_node_t *node)
 {
    t_exec_node *list;
    t_exec_node *exec_node;
@@ -136,26 +136,27 @@ t_exec_node   *parse(lexer_node_t *node)
 
    token = node;
    list = NULL;
-   if (token && !check_node(node, "|"))
-   {
-       while (token)
-       {
-            exec_node = parse_command(&token);
-            if (exec_node->status)
-                break;
-            if (!list)
+   if (!syntax_validation (args))
+    {
+        if (token && !check_node(node, "|"))
+        {
+            while (token)
             {
-                exec_node->prev = NULL;
-                list = exec_node;
+                exec_node = parse_command(&token);
+                if (!list)
+                {
+                    exec_node->prev = NULL;
+                    list = exec_node;
+                }
+                else 
+                {
+                    last_node = last_exec_node(list);
+                    last_node->next = exec_node;
+                    exec_node->prev = last_node;
+                }
             }
-            else 
-            {
-                last_node = last_exec_node(list);
-                last_node->next = exec_node;
-                exec_node->prev = last_node;
-            }
-       }
-   }
+        }
+    }
    print_exec_node(list);
    return (list);
 }

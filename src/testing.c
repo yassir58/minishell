@@ -16,14 +16,24 @@ void print_token (int token)
 void testing (lexer_node_t *node)
 {
     printf (" __________________ lexer output __________________\n");
+    lexer_node_t *tmp;
+
+
     if (!node)
         printf ("NULL ==> \n");
     else
     {
-        print_token (node->token);
-        printf ("%s \n", node->start);
-        printf ("JOINABLE\n");
-        //free (node);
+        tmp = node;
+        while (tmp)
+        {
+            print_token (tmp->token);
+            printf ("%s \n", tmp->start);
+            if (tmp->joinable)
+                printf ("JOINABLE\n");
+            if (tmp->invalid == TRUE)
+                printf ("invalid \n");
+            tmp = tmp->next;
+        }
     }
 }
 
@@ -166,17 +176,4 @@ char *update_prompt (shell_args_t *args)
     }
     else
         return (ft_strjoin(pwd, elm));
-}
-
-void print_fd_table (shell_args_t *args)
-{
-    int i;
-
-    i = 0;
-    while (args->fds_table[i])
-    {
-       
-        printf ("[ %d : %d ]\n", args->fds_table[i][0], args->fds_table[i][1]);    
-        i++;
-    }
 }

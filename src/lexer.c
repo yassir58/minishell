@@ -18,10 +18,7 @@ lexer_node_t *lexer (char *line)
         else
             tmp = handle_regular (line, &index);
         if (tmp)
-        {
             create_token_list (&node, tmp);
-            // printf ("tmp exist \n");
-        }
     }
     return (node);
 }
@@ -35,10 +32,11 @@ lexer_node_t *handle_regular (char *line, int *index)
     node->start = &line[(*index)];
     node->token = WORD;
     node->next =  NULL;
+    if (*index > 0 && line[(*index - 1)] != ' ' && !ft_strchr (OPERATORS, line[(*index - 1)])) 
+        node->joinable = TRUE;
     while (!ft_strchr (DELIMTERS, line[(*index)]) 
         && !ft_strchr (OPERATORS, line[(*index)]))
     {
-        // printf ("regular char %c at %d \n", line [(*index)], (*index));
         node->length++;
         (*index)++;
     }
@@ -53,10 +51,7 @@ lexer_node_t *handle_delim (char *line, int *index)
     if (line[(*index)] == ' ')
     {
         while (line[(*index)] && line[(*index)] == ' ')
-        {
-            // printf ("%d escaping space \n", (*index));
             (*index)++;
-        }
     }
     else
     {
@@ -105,7 +100,7 @@ void handle_quote (char *line, int *index, lexer_node_t **node)
 
     tmp = *node;
     delim = line[(*index)];
-    if (*index > 0 && line[(*index - 1)] != ' ')
+    if (*index > 0 && line[(*index - 1)] != ' ' && !ft_strchr (OPERATORS, line[(*index - 1)])) 
         tmp->joinable = TRUE;
     (*index)++;
     tmp->start = &(line[(*index)]);
@@ -125,5 +120,4 @@ void handle_quote (char *line, int *index, lexer_node_t **node)
     }
     else
         tmp->closed = FALSE;
-    // printf ("______ %d _____ \n", tmp->length);
 }

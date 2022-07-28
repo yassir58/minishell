@@ -1,11 +1,12 @@
 #include "../includes/minishell.h"
 
-void pwd_function (env_list_t *env_list)
+int pwd_function (env_list_t *env_list)
 {
     char *pwd;
     
     pwd = get_pwd (env_list);
     printf ("%s\n", pwd);
+    return (0);
 }
 
 int cd_function (char *arg, int flag, env_list_t **env_list)
@@ -16,7 +17,7 @@ int cd_function (char *arg, int flag, env_list_t **env_list)
     i = 0;
     err = 0;
     if (flag == -1)
-        write (2 ,"cd: Arguments Err \n", 19);
+        builtin_err ("cd: Arguments Err \n", NULL);
     else
     {
         if (arg == NULL)
@@ -27,18 +28,14 @@ int cd_function (char *arg, int flag, env_list_t **env_list)
         {
             err = chdir (arg);
             if (err == -1)
-            {
-                err  = check_for_dots (arg, *env_list);
-                if (err == -1)
-                    printf ("no such file or directory : %s\n", arg);
-            }
+                    builtin_err (" :no such file or directory\n", arg);
         }
         update_pwd_env (env_list);
     }
     return (0);
 }
 
-void echo_function (char *argv[], int argc)
+int echo_function (char *argv[], int argc)
 {
     int i = 1;
     char thrilling;
@@ -46,11 +43,11 @@ void echo_function (char *argv[], int argc)
     thrilling = '\n';
     if (argc > 1)
     {
-        if (!strcmp (argv[i], "-n"))
+        if (check_for_valid_option (argv[i]) == 1)
         {
-            thrilling = '\0';
-            while (argv[i] && !strcmp (argv[i], "-n"))
+            while (argv[i] && (check_for_valid_option (argv[i]) == 1))
                 i++;
+            thrilling = '\0';
         }
         while (argv[i])
         {
@@ -63,4 +60,17 @@ void echo_function (char *argv[], int argc)
     }
     if (thrilling)
         printf ("%c", thrilling);
+    return (0);
+}
+
+
+int builtin_err (char *err, char *arg)
+{
+    char *res;
+    if (arg)
+        res = ft_strjoin (arg, err);
+    else
+        res = err;
+    ft_putstr_fd (res, 2);
+    return (1);
 }

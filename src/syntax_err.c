@@ -1,69 +1,81 @@
 #include "../includes/minishell.h"
 
-void syntax_error (lexer_node_t *node)
+
+int syntax_error (shell_args_t *args)
 {
-    write (2, "Syntax error \n", 14);
-    free_list (node);
-    exit (EXIT_FAILURE);
+    ft_putstr_fd ("Syntax error \n", 2);
+    return (258);
     
 }
 
-void syntax_validation (lexer_node_t *node)
+int syntax_validation (shell_args_t *args)
 {
     lexer_node_t *tmp;
+    int last_node;
+    int status;
 
-    tmp = node ;
-   
-    validate_first_node (node);
-    validate_last_node (node);
+    tmp = args->lexer_list ;
+    status = validate_first_node (args);
+    if (!status)
+        status = validate_last_node (args);
+    if (status)
+        return (status);
     while (tmp)
     {
-        invalid_operator (tmp);
+        status = invalid_operator (args, tmp);
+        if (status)
+            return (status);
         if (tmp->token == DOUBLE_QUOTED_SEQUENCE ||
             tmp->token == SINGLE_QUOTED_SEQUENCE)
         {
             if (tmp->closed == FALSE)
-                syntax_error (node);
+                return (syntax_error (args));
         }
         tmp = tmp->next;
     }
+    return (0);
 }
 
-void validate_first_node (lexer_node_t *node)
+int validate_first_node (shell_args_t *args)
 {
-    if (node->token == OPERATOR)
+    if (args->lexer_list->token == OPERATOR)
     {
-        if (!ft_strcmp (node->start, "|"))
-             syntax_error (node);
-        else if (node->next == NULL)
-            syntax_error (node);
+        if (!ft_strcmp (args->lexer_list->start, "|"))
+             return (syntax_error (args));
+        else if (args->lexer_list->next == NULL)
+            return (syntax_error (args));
     }
+    return (0);
 }
 
-void invalid_operator (lexer_node_t *node)
+int invalid_operator (shell_args_t *args, lexer_node_t *node)
 {
     if (node->token == OPERATOR)
     {
+        if (node->invalid == TRUE)
+            return (syntax_error (args));
         if (ft_strcmp (node->start, "|"))
         {
             if (node->next && node->next->token == OPERATOR)
-                syntax_error (node);
+                return (syntax_error (args));
         }
         else if (node->next)
         {
             if (!ft_strcmp (node->next->start, "|"))
-                syntax_error (node);
+                return (syntax_error (args));
         }
     }
+    return (0);
 }
 
-void validate_last_node (lexer_node_t *node)
+int validate_last_node (shell_args_t *args)
 {
     lexer_node_t *tmp ;
 
-    tmp = node;
+    tmp = args->lexer_list;
     while (tmp->next)
         tmp = tmp->next;
     if (tmp->token == OPERATOR)
-        syntax_error (node);
+        return (syntax_error (args));
+    return (0);
 }

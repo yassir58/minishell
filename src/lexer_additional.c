@@ -7,15 +7,17 @@ void create_token_list (lexer_node_t **head, lexer_node_t *temp)
 
     node = *head;
     ptr = node;
-    
     if (temp)
     {
         if (temp->joinable)
         {
             while (ptr->next)
                 ptr = ptr->next;
-            expand_single (ptr, temp);
-            temp->start = strndup (temp->start, temp->length);
+            temp->start = strndup (temp->start, temp->length); // ft_strndup
+            if (temp->token == DOUBLE_QUOTED_SEQUENCE || temp->token == WORD)
+                temp->start = expand_variable (temp->start);
+            if (ptr->token == DOUBLE_QUOTED_SEQUENCE || ptr->token == WORD)
+                ptr->start = expand_variable (ptr->start);
             ptr->start = ft_strjoin (ptr->start, temp->start);
             ptr->length += temp->length;
             ptr->joinable = TRUE;
@@ -26,6 +28,8 @@ void create_token_list (lexer_node_t **head, lexer_node_t *temp)
         else
         {
             temp->start = strndup (temp->start, temp->length);
+            if (temp->token == DOUBLE_QUOTED_SEQUENCE || temp->token == WORD)
+                temp->start =  expand_variable (temp->start);
             push_to_list (head, temp);
         }
     }
@@ -49,34 +53,14 @@ void check_word (lexer_node_t *tokens_list)
     }
 }
 
-lexer_node_t *expand_variables (lexer_node_t *tokens_list)
-{
-    lexer_node_t *tmp;
-    char *res;
-
-    tmp = tokens_list;
-    while (tmp)
-    {
-        if (tmp->token == DOUBLE_QUOTED_SEQUENCE ||
-        (tmp->token == WORD && ft_strchr(tmp->start , '$')))
-        {
-            res = handle_variables (tmp->start);
-            free (tmp->start);
-            tmp->start = res;
-        }
-        tmp = tmp->next ;
-    }
-    return (tokens_list);
-}
-
-char *handle_variables (char *str)
+char *expand_variable (char *str)
 {
     int i;
     char *res;
     char *tmp;
 
     i = 0;
-    res = "";
+    res = ft_strdup ("");
     while (str[i])
     {
         if (str[i] == '$')
