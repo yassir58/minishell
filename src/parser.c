@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/29 15:34:29 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/29 16:30:53 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,8 @@ t_exec_node   *parse(shell_args_t *args, lexer_node_t *node)
             while (token)
             {
                 exec_node = parse_command(&token);
+                if (exec_node->status)
+                    break;
                 if (!list)
                 {
                     exec_node->prev = NULL;
