@@ -1,42 +1,73 @@
 #include "../includes/minishell.h"
 
-int handle_redir_input (shell_args_t *args, t_redirect *redirect_node)
+int handle_redir_input (shell_args_t *args, t_redirect *redirect_node, int *err)
 {
     int fd;
 
-    if (access(redirect_node->filename, (F_OK)))
+    fd = access(redirect_node->filename, (F_OK));
+    if (fd == -1)
     {
-        printf ("%s no such file or directory \n", redirect_node->filename);
+        redir_err (redirect_node->filename, " : No such file or directory \n");
+        *err = 1;
         return (-1);
+    }
+    else
+    {
+        fd = access (redirect_node->filename , (R_OK));
+        if  (fd  == -1)
+        {
+            redir_err (redirect_node->filename, " : Permission denied\n");
+            *err = 1;
+            return (-1);
+        }       
     }
     fd = open (redirect_node->filename, O_RDONLY, 0644);
     if (fd == -1)
-        return (exit_with_failure (args, "failed top opem file for reading\n"));
-    
+        return (exit_with_failure (args, "failed top open file for reading\n"));
     return (fd);
 }
 
-int handle_redir_output (shell_args_t *args, t_redirect *redirect_node)
+int handle_redir_output (shell_args_t *args, t_redirect *redirect_node, int *err)
 {
     int fd;
- 
-    fd = open (redirect_node->filename, O_CREAT | O_TRUNC | O_RDWR, 0644);
+
+  
+    fd = access (redirect_node->filename, (F_OK));
+    if (fd != -1)
+    {
+        fd = access (redirect_node->filename, (F_OK | W_OK));
+        if  (fd  == -1)
+        {
+            redir_err (redirect_node->filename, " : Permission denied\n");
+            *err = 1;
+            return (-1);
+        }     
+    }
+    fd = open (redirect_node->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
         return (exit_with_failure (args, "failed to open file for writing\n"));
-
     return (fd);
 }
 
-int handle_redir_append (shell_args_t *args, t_redirect *redirect_node)
+int handle_redir_append (shell_args_t *args, t_redirect *redirect_node,  int *err)
 {
     int fd;
     
-    fd = open (redirect_node->filename, O_WRONLY|O_APPEND|O_CREAT, 0644);
+    fd = access (redirect_node->filename, (F_OK));
+    if (fd != -1)
+    {
+        fd = access (redirect_node->filename, (F_OK | W_OK));
+        if  (fd  == -1)
+        {
+            redir_err (redirect_node->filename, " : Permission denied\n");
+            *err = 1;
+            return (-1);
+        }     
+    }
+    fd = open (redirect_node->filename, O_APPEND  | O_CREAT | O_RDWR , 0644);
     if (fd == -1)
         return (exit_with_failure (args, "failed to open file for append\n"));
-    else
-        dup2 (fd , STDOUT_FILENO);
-    return (0);
+    return (fd);
 }
 
 int handle_herdoc (shell_args_t *args ,t_redirect *redirect_node)
@@ -61,25 +92,31 @@ int handle_herdoc (shell_args_t *args ,t_redirect *redirect_node)
 int handle_redirections (shell_args_t *args , t_exec_node *exec_node, int *infile, int *outfile)
 {
     t_redirect *temp;
+    int err;
 
     temp = exec_node->cmd->redir_list;
+    err = 0;
     while (temp)
     {
         if (temp->type == REDIRIN)
-            *infile = handle_redir_input (args, temp);
-        else if (exec_node->cmd->redir_list->type == REDIROUT)
-            *outfile = handle_redir_output (args, temp);
-        if (*infile == -1 || *outfile == -1)
-            return (-1);
+            *infile = handle_redir_input (args, temp , &err);
+        else if (temp->type == REDIROUT)
+            *outfile = handle_redir_output (args, temp, &err);
+        else if (temp->type == APPEND)
+            *outfile = handle_redir_append (args, temp, &err);
+        else if (temp->type == HEREDOC)
+            err = handle_herdoc (args, temp);
+        if (err)
+            return (err);
         temp = temp->next;
     }
-    // dup2 (in, STDIN_FILENO);
-    // dup2 (outfile, STDOUT_FILENO);
-    // else if (tmp->type == APPEND)
-    //     err = handle_redir_append (args, tmp);
-    // else if (tmp->type == HEREDOC)
-    //     err =handle_herdoc (args, tmp);
-    // if (err == EXIT_FAILURE)
-    return (0);
+    return (err);
 }
 
+void redir_err (char *filename, char *err_message)
+{
+    char *err;
+
+    err = ft_strjoin (filename , err_message);
+    ft_putstr_fd (err, 2);
+}

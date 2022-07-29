@@ -239,9 +239,9 @@ env_list_t *create_path_node (void);
 void init_old_pwd (env_list_t **env_list);
 int get_childer_status (void);
 /// redirections
-int handle_redir_input (shell_args_t *args, t_redirect *redirect_node);
-int handle_redir_output (shell_args_t *args, t_redirect *redirect_node);
-int handle_redir_append (shell_args_t *args, t_redirect *redirect_node);
+int handle_redir_input (shell_args_t *args, t_redirect *redirect_node, int *err);
+int handle_redir_output (shell_args_t *args, t_redirect *redirect_node, int *err);
+int handle_redir_append (shell_args_t *args, t_redirect *redirect_node, int *err);
 int handle_herdoc (shell_args_t *args ,t_redirect *redirect_node);
 int handle_redirections (shell_args_t *args, t_exec_node *exec_node, int *infile, int *outfile);
 //////// general utils
@@ -263,5 +263,5 @@ char **get_path (shell_args_t *args, char **cmds, int *status);
 int handle_cd (shell_args_t *args, char **cmds);
 int access_status (char *cmd, int *status);
 int cd_prev_pwd (env_list_t *env_list);
-
+void redir_err (char *filename, char *err_message);
 #endif

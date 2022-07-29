@@ -185,9 +185,7 @@ int handle_simple_command (shell_args_t *args)
         return (status);
     id = fork_child (args);
     if (args->exec_node->builtin && !ft_strcmp (args->exec_node->cmd->cmds->cmd, "cd"))
-    {
         status = handle_cd (args, get_commands(args->exec_node->cmd->cmds));
-    }
     else
     {
         if (id == 0)

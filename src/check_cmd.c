@@ -6,7 +6,7 @@
 /*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:45:04 by yelatman          #+#    #+#             */
-/*   Updated: 2022/07/27 13:58:32 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/07/29 11:37:53 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int access_status (char *cmd, int *status)
 	
 	if (access (cmd, F_OK) != -1)
 	{
-			if (access (cmd, X_OK) != -1)
+			if (access (cmd, (F_OK & X_OK)) != -1)
 			{
 				*status = 0;
 				stat (cmd, &sfile);
