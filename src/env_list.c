@@ -6,42 +6,36 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:04 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/28 18:44:55 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/29 15:19:12 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void print_env_list (env_list_t *list)
+void print_export_list (env_list_t *list)
 {
     env_list_t *tmp;
 
     tmp = list;
     while (tmp)
     {
-        printf("%s=%s\n", tmp->variable_name, tmp->value);
+        printf("declare -x %s=\"%s\"\n", tmp->variable_name, tmp->value);
         tmp = tmp->next;
     }
 }
 
-
-void deleteNode(env_list_t **list, char *key)
+void delete_env_variable(env_list_t **list, char *key)
 {
     env_list_t *tmp;
     env_list_t *prev;
 
     tmp = *list;
-    printf("Zaba: %s\n", (*list)->variable_name);
-    printf("Zaba addres: %p\n", *list);
     if (tmp != NULL && (ft_strcmp(tmp->variable_name, key) == 0))
     {
         *list = tmp->next;
         free(tmp);
-        printf("hoho\n");
         return;
     }
-    printf("Sbrdida\n");
-    
     while (tmp != NULL && (ft_strcmp(tmp->variable_name, key) != 0))
     { 
         prev = tmp;
@@ -65,16 +59,6 @@ env_list_t *search_env_variable(char *var, env_list_t *list)
         node = node->next;
     }
     return (NULL);
-}
-
-void    delete_env_variable(char *var, env_list_t *list)
-{
-    env_list_t *tmp;
-    env_list_t *node;
-
-    
-    deleteNode(&list, var);
-    printf("%s\n", list->variable_name);
 }
 
 

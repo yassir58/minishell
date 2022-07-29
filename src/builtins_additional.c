@@ -6,13 +6,13 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/28 14:14:23 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/29 15:16:32 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int    ft_unset(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
+int    ft_unset(t_exec_node *exec_node, env_list_t **list, shell_args_t *args)
 {
     int i;
     int size;
@@ -25,7 +25,7 @@ int    ft_unset(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
     while (i < size)
     {
         if (cmds[i] && !ft_isdigit(cmds[i][1]))
-            delete_env_variable(cmds[i], list);
+            delete_env_variable(list, cmds[i]);
         else
         {
             printf("Minishell: unset: %s: not a valid identifier\n", cmds[i]);
@@ -44,7 +44,7 @@ int ft_env(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
     cmds = get_commands(exec_node->cmd->cmds);
     if (number_of_el(cmds) == 1)
     {
-        print_unsorted_env(list);
+        print_export_list(list);
         args->exit_code = 0;
     }
     else
@@ -60,23 +60,22 @@ void handle_exit(char **cmds, shell_args_t *args)
 {
     if (number_of_el(cmds) > 2)
     {
-        perror("Minishell: exit: too many arguments\n");
+        printf("Minishell: exit: too many arguments\n");
         args->exit_code = 1;
         return ;
     }
-    else if (!ft_isdigit(cmds[1][0]))
-    {
-        perror("Minishell: exit: numeric argument required\n");
-        args->exit_code = 2;
-    }
-    else if (number_of_el(cmds) == 2)
-        args->exit_code = ft_atoi(cmds[1]);
     else if (number_of_el(cmds) == 2)
     {
         if (is_number(cmds[1]))
+        {
             args->exit_code = ft_atoi(cmds[1]);
+            exit(args->exit_code);
+        }
         else
-            perror("Minishell: exit: numeric argument required\n");
+        {
+            args->exit_code = 255;
+            printf("Minishell: exit: numeric argument required\n");
+        }
     }
     exit(args->exit_code);
 }
@@ -186,7 +185,7 @@ int    validate_export_args(char **cmds)
             i++;
         else
         {
-            perror("bash: export: not a valid identifier\n");
+            printf("minishell: export: not a valid identifier\n");
             return (1);
         }
     }
@@ -207,8 +206,9 @@ int   check_existing_variable(char *argument, env_list_t *list)
         if (node)
         {
             if (!object[1])
-                return (1);
+                return (-1);
             node->value = object[1];
+            return (1);
         }
         else
         {
@@ -216,19 +216,22 @@ int   check_existing_variable(char *argument, env_list_t *list)
                 return (1);
         }
     }
-    free_string_table(object);
+    // free_string_table(object);
     return (0);
 }
 
 void    add_export_variable(char **cmds, env_list_t *list)
 {
     int i;
+    int tmp;
     
     i = 1;
+    tmp = 0;
     while (cmds[i])
     {
-        if (!check_existing_variable(cmds[i], list))
-            create_env_node(cmds[i],i);
+        tmp = check_existing_variable(cmds[i], list);
+        if (tmp != -1 && tmp != 1)
+            push_env_node (&list, create_env_node (cmds[i], i));
         i++;
     }
 }
@@ -241,11 +244,9 @@ void    ft_export(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
 
     i = 0;
     cmds = get_commands(exec_node->cmd->cmds);
-    // if there is no argument just print the list of env sorted.
+    order_env_list(list);
     if (!cmds[1])
-        print_env_list(list);
-    // validate that the arguments are valid.
-    // add the nodes entered into the linked list.
+        print_export_list(list);
     else if (number_of_el(cmds) > 1)
     {
         if(!validate_export_args(cmds))

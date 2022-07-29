@@ -20,8 +20,8 @@ int main (int argc ,char *argv[], char *env[])
         args->line = prompt(args->prompt);
         args->lexer_list = lexer (args->line);
         args->exec_node = parse (args, args->lexer_list);
-        status = init_command (args);
-        g_status = get_childer_status ();
+        // status = init_command (args);
+        // g_status = get_childer_status ();
         // if (status)
         //     printf ("status : %d\n", status);
         // else

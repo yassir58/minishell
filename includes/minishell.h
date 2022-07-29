@@ -194,12 +194,12 @@ int	    ft_strcmp(const char *s1, const char *s2);
 char    *get_next_line(int fd);
 
 
-int    ft_unset(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
+int    ft_unset(t_exec_node *exec_node, env_list_t **list, shell_args_t *args);
 int ft_env(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
 void handle_exit(char **cmds, shell_args_t *args);
 int ft_exit(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
 env_list_t *search_env_variable(char *var, env_list_t *list);
-void    delete_env_variable(char *var, env_list_t *list);
+void    delete_env_variable(env_list_t **list, char *key);
 void print_env_list (env_list_t *list);
 int     check_space(char *str);
 char    *prompt(char *string);
@@ -266,7 +266,7 @@ int redirect_type(lexer_node_t *node);
 void    print_exec_node(t_exec_node *list);
 void    print_redirects(t_redirect *list);
 void    print_commands(t_cmd *list);
-void    print_env_list (env_list_t *list);
+void    print_export_list (env_list_t *list);
 
 // - History function.
 char    *prompt(char *string);
@@ -277,7 +277,9 @@ void        print_env_list (env_list_t *list);
 void        order_env_list(env_list_t *list);
 void    print_unsorted_env(env_list_t *list);
 
+// Builtins
 
+void    ft_export(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
 
 // - Testing
 

@@ -65,9 +65,11 @@ int builtin_routine (shell_args_t *args, t_exec_node *exec_node)
     else if (!advanced_strcmp (cmds[0], "env"))
         ft_env (exec_node, args->env_list, args);
     else if (!advanced_strcmp (cmds[0], "unset"))
-        ft_unset (exec_node, args->env_list, args);
+        ft_unset (exec_node, &args->env_list, args);
     else if (!advanced_strcmp (cmds[0], "exit"))
         ft_exit (exec_node, args->env_list, args);
+    else if (!advanced_strcmp (cmds[0], "export"))
+        ft_export(exec_node, args->env_list, args);
     free_tab (cmds);
     return (exit_status);
 }
