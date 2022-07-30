@@ -60,7 +60,7 @@ int access_status (char *cmd, int *status)
 	
 	if (access (cmd, F_OK) != -1)
 	{
-			if (access (cmd, X_OK) != -1)
+			if (access (cmd, (F_OK & X_OK)) != -1)
 			{
 				*status = 0;
 				stat (cmd, &sfile);

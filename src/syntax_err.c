@@ -57,7 +57,7 @@ int invalid_operator (shell_args_t *args, lexer_node_t *node)
         if (ft_strcmp (node->start, "|"))
         {
             if (node->next && node->next->token == OPERATOR)
-                return (syntax_error (args));
+                    return (syntax_error (args));
         }
         else if (node->next)
         {

@@ -28,6 +28,7 @@ int main (int argc ,char *argv[], char *env[])
         // {
         //     printf ("g_status %d \n", g_status);
         // }
+        // print_exec_node (args->exec_node);
         args->prompt = update_prompt (args);
         free (args->line);
     }

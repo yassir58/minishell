@@ -182,7 +182,7 @@ int check_for_valid_option (char *option);
 void handle_nonbuiltin (shell_args_t *args, t_exec_node *exec_node);
 int handle_builtin (shell_args_t *args, t_exec_node *tmp, int **fds, int indx);
 int execution_chain (shell_args_t *args);
-int builtin_routine (shell_args_t *args, t_exec_node *exec_node);
+int builtin_routine (shell_args_t *args, t_exec_node *exec_node, int infile, int outfile);
 void exec_command (shell_args_t *args, t_exec_node *exec_node);
 int check_node(lexer_node_t *node, char *operator);
 int check_redirect(lexer_node_t *node);
@@ -312,11 +312,11 @@ env_list_t *create_path_node (void);
 void init_old_pwd (env_list_t **env_list);
 int get_childer_status (void);
 /// redirections
-int handle_redir_input (shell_args_t *args, t_redirect *redirect_node);
-int handle_redir_output (shell_args_t *args, t_redirect *redirect_node);
-int handle_redir_append (shell_args_t *args, t_redirect *redirect_node);
+int handle_redir_input (shell_args_t *args, t_redirect *redirect_node, int *err);
+int handle_redir_output (shell_args_t *args, t_redirect *redirect_node, int *err);
+int handle_redir_append (shell_args_t *args, t_redirect *redirect_node, int *err);
 int handle_herdoc (shell_args_t *args ,t_redirect *redirect_node);
-int handle_redirections (shell_args_t *args,t_redirect *redir_list);
+int handle_redirections (shell_args_t *args, t_exec_node *exec_node, int *infile, int *outfile);
 //////// general utils
 void *allocation_err (void);
 int open_pipe (int *fd, shell_args_t *args);
@@ -335,5 +335,6 @@ int test_piped_commands (shell_args_t *args);
 char **get_path (shell_args_t *args, char **cmds, int *status);
 int handle_cd (shell_args_t *args, char **cmds);
 int access_status (char *cmd, int *status);
-
+int cd_prev_pwd (env_list_t *env_list);
+void redir_err (char *filename, char *err_message);
 #endif

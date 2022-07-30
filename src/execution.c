@@ -19,7 +19,7 @@ int test_piped_commands (shell_args_t *args)
             id = fork_child (args);
             if (!id)
             {
-                handle_redirections (args, tmp->cmd->redir_list);
+                // handle_redirections (args, tmp->cmd->redir_list);
                 if (tmp->builtin)
                 {
                     status = handle_builtin (args, tmp, fds, indx);
@@ -49,7 +49,7 @@ void link_pipes (t_exec_node *tmp, int **fds, int indx)
 }
 
 
-int builtin_routine (shell_args_t *args, t_exec_node *exec_node)
+int builtin_routine (shell_args_t *args, t_exec_node *exec_node, int infile, int outfile)
 {
     char **cmds;
     int exit_status;
@@ -71,6 +71,10 @@ int builtin_routine (shell_args_t *args, t_exec_node *exec_node)
     else if (!advanced_strcmp (cmds[0], "export"))
         ft_export(exec_node, args->env_list, args);
     free_tab (cmds);
+    if (infile != -1 && infile != 0 )
+        close (infile);
+    if (outfile != -1 && outfile != 1)
+        close (outfile);
     return (exit_status);
 }
 
@@ -169,16 +173,35 @@ int handle_simple_command (shell_args_t *args)
 {
     int id;
     int status;
+    int infile;
+    int outfile ;
 
     status = 0;
-    handle_redirections (args, args->exec_node->cmd->redir_list);
-    if (args->exec_node->builtin)
-        status = builtin_routine (args, args->exec_node);
-    else 
+    id = 0;
+    infile = 0;
+    outfile = 1;
+    status = handle_redirections (args, args->exec_node, &infile, &outfile);
+    if (status)
+        return (status);
+    id = fork_child (args);
+    if (args->exec_node->builtin && !ft_strcmp (args->exec_node->cmd->cmds->cmd, "cd"))
+        status = handle_cd (args, get_commands(args->exec_node->cmd->cmds));
+    else
     {
-        id = fork_child (args);
         if (id == 0)
-            exec_command (args, args->exec_node);
+        {
+            if (infile != -1 && infile != 0)
+                dup2 (infile, STDIN_FILENO);
+            if (outfile != -1 && outfile != 1)
+                dup2 (outfile, STDOUT_FILENO);
+            if (args->exec_node->builtin)
+            {
+                status = builtin_routine (args, args->exec_node, infile, outfile);
+                exit (status);
+            }
+            else
+                exec_command (args, args->exec_node);
+        }
     }
     return (status);
 }
