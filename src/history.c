@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   history.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/02 14:14:22 by ochoumou          #+#    #+#             */
+/*   Updated: 2022/07/28 12:17:33 by ochoumou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 int     check_space(char *str)
@@ -32,6 +44,9 @@ char    *prompt(char *string)
             line = prompt(string);
     }
     else
-        exit(EXIT_FAILURE);
+    {
+        printf("Exit\n");
+        exit(1);
+    }
     return (line);
 }

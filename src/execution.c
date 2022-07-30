@@ -65,9 +65,11 @@ int builtin_routine (shell_args_t *args, t_exec_node *exec_node, int infile, int
     else if (!advanced_strcmp (cmds[0], "env"))
         ft_env (exec_node, args->env_list, args);
     else if (!advanced_strcmp (cmds[0], "unset"))
-        ft_unset (exec_node, args->env_list, args);
+        ft_unset (exec_node, &args->env_list, args);
     else if (!advanced_strcmp (cmds[0], "exit"))
         ft_exit (exec_node, args->env_list, args);
+    else if (!advanced_strcmp (cmds[0], "export"))
+        ft_export(exec_node, args->env_list, args);
     free_tab (cmds);
     if (infile != -1 && infile != 0 )
         close (infile);
@@ -90,8 +92,6 @@ void exec_command (shell_args_t *args, t_exec_node *exec_node)
         shell_err (cmds[0], status);
     execve (path[0], cmds, args->env);
 }
-
-
 
 char **check_for_path (char *cmd)
 {

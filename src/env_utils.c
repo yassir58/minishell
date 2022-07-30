@@ -5,11 +5,11 @@ env_list_t *get_env_list (char *env[])
     int i;
     env_list_t *head;
 
-    i = 0;
+    i = 1;
     head = NULL;
     while (env[i])
     {
-        push_env_node (&head, create_env_node (env[i]));
+        push_env_node (&head, create_env_node (env[i], i));
         i++;
     }
     push_env_node (&head, create_path_node ());
@@ -17,10 +17,12 @@ env_list_t *get_env_list (char *env[])
     return (head);
 }
 
-env_list_t *create_env_node (char *envStr)
+
+env_list_t *create_env_node (char *envStr, int index)
 {
     char **envTab;
     env_list_t *node;
+    int shell;
 
     node = malloc (sizeof (env_list_t));
     envTab = NULL;
@@ -28,7 +30,14 @@ env_list_t *create_env_node (char *envStr)
        return (NULL);
     envTab = ft_split (envStr, '=');
     node->variable_name = envTab[0];
-    node->value = envTab[1];
+    if (!ft_strcmp(node->variable_name, "SHLVL"))
+    {
+        shell = ft_atoi(envTab[1]) + 1;
+        node->value = ft_itoa(shell);
+    }
+    else
+        node->value = envTab[1];
+    node->index = index;
     node->next = NULL;
     return (node);
 }

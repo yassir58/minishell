@@ -1,12 +1,16 @@
-#include "../includes/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/02 14:14:47 by ochoumou          #+#    #+#             */
+/*   Updated: 2022/07/28 12:13:40 by ochoumou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/**
- * @brief This function will compare two strings regardless if one of the strings is
- * capitale letters
- * @param s1 The command the we want to get its type
- * @param s2 One of the builting commands
- * @return int 
- */
+#include "../includes/minishell.h"
 
 int	advanced_strcmp(char *s1, char *s2)
 {

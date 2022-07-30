@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:45:04 by yelatman          #+#    #+#             */
-/*   Updated: 2022/07/29 11:37:53 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/07/29 11:23:31 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ char	*check_access(char *command, char *path, int *status)
 	}
 	return (NULL);
 }
-
 
 int access_status (char *cmd, int *status)
 {

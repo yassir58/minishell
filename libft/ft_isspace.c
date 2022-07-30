@@ -1,5 +1,3 @@
-#include "libft.h"
-
 int ft_isspace(char c)
 {
     if (c == 32)
