@@ -40,7 +40,7 @@
 #define B6 "env"
 #define B7 "exit"
 
-int heredoc_status;
+
 
 typedef struct lexer_node_s
 {
@@ -109,16 +109,34 @@ typedef struct shell_args_s
 {
     char *prompt;
     char *line;
-    int **fds_table;
-    unsigned char exit_code;
     env_list_t *env_list;
     lexer_node_t *lexer_list;
     t_exec_node *exec_node;
-    int shell_level;
+    unsigned char status;
     char **env;
 } shell_args_t;
 
 
+typedef struct s_shell_data
+{
+    int heredoc_status;
+    int fork_status;
+    int shell_level;
+    unsigned char exit_code;
+} g_shell_data;
+
+
+typedef struct s_exec_utils 
+{
+    int **fds;
+    int indx;
+    int id;
+    int infile;
+    int outfile;
+} t_exec_utils;
+
+
+g_shell_data *g_data;
 lexer_node_t *lexer (char *line);
 lexer_node_t *handle_regular (char *line, int *index);
 lexer_node_t *handle_delim (char *line, int *index);
@@ -132,7 +150,7 @@ void free_list(lexer_node_t *node);
 void print_token (int token);
 void testing (lexer_node_t *node);
 lexer_node_t *init_node ();
-int syntax_error (shell_args_t *args);
+int syntax_error (void);
 int syntax_validation (shell_args_t *args);
 void check_word (lexer_node_t *tokens_list);
 char *expand_variable (char *str);
@@ -152,7 +170,7 @@ char *get_pwd_env (env_list_t *list);
 int update_pwd_env (env_list_t **list);
 char *get_pwd (env_list_t *env_list);
 int echo_function (char *argv[], int argc);
-int invalid_operator (shell_args_t *args, lexer_node_t *node);
+int invalid_operator (lexer_node_t *node);
 int validate_first_node (shell_args_t *args);
 int validate_last_node (shell_args_t *args);
 int handle_piped_command (shell_args_t *args);
@@ -194,10 +212,10 @@ int	    ft_strcmp(const char *s1, const char *s2);
 char    *get_next_line(int fd);
 
 
-int    ft_unset(t_exec_node *exec_node, env_list_t **list, shell_args_t *args);
-int ft_env(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
-void handle_exit(char **cmds, shell_args_t *args);
-int ft_exit(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
+int    ft_unset(t_exec_node *exec_node, env_list_t **list);
+int ft_env(t_exec_node *exec_node, env_list_t *list);
+void handle_exit(char **cmds);
+int ft_exit(t_exec_node *exec_node);
 env_list_t *search_env_variable(char *var, env_list_t *list);
 void    delete_env_variable(env_list_t **list, char *key);
 void print_env_list (env_list_t *list);
@@ -279,7 +297,7 @@ void    print_unsorted_env(env_list_t *list);
 
 // Builtins
 
-void    ft_export(t_exec_node *exec_node, env_list_t *list, shell_args_t *args);
+void    ft_export(t_exec_node *exec_node, env_list_t *list);
 
 // - Testing
 
@@ -310,7 +328,7 @@ void close_unused_fds (int **fds_table , int used);
 void close_unused_fds_2 (int **fds_table, int used1, int used2);
 env_list_t *create_path_node (void);
 void init_old_pwd (env_list_t **env_list);
-int get_childer_status (void);
+void get_children_status (unsigned char *status);
 /// redirections
 int handle_redir_input (shell_args_t *args, t_redirect *redirect_node, int *err);
 int handle_redir_output (shell_args_t *args, t_redirect *redirect_node, int *err);
@@ -331,10 +349,19 @@ int handle_simple_command (shell_args_t *args);
 void shell_err (char *command, int status);
 int builtin_err (char *err, char *arg);
 void link_pipes (t_exec_node *tmp, int **fds, int indx);
-int test_piped_commands (shell_args_t *args);
-char **get_path (shell_args_t *args, char **cmds, int *status);
+int exec_piped_commands (shell_args_t *args);
+char **get_path (char **cmds, int *status);
 int handle_cd (shell_args_t *args, char **cmds);
 int access_status (char *cmd, int *status);
 int cd_prev_pwd (env_list_t *env_list);
 void redir_err (char *filename, char *err_message);
+void link_rediriction_pipes (int infile, int outfile);
+int handle_one_builtin_cmd (shell_args_t *args, int infile, int outfile);
+t_exec_utils *init_exec_utils (void);
+g_shell_data *init_global (void);
+shell_args_t *init_args (char *env[]);
+void exec_cmd (shell_args_t *args,t_exec_node *tmp, t_exec_utils *utils);
+void add_exit_var (env_list_t **env_list);
+void set_exit_status (env_list_t **env_list, unsigned char exit_code);
+
 #endif

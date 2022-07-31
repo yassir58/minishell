@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:22 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/28 12:17:33 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/31 15:48:54 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,6 @@ char    *prompt(char *string)
             line = prompt(string);
     }
     else
-    {
-        printf("Exit\n");
-        exit(1);
-    }
+        exit(EXIT_FAILURE);
     return (line);
 }

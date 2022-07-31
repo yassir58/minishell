@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_additional.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/29 15:16:32 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/31 15:23:09 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int    ft_unset(t_exec_node *exec_node, env_list_t **list, shell_args_t *args)
+int    ft_unset(t_exec_node *exec_node, env_list_t **list)
 {
     int i;
     int size;
@@ -21,7 +21,7 @@ int    ft_unset(t_exec_node *exec_node, env_list_t **list, shell_args_t *args)
     i = 1;
     cmds = get_commands(exec_node->cmd->cmds);
     size = number_of_el(cmds);
-    args->exit_code = 0;
+    g_data->exit_code = 0;
     while (i < size)
     {
         if (cmds[i] && !ft_isdigit(cmds[i][1]))
@@ -29,7 +29,7 @@ int    ft_unset(t_exec_node *exec_node, env_list_t **list, shell_args_t *args)
         else
         {
             printf("Minishell: unset: %s: not a valid identifier\n", cmds[i]);
-            args->exit_code = 1;
+            g_data->exit_code = 1;
             return (1);
         }
         i++;
@@ -37,7 +37,7 @@ int    ft_unset(t_exec_node *exec_node, env_list_t **list, shell_args_t *args)
     return (0);
 }
 
-int ft_env(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
+int ft_env(t_exec_node *exec_node, env_list_t *list)
 {
     char **cmds;
 
@@ -45,49 +45,49 @@ int ft_env(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
     if (number_of_el(cmds) == 1)
     {
         print_export_list(list);
-        args->exit_code = 0;
+        g_data->exit_code = 0;
     }
     else
     {
-        args->exit_code = 1;
+        g_data->exit_code = 1;
         perror("Minishell: env: illegal option\n");
         return (1);
     }
     return (0);
 }  
 
-void handle_exit(char **cmds, shell_args_t *args)
+void handle_exit(char **cmds)
 {
     if (number_of_el(cmds) > 2)
     {
         printf("Minishell: exit: too many arguments\n");
-        args->exit_code = 1;
+        g_data->exit_code = 1;
         return ;
     }
     else if (number_of_el(cmds) == 2)
     {
         if (is_number(cmds[1]))
         {
-            args->exit_code = ft_atoi(cmds[1]);
-            exit(args->exit_code);
+            g_data->exit_code = ft_atoi(cmds[1]);
+            exit(g_data->exit_code);
         }
         else
         {
-            args->exit_code = 255;
+            g_data->exit_code = 255;
             printf("Minishell: exit: numeric argument required\n");
         }
     }
-    exit(args->exit_code);
+    exit(g_data->exit_code);
 }
 
-int ft_exit(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
+int ft_exit(t_exec_node *exec_node)
 {
     char **cmds;
 
     cmds = get_commands(exec_node->cmd->cmds);
-    args->exit_code = 0;
+    g_data->exit_code = 0;
     printf("exit\n");
-    handle_exit(cmds, args);
+    handle_exit(cmds);
     return (1);
 }
 
@@ -127,7 +127,6 @@ void    order_env_list(env_list_t *list)
 {
     env_list_t *tmp_i;
     env_list_t *tmp_j;
-    int         tmp;
 
     tmp_i = list;
     while (tmp_i != NULL)
@@ -236,7 +235,7 @@ void    add_export_variable(char **cmds, env_list_t *list)
     }
 }
 
-void    ft_export(t_exec_node *exec_node, env_list_t *list, shell_args_t *args)
+void    ft_export(t_exec_node *exec_node, env_list_t *list)
 {
     char **cmds;
     

@@ -55,6 +55,8 @@ char *get_variable_value (char *str, int *i)
     char *varName;
     char *varValue;
     
+    varName = NULL;
+    varValue = NULL;
     varName = extract_var_name (str, i);
     if (varName)
     {

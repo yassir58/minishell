@@ -42,7 +42,7 @@ int nodes_number (shell_args_t *args)
     return (len);
 }
 
-int get_childer_status (void)
+void get_children_status (unsigned char *exit_status)
 {
    int flag;
    int status;
@@ -56,11 +56,10 @@ int get_childer_status (void)
         flag = waitpid (-1 , &status, 0);
         if (WIFEXITED(status) && flag != -1)
         {
-            printf ("%d exit status %d\n",flag, WEXITSTATUS (status));
             if (flag > prev_child)
                 parent_status = WEXITSTATUS (status);
             prev_child = flag;
         }
    }
-   return (parent_status);
+   *exit_status = prev_child;
 }

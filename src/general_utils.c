@@ -13,7 +13,7 @@ int open_pipe (int *fd, shell_args_t *args)
 
     err = pipe (fd);
     if (err == -1)
-        return (exit_with_failure (args, "pipe failed !\n"));
+        exit_with_failure (args, "pipe failed !\n");
     return (err);
 }
 
@@ -31,7 +31,9 @@ int close_fd (int fd)
 int exit_with_failure (shell_args_t *args, char *err_message)
 {
     write (2, err_message ,ft_strlen (err_message));
-    return (EXIT_FAILURE);
+    free (g_data);
+    free (args);
+    exit (EXIT_FAILURE);
 }
 
 

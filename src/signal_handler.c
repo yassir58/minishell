@@ -2,17 +2,22 @@
 
 void	handler(int signum)
 {
-    if (signum == SIGINT && heredoc_status == 0)
+    if (signum == SIGINT && (g_data->heredoc_status == 0 && !g_data->fork_status))
     {
         printf("\n");
         rl_on_new_line();
         rl_replace_line("",0);
         rl_redisplay();
     }
-    else if (signum == SIGINT && heredoc_status != 0)
+    else if (signum == SIGINT && g_data->heredoc_status != 0)
     {
-        kill(heredoc_status, SIGKILL);
-        heredoc_status = 0;
+        kill(g_data->heredoc_status, SIGKILL);
+        g_data->heredoc_status = 0;
+    }
+    else if (signum == SIGINT && g_data->fork_status != 0)
+    {
+        kill (g_data->fork_status, SIGKILL);
+        g_data->fork_status = 0;
     }
 }
 

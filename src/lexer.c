@@ -5,7 +5,6 @@ lexer_node_t *lexer (char *line)
     int index;
     lexer_node_t *node;
     lexer_node_t *tmp;
-    lexer_node_t *pointer;
 
     node = NULL;
     index = 0;

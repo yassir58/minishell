@@ -1,41 +1,30 @@
 #include "../includes/minishell.h"
 
-int test_piped_commands (shell_args_t *args)
+int exec_piped_commands (shell_args_t *args)
 {
     t_exec_node *tmp;
-    int **fds;
-    int indx;
-    int id;
+    t_exec_utils *utils;
     int status;
 
-    indx = 0;
+    status = 0;
     tmp = args->exec_node;
-    if (!tmp)
-        return (258);
-    fds = open_fd_table (nodes_number(args), args);
-
-        while (tmp)
+    utils = init_exec_utils ();
+    utils->fds = open_fd_table (nodes_number(args), args);
+    while (tmp)
+    {
+        utils->id = fork_child (args);
+        if (!(utils->id))
         {
-            id = fork_child (args);
-            if (!id)
-            {
-                // handle_redirections (args, tmp->cmd->redir_list);
-                if (tmp->builtin)
-                {
-                    status = handle_builtin (args, tmp, fds, indx);
-                    exit (status);
-                }
-                else
-                {
-                    link_pipes (tmp, fds, indx);
-                    exec_command (args, tmp);
-                }
-            }
-            indx++;
-            tmp = tmp->next;
+            status = handle_redirections (args, tmp, &(utils->infile), &(utils->outfile));
+            if (status)
+                return (status);
+            exec_cmd (args,tmp,  utils);
         }
-    close_fd_table (fds);
-    return (0);
+        utils->indx++;
+        tmp = tmp->next;
+    }
+    close_fd_table (utils->fds);
+    return (status);
 }
 
 void link_pipes (t_exec_node *tmp, int **fds, int indx)
@@ -63,13 +52,13 @@ int builtin_routine (shell_args_t *args, t_exec_node *exec_node, int infile, int
     else if (!advanced_strcmp (cmds[0], "echo"))
         echo_function (cmds, number_of_el (cmds));
     else if (!advanced_strcmp (cmds[0], "env"))
-        ft_env (exec_node, args->env_list, args);
+        ft_env (exec_node, args->env_list);
     else if (!advanced_strcmp (cmds[0], "unset"))
-        ft_unset (exec_node, &args->env_list, args);
+        ft_unset (exec_node, &args->env_list);
     else if (!advanced_strcmp (cmds[0], "exit"))
-        ft_exit (exec_node, args->env_list, args);
+        ft_exit (exec_node);
     else if (!advanced_strcmp (cmds[0], "export"))
-        ft_export(exec_node, args->env_list, args);
+        ft_export(exec_node, args->env_list);
     free_tab (cmds);
     if (infile != -1 && infile != 0 )
         close (infile);
@@ -87,7 +76,7 @@ void exec_command (shell_args_t *args, t_exec_node *exec_node)
 
     status = 0;
     cmds = get_commands (exec_node->cmd->cmds);
-    path = get_path (args, cmds, &status);    
+    path = get_path (cmds, &status);    
     if (!path[0])
         shell_err (cmds[0], status);
     execve (path[0], cmds, args->env);
@@ -97,7 +86,6 @@ char **check_for_path (char *cmd)
 {
     char **path_table;
     char **cmd_path;
-    char *dir_name;
     int i;
 
     path_table = NULL;
@@ -177,31 +165,24 @@ int handle_simple_command (shell_args_t *args)
     int outfile ;
 
     status = 0;
-    id = 0;
+    id = 1;
     infile = 0;
     outfile = 1;
-    status = handle_redirections (args, args->exec_node, &infile, &outfile);
-    if (status)
-        return (status);
-    id = fork_child (args);
-    if (args->exec_node->builtin && !ft_strcmp (args->exec_node->cmd->cmds->cmd, "cd"))
-        status = handle_cd (args, get_commands(args->exec_node->cmd->cmds));
+    if (args->exec_node->builtin)
+        status = handle_one_builtin_cmd (args, infile, outfile);
     else
     {
+        id = fork_child (args);
         if (id == 0)
         {
-            if (infile != -1 && infile != 0)
-                dup2 (infile, STDIN_FILENO);
-            if (outfile != -1 && outfile != 1)
-                dup2 (outfile, STDOUT_FILENO);
-            if (args->exec_node->builtin)
-            {
-                status = builtin_routine (args, args->exec_node, infile, outfile);
-                exit (status);
-            }
-            else
-                exec_command (args, args->exec_node);
+            status = handle_redirections (args, args->exec_node, &infile, &outfile);
+            if (status)
+                return (status);
+            link_rediriction_pipes (infile, outfile);
+            exec_command (args, args->exec_node);
         }
+        else    
+            g_data->fork_status = id;
     }
     return (status);
 }
@@ -221,14 +202,17 @@ void shell_err (char *command, int status)
     exit (status);
 }
 
-char **get_path (shell_args_t *args, char **cmds, int *status)
+char **get_path (char **cmds, int *status)
 {
     char *path;
     char **path_check;
     char **path_table;
     char *cmd;
 
+    path_check= NULL;
     path_table = malloc (sizeof (char *) * 3);
+    if (!path_table)
+        allocation_err ();
     path_check = check_for_path (cmds[0]);
     path = NULL;
     path_table[2] = NULL;
@@ -259,4 +243,62 @@ int handle_cd (shell_args_t *args, char **cmds)
     else 
         exit_status = cd_function (NULL, 1, &args->env_list);
     return (exit_status);
+}
+
+
+void link_rediriction_pipes (int infile, int outfile)
+{
+    if (infile > 0)
+         dup2 (infile, STDIN_FILENO);
+    if (outfile > 1)
+            dup2 (outfile, STDOUT_FILENO);
+}
+
+
+int handle_one_builtin_cmd (shell_args_t *args, int infile, int outfile)
+{
+    int status;
+    int id;
+
+    status = 0;
+    id = 0;
+    if (!ft_strcmp (args->exec_node->cmd->cmds->cmd, "cd"))
+        status = handle_cd (args, get_commands(args->exec_node->cmd->cmds));
+    else if (!ft_strcmp (args->exec_node->cmd->cmds->cmd, "exit"))
+        ft_exit (args->exec_node); 
+    else
+    {
+        status = handle_redirections (args, args->exec_node, &infile, &outfile);
+        if (status)
+            return (status);
+        link_rediriction_pipes (infile, outfile);
+        id = fork_child (args);
+        if (!id)
+        {
+            status = builtin_routine (args, args->exec_node, infile, outfile);
+            exit (status);
+        }
+    }
+    return (status);
+}
+
+
+
+void exec_cmd (shell_args_t *args,t_exec_node *tmp, t_exec_utils *utils)
+{
+    int status;
+
+    status = 0;
+    link_rediriction_pipes (utils->infile, utils->outfile);
+    if (tmp->builtin)
+    {
+        status = handle_builtin (args, tmp, utils->fds, utils->indx);
+        exit (status);
+    }
+    else
+    {
+        if (utils->infile == 0 && utils->outfile == 1)
+            link_pipes (tmp, utils->fds, utils->indx);
+        exec_command (args, tmp);
+    }
 }

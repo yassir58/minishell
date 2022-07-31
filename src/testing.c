@@ -40,9 +40,7 @@ void testing (lexer_node_t *node)
 void test_env_list (env_list_t *list)
 {
     env_list_t *tmp;
-    env_list_t *ptr;
-
-
+   
     tmp = list;
     while (tmp)
     {

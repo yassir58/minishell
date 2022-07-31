@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/29 16:30:53 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/07/31 12:45:06 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int handle_ctrl(t_redirect *tmp, lexer_node_t *word)
 {
     int pid;
     int fd;
-    int status;
     
     fd = open("/tmp/.minishell", O_CREAT | O_RDWR | O_TRUNC, 0644);
     pid = fork();
@@ -40,10 +39,10 @@ int handle_ctrl(t_redirect *tmp, lexer_node_t *word)
         handle_heredoc(tmp, fd, word);
     else
     {
-        heredoc_status = pid;
+        g_data->heredoc_status = pid;
         wait(NULL);
     }
-    if (heredoc_status)
+    if (g_data->heredoc_status)
         get_file_content(tmp);
     else
         return (0);
@@ -102,7 +101,6 @@ t_exec_node *check_piped(lexer_node_t **node, t_cmd *cmds, t_redirect *redirects
 
 t_exec_node *parse_command(lexer_node_t **node)
 {
-    t_redir_type type;
     t_redirect *redirects;
     t_redirect *tmp;
     t_cmd *cmds;
@@ -159,6 +157,5 @@ t_exec_node   *parse(shell_args_t *args, lexer_node_t *node)
             }
         }
     }
-//    print_exec_node(list);
-   return (list);
+    return (list);
 }
