@@ -6,8 +6,8 @@ OBJS=$(addprefix $(SRCDIR), $(SRCS:.c=.o))
 NAME = minishell
 HEADERS = ./includes/minishell.h
 LIBNAME = ./libft/libft.a
-INCLUDES= -I/goinfre/yelatman/homebrew/opt/readline/include
-READLINE= -lreadline -L/goinfre/yelatman/homebrew/opt/readline/lib
+INCLUDES= "-I/Users/ochoumou/.brew/opt/readline/include"
+READLINE= -lreadline -L/Users/ochoumou/.brew/opt/readline/lib
 
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
