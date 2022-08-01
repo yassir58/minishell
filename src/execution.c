@@ -79,7 +79,7 @@ void exec_command (shell_args_t *args, t_exec_node *exec_node)
     path = get_path (cmds, &status);    
     if (!path[0])
         shell_err (cmds[0], status);
-    execve (path[0], cmds, args->env);
+    execve (path[0], cmds, get_env_table (args->env_list));
 }
 
 char **check_for_path (char *cmd)
@@ -268,13 +268,13 @@ int handle_one_builtin_cmd (shell_args_t *args, int infile, int outfile)
         ft_exit (args->exec_node); 
     else
     {
-        status = handle_redirections (args, args->exec_node, &infile, &outfile);
         if (status)
             return (status);
-        link_rediriction_pipes (infile, outfile);
         id = fork_child (args);
         if (!id)
         {
+            status = handle_redirections (args, args->exec_node, &infile, &outfile);
+            link_rediriction_pipes (infile, outfile);
             status = builtin_routine (args, args->exec_node, infile, outfile);
             exit (status);
         }

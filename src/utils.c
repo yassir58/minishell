@@ -50,7 +50,7 @@ void push_to_list (lexer_node_t **head, lexer_node_t *node)
 }
 
 
-char *get_variable_value (char *str, int *i)
+char *get_variable_value (shell_args_t *args ,char *str, int *i)
 {
     char *varName;
     char *varValue;
@@ -60,7 +60,10 @@ char *get_variable_value (char *str, int *i)
     varName = extract_var_name (str, i);
     if (varName)
     {
-        varValue = getenv (varName);
+        if (!ft_strcmp (varName, "?"))
+            varValue = ft_itoa (g_data->exit_code);
+        else
+            varValue = ft_getenv (args, varName);
         free (varName);
     }
     return (varValue);
@@ -90,4 +93,21 @@ char *push_char (char *str, char c)
     if (str && length > 0)
         free (str);
     return (res);
+}
+
+
+
+char *ft_getenv (shell_args_t *args, char *varName)
+{
+    env_list_t *temp;
+   
+    temp = args->env_list;
+
+    while (temp)
+    {
+        if (!ft_strcmp (temp->variable_name, varName))
+            return (ft_strdup (temp->value));
+        temp = temp->next;
+    }
+    return (NULL);
 }

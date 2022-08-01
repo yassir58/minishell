@@ -1,12 +1,14 @@
 #include "../includes/minishell.h"
 
-void create_token_list (lexer_node_t **head, lexer_node_t *temp)
+void create_token_list (shell_args_t *args, lexer_node_t **head, lexer_node_t *temp)
 {
     lexer_node_t *node;
     lexer_node_t *ptr;
 
     node = *head;
     ptr = node;
+    if (!args)
+        return ;
     if (temp)
     {
         if (temp->joinable)
@@ -15,9 +17,9 @@ void create_token_list (lexer_node_t **head, lexer_node_t *temp)
                 ptr = ptr->next;
             temp->start = strndup (temp->start, temp->length); // ft_strndup
             if (temp->token == DOUBLE_QUOTED_SEQUENCE || temp->token == WORD)
-                temp->start = expand_variable (temp->start);
+                temp->start = expand_variable (args, temp->start);
             if (ptr->token == DOUBLE_QUOTED_SEQUENCE || ptr->token == WORD)
-                ptr->start = expand_variable (ptr->start);
+                ptr->start = expand_variable (args, ptr->start);
             ptr->start = ft_strjoin (ptr->start, temp->start);
             ptr->length += temp->length;
             ptr->joinable = TRUE;
@@ -29,7 +31,7 @@ void create_token_list (lexer_node_t **head, lexer_node_t *temp)
         {
             temp->start = strndup (temp->start, temp->length);
             if (temp->token == DOUBLE_QUOTED_SEQUENCE || temp->token == WORD)
-                temp->start =  expand_variable (temp->start);
+                temp->start =  expand_variable (args, temp->start);
             push_to_list (head, temp);
         }
     }
@@ -53,7 +55,7 @@ void check_word (lexer_node_t *tokens_list)
     }
 }
 
-char *expand_variable (char *str)
+char *expand_variable (shell_args_t *args, char *str)
 {
     int i;
     char *res;
@@ -65,7 +67,7 @@ char *expand_variable (char *str)
     {
         if (str[i] == '$')
         {
-            tmp = get_variable_value (str,  &i);
+            tmp = get_variable_value (args, str,  &i);
             if (tmp)
                res = ft_strjoin (res, tmp);
         }

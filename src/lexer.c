@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-lexer_node_t *lexer (char *line)
+lexer_node_t *lexer (shell_args_t *args, char *line)
 {
     int index;
     lexer_node_t *node;
@@ -17,7 +17,7 @@ lexer_node_t *lexer (char *line)
         else
             tmp = handle_regular (line, &index);
         if (tmp)
-            create_token_list (&node, tmp);
+            create_token_list (args, &node, tmp);
     }
     return (node);
 }

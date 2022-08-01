@@ -121,7 +121,6 @@ typedef struct s_shell_data
 {
     int heredoc_status;
     int fork_status;
-    int shell_level;
     unsigned char exit_code;
 } g_shell_data;
 
@@ -137,7 +136,7 @@ typedef struct s_exec_utils
 
 
 g_shell_data *g_data;
-lexer_node_t *lexer (char *line);
+lexer_node_t *lexer (shell_args_t *args, char *line);
 lexer_node_t *handle_regular (char *line, int *index);
 lexer_node_t *handle_delim (char *line, int *index);
 lexer_node_t *handle_operator (char *line, int *index);
@@ -145,7 +144,7 @@ char **handle_absolue_path (char **path_table);
 char **handle_relative_path (char **path_table);
 void handle_quote (char *line, int *index, lexer_node_t **node);
 void push_to_list (lexer_node_t **head, lexer_node_t *node);
-void create_token_list (lexer_node_t **head, lexer_node_t *temp);
+void create_token_list (shell_args_t *args, lexer_node_t **head, lexer_node_t *temp);
 void free_list(lexer_node_t *node);
 void print_token (int token);
 void testing (lexer_node_t *node);
@@ -153,9 +152,9 @@ lexer_node_t *init_node ();
 int syntax_error (void);
 int syntax_validation (shell_args_t *args);
 void check_word (lexer_node_t *tokens_list);
-char *expand_variable (char *str);
+char *expand_variable (shell_args_t *args,char *str);
 char *extract_var_name (char *str, int *index);
-char *get_variable_value (char *str, int *i);
+char *get_variable_value (shell_args_t *args, char *str, int *i);
 char *push_char (char *str, char c);
 env_list_t *get_env_list (char *env[]);
 env_list_t *create_env_node (char *envStr, int index);
@@ -227,7 +226,7 @@ void    test_exec_node (t_exec_node *node);
 char	*check_access(char *command, char *path, int *status);
 char	**paths_table(char *path);
 char    *update_prompt (shell_args_t *args);
-
+char *ft_getenv (shell_args_t *args, char *varName);
 /* ======================= Parser Functions ========================== **/
 
 void        print_commands(t_cmd *list);
@@ -235,7 +234,7 @@ void        print_commands(t_cmd *list);
 // - Function related to parser handler
 
 
-void    handle_heredoc(t_redirect *node, int fd, lexer_node_t *word);
+void    handle_heredoc(shell_args_t *args, t_redirect *node, int fd, lexer_node_t *word);
 
 // - Function related to string convesion.
 int     commands_number(t_cmd *list);
@@ -256,12 +255,12 @@ t_cmd_node *command_node(t_redirect *redirlist, t_cmd *cmdlist);
 
 // - Functions related to parsing core.
 t_exec_node   *parse(shell_args_t *args, lexer_node_t *node);
-t_exec_node *parse_command(lexer_node_t **node);
+t_exec_node *parse_command(shell_args_t *args, lexer_node_t **node);
 
 // - Functions related to execution node.
 t_exec_node *new_exec_cmd(t_cmd_node *cmd, bool piped, bool status);
 t_exec_node *last_exec_node(t_exec_node *list);
-
+int handle_ctrl(shell_args_t *args, t_redirect *tmp, lexer_node_t *word);
 // - Functions can be used as utility.
 bool is_builtin(t_cmd_node *cmd);
 /**
@@ -363,5 +362,7 @@ shell_args_t *init_args (char *env[]);
 void exec_cmd (shell_args_t *args,t_exec_node *tmp, t_exec_utils *utils);
 void add_exit_var (env_list_t **env_list);
 void set_exit_status (env_list_t **env_list, unsigned char exit_code);
+int env_size(env_list_t *list);
+char    **get_env_table(env_list_t *list);
 
 #endif

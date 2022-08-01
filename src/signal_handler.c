@@ -19,10 +19,12 @@ void	handler(int signum)
         kill (g_data->fork_status, SIGKILL);
         g_data->fork_status = 0;
     }
+    else if (signum == SIGQUIT && g_data->fork_status == 0)
+        return ;
 }
 
 void    init_signals(void)
 {
     signal(SIGINT, handler);
-    signal(SIGSTOP, SIG_IGN);
+    signal(SIGQUIT, handler);
 }

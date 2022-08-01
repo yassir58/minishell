@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string_convert.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:15:02 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/28 12:12:33 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/01 09:56:55 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,23 @@
 int commands_number(t_cmd *list)
 {
     t_cmd   *tmp;
+    int     i;
+
+    i = 0;
+    tmp = list;
+    if (!list)
+        return (0);
+    while (tmp)
+    {
+        tmp = tmp->next;
+        i++;
+    }
+    return (i);
+}
+
+int env_size(env_list_t *list)
+{
+    env_list_t   *tmp;
     int     i;
 
     i = 0;
@@ -47,6 +64,29 @@ char    **get_commands(t_cmd *cmds)
     }
     commands[i] = NULL;
     return (commands);
+}
+
+char    **get_env_table(env_list_t *list)
+{
+    env_list_t *tmp;
+    int i;
+    char **env_table;
+    char *row;
+
+    i = 0;
+    tmp = list;
+    env_table = (char **)malloc(sizeof(char *) * (env_size(list) + 1));
+    if (!env_table)
+        return (NULL);
+    while (tmp)
+    {
+        row = ft_strdup(tmp->variable_name);
+        row = ft_strjoin(row, "=");
+        env_table[i++] = ft_strjoin(row, tmp->value);
+        tmp = tmp->next;
+    }
+    env_table[i] = NULL;
+    return (env_table);
 }
 
 int number_of_el(char **cmds)

@@ -6,7 +6,7 @@
 /*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/31 12:45:06 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/01 10:08:59 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void    get_file_content(t_redirect *tmp)
     }
 }
 
-int handle_ctrl(t_redirect *tmp, lexer_node_t *word)
+int handle_ctrl(shell_args_t *args, t_redirect *tmp, lexer_node_t *word)
 {
     int pid;
     int fd;
@@ -36,7 +36,7 @@ int handle_ctrl(t_redirect *tmp, lexer_node_t *word)
     fd = open("/tmp/.minishell", O_CREAT | O_RDWR | O_TRUNC, 0644);
     pid = fork();
     if (pid == 0)
-        handle_heredoc(tmp, fd, word);
+        handle_heredoc(args, tmp, fd, word);
     else
     {
         g_data->heredoc_status = pid;
@@ -49,10 +49,11 @@ int handle_ctrl(t_redirect *tmp, lexer_node_t *word)
     return (1);
 }
 
-void    handle_heredoc(t_redirect *node, int fd, lexer_node_t *word)
+void    handle_heredoc(shell_args_t *args, t_redirect *node, int fd, lexer_node_t *word)
 {
     char *input;
 
+    
     write(1, "> ", 2);
     input = advanced_get_next_line(0, 0);
     if (input == NULL)
@@ -62,7 +63,7 @@ void    handle_heredoc(t_redirect *node, int fd, lexer_node_t *word)
         if (ft_strcmp(input, node->filename))
         {
             if (word->next->token == WORD)
-                input = expand_variable(input);
+                input = expand_variable(args, input);
             node->heredoc_content = ft_strjoin(node->heredoc_content, input);
             node->heredoc_content = ft_strjoin(node->heredoc_content, "\n");
         }
@@ -99,7 +100,7 @@ t_exec_node *check_piped(lexer_node_t **node, t_cmd *cmds, t_redirect *redirects
     return (new_exec_cmd(command_node(redirects, cmds), FALSE, FALSE));
 }
 
-t_exec_node *parse_command(lexer_node_t **node)
+t_exec_node *parse_command(shell_args_t *args, lexer_node_t **node)
 {
     t_redirect *redirects;
     t_redirect *tmp;
@@ -116,7 +117,7 @@ t_exec_node *parse_command(lexer_node_t **node)
             tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
             if (redirect_type((*node)) == HEREDOC)
             {
-                if(!handle_ctrl(tmp, (*node)))
+                if(!handle_ctrl(args ,tmp, (*node)))
                     return (new_exec_cmd(command_node(redirects, cmds), TRUE, TRUE));
             }
             (*node) = (*node)->next->next;
@@ -140,7 +141,7 @@ t_exec_node   *parse(shell_args_t *args, lexer_node_t *node)
         {
             while (token)
             {
-                exec_node = parse_command(&token);
+                exec_node = parse_command(args, &token);
                 if (exec_node->status)
                     break;
                 if (!list)

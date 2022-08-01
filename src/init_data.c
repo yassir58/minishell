@@ -41,40 +41,7 @@ shell_args_t *init_args (char *env[])
     args->prompt = NULL;
     args->env = env;
     args->env_list = get_env_list (args->env);
-    add_exit_var (&(args->env_list));
     args->lexer_list = NULL;
     args->exec_node = NULL;
     return (args);
-}
-
-
-void add_exit_var (env_list_t **env_list)
-{
-    env_list_t *temp;
-    env_list_t *node;
-
-    temp = *env_list;
-    node = malloc (sizeof (env_list));
-    if (!node)
-        allocation_err ();
-    node->variable_name = "?";
-    node->value = "0";
-    node->next = NULL;
-    while (temp->next)
-        temp = temp->next;
-    temp->next = node;
-}
-
-
-void set_exit_status (env_list_t **env_list, unsigned char exit_code)
-{
-    env_list_t *temp;
-
-    temp = *env_list;
-    while (temp)
-    {
-        if (!ft_strcmp (temp->variable_name, "?"))
-            temp->value = ft_itoa (exit_code);
-        temp = temp->next;
-    }
 }

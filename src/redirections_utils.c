@@ -31,7 +31,6 @@ int handle_redir_output (shell_args_t *args, t_redirect *redirect_node, int *err
 {
     int fd;
 
-  
     fd = access (redirect_node->filename, (F_OK));
     if (fd != -1)
     {
