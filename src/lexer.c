@@ -11,13 +11,21 @@ lexer_node_t *lexer (shell_args_t *args, char *line)
     while (line[index])
     {
         if (ft_strchr (OPERATORS, line[index]))
+        {
             tmp = handle_operator (line, &index);
+        }
         else if (ft_strchr (DELIMTERS, line[index]))
+        {
             tmp = handle_delim (line, &index);
+        }
         else
+        {
             tmp = handle_regular (line, &index);
+        }
         if (tmp)
+        {
             create_token_list (args, &node, tmp);
+        }
     }
     return (node);
 }
