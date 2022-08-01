@@ -15,6 +15,7 @@ void init_command (shell_args_t *args)
         status = handle_simple_command (args);
     else
         status = exec_piped_commands (args);
+    g_data->exit_code = (unsigned char) status;
 }
 
 

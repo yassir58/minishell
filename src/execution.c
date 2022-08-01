@@ -76,7 +76,7 @@ void exec_command (shell_args_t *args, t_exec_node *exec_node)
 
     status = 0;
     cmds = get_commands (exec_node->cmd->cmds);
-    path = get_path (cmds, &status);    
+    path = get_path (args, cmds, &status);    
     if (!path[0])
         shell_err (cmds[0], status);
     execve (path[0], cmds, get_env_table (args->env_list));
@@ -202,7 +202,7 @@ void shell_err (char *command, int status)
     exit (status);
 }
 
-char **get_path (char **cmds, int *status)
+char **get_path (shell_args_t *args, char **cmds, int *status)
 {
     char *path;
     char **path_check;
@@ -225,7 +225,7 @@ char **get_path (char **cmds, int *status)
     }
     else
         path_table[1] = cmds[0];
-    path = check_access (cmds[0], path, status);
+    path = check_access (args, cmds[0], path, status);
     path_table[0] = path;
     return (path_table);
 }
@@ -236,12 +236,10 @@ int handle_cd (shell_args_t *args, char **cmds)
     int exit_status ;
 
     exit_status = 0;
-    if (number_of_el (cmds) > 2)
-        exit_status = cd_function (NULL, -1, &args->env_list);
-    else if (number_of_el (cmds) == 2)
-        exit_status = cd_function (cmds[1], 1, &args->env_list);
+    if (number_of_el (cmds) >= 2)
+        exit_status = cd_function (cmds[1], &args->env_list);
     else 
-        exit_status = cd_function (NULL, 1, &args->env_list);
+        exit_status = cd_function (NULL, &args->env_list);
     return (exit_status);
 }
 
@@ -294,15 +292,13 @@ void exec_cmd (shell_args_t *args,t_exec_node *tmp, t_exec_utils *utils)
 
     status = 0;
     link_rediriction_pipes (utils->infile, utils->outfile);
+    if (utils->infile == 0 && utils->outfile == 1)
+        link_pipes (tmp, utils->fds, utils->indx);
     if (tmp->builtin)
     {
-        status = handle_builtin (args, tmp, utils->fds, utils->indx);
+        status = builtin_routine (args, tmp, utils->infile, utils->outfile);
         exit (status);
     }
     else
-    {
-        if (utils->infile == 0 && utils->outfile == 1)
-            link_pipes (tmp, utils->fds, utils->indx);
         exec_command (args, tmp);
-    }
 }
