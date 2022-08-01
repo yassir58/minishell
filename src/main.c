@@ -19,10 +19,8 @@ int main (int argc ,char *argv[], char *env[])
         args->line = prompt(args->prompt);
         args->lexer_list = lexer (args, args->line);
         args->exec_node = parse (args, args->lexer_list);
-        args->status = init_command (args);
-        if (!args->status)
-            get_children_status (&(args->status));
-        g_data->exit_code = args->status;
+        init_command (args);
+        get_children_status ();
     }
     /// free allocated global data
     return (0);

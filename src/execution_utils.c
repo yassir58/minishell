@@ -42,27 +42,25 @@ int nodes_number (shell_args_t *args)
     return (len);
 }
 
-void get_children_status (unsigned char *exit_status)
+void get_children_status ()
 {
     int flag;
     int status;
-    int parent_status;
 
     flag = 0;
-    parent_status = 0;
    while (flag != -1)
    {
         flag = waitpid (-1 , &status, 0);
         if (WIFEXITED(status) && flag != -1)
-            parent_status = WEXITSTATUS (status);
+            g_data->exit_code = WEXITSTATUS (status);
         else if (WIFSIGNALED (status) && flag != -1)
         {
             if (WTERMSIG(status) + 128 == 131)
             {
-                parent_status = 131;
+                g_data->exit_code = 131;
                 printf ("Quit : 3\n");
             }
         }
    }
-   *exit_status = parent_status;
+
 }

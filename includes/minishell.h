@@ -327,7 +327,7 @@ void close_unused_fds (int **fds_table , int used);
 void close_unused_fds_2 (int **fds_table, int used1, int used2);
 env_list_t *create_path_node (void);
 void init_old_pwd (env_list_t **env_list);
-void get_children_status (unsigned char *status);
+void get_children_status (void);
 /// redirections
 int handle_redir_input (shell_args_t *args, t_redirect *redirect_node, int *err);
 int handle_redir_output (shell_args_t *args, t_redirect *redirect_node, int *err);
@@ -340,7 +340,7 @@ int open_pipe (int *fd, shell_args_t *args);
 int close_fd (int fd);
 int exit_with_failure (shell_args_t *args, char *err_message);
 int fork_child (shell_args_t *args);
-int init_command (shell_args_t *args);
+void init_command (shell_args_t *args);
 int get_status (int pid);
 void check_for_valid_command (t_exec_node *exec_node);
 void command_exist (t_exec_node *exec_node);
@@ -364,5 +364,7 @@ void add_exit_var (env_list_t **env_list);
 void set_exit_status (env_list_t **env_list, unsigned char exit_code);
 int env_size(env_list_t *list);
 char    **get_env_table(env_list_t *list);
+char *expand_word (shell_args_t *args, char *str);
+char *handle_expand (shell_args_t *args, lexer_node_t *temp);
 
 #endif
