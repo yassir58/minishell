@@ -31,6 +31,12 @@ int handle_redir_output (shell_args_t *args, t_redirect *redirect_node, int *err
 {
     int fd;
 
+    if (!ft_strcmp(redirect_node->filename, ""))
+    {
+        redir_err (redirect_node->filename, " : No such file or directory\n");
+        *err = 1;
+        return (-1);
+    }
     fd = access (redirect_node->filename, (F_OK));
     if (fd != -1)
     {
@@ -52,6 +58,12 @@ int handle_redir_append (shell_args_t *args, t_redirect *redirect_node,  int *er
 {
     int fd;
     
+    if (!ft_strcmp(redirect_node->filename, ""))
+    {
+        redir_err (redirect_node->filename, " : No such file or directory\n");
+        *err = 1;
+        return (-1);
+    }
     fd = access (redirect_node->filename, (F_OK));
     if (fd != -1)
     {

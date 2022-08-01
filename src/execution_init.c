@@ -1,18 +1,20 @@
 #include "../includes/minishell.h"
 
 
-int init_command (shell_args_t *args)
+void init_command (shell_args_t *args)
 {
     int status;
 
     status = 0;
     if (args->exec_node == NULL)
-        return (258);
+    {
+        g_data->exit_code =(unsigned char) 258;
+        return ;
+    }
     if (args->exec_node->next == NULL)
         status = handle_simple_command (args);
     else
         status = exec_piped_commands (args);
-    return (status);
 }
 
 
