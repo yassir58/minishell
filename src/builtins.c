@@ -9,32 +9,34 @@ int pwd_function (env_list_t *env_list)
     return (0);
 }
 
-int cd_function (char *arg, int flag, env_list_t **env_list)
+int cd_function (char *arg, env_list_t **env_list)
 {
     int i;
     int err;
 
     i = 0;
     err = 0;
-    if (flag == -1)
-        builtin_err ("cd: Arguments Err \n", NULL);
+  
+    if (arg == NULL)
+        cd_to_home (*env_list);
+    else if (!ft_strcmp (arg, "~"))
+        cd_to_home (*env_list);
+    else if (!ft_strcmp (arg, "-"))
+        cd_prev_pwd (*env_list);
     else
     {
-        if (arg == NULL)
-            cd_to_home (*env_list);
-        else if (!strcmp (arg, "~"))
-            cd_to_home (*env_list);
-        else if (!strcmp (arg, "-"))
-             cd_prev_pwd (*env_list);
-        else
+        err = isDir (arg);
+        if (err == -1 || !err)
         {
-            err = chdir (arg);
-            if (err == -1)
-                    builtin_err (" :no such file or directory\n", arg);
+            if (!err)
+                return (builtin_err (" : Not a directory\n", arg));
+            else
+                return (builtin_err (": No such file or directory\n", arg));
         }
-        update_pwd_env (env_list);
+        chdir (arg);
     }
-    return (0);
+    update_pwd_env (env_list);
+    return (err);
 }
 
 int echo_function (char *argv[], int argc)

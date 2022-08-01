@@ -5,6 +5,15 @@ int handle_redir_input (shell_args_t *args, t_redirect *redirect_node, int *err)
     int fd;
 
     fd = access(redirect_node->filename, (F_OK));
+    if (!ft_strcmp(redirect_node->filename, ""))
+    {
+        if (redirect_node->token == WORD)
+            redir_err (redirect_node->filename, " :ambiguous redirect\n");
+        else 
+            redir_err (redirect_node->filename, " : No such file or directory\n");
+        *err = 1;
+        return (-1);
+    }
     if (fd == -1)
     {
         redir_err (redirect_node->filename, " : No such file or directory \n");
@@ -33,7 +42,10 @@ int handle_redir_output (shell_args_t *args, t_redirect *redirect_node, int *err
 
     if (!ft_strcmp(redirect_node->filename, ""))
     {
-        redir_err (redirect_node->filename, " : No such file or directory\n");
+        if (redirect_node->token == WORD)
+            redir_err (redirect_node->filename, " :ambiguous redirect\n");
+        else 
+            redir_err (redirect_node->filename, " : No such file or directory\n");
         *err = 1;
         return (-1);
     }
@@ -60,7 +72,10 @@ int handle_redir_append (shell_args_t *args, t_redirect *redirect_node,  int *er
     
     if (!ft_strcmp(redirect_node->filename, ""))
     {
-        redir_err (redirect_node->filename, " : No such file or directory\n");
+        if (redirect_node->token == WORD)
+            redir_err (redirect_node->filename, " :ambiguous redirect\n");
+        else 
+            redir_err (redirect_node->filename, " : No such file or directory\n");
         *err = 1;
         return (-1);
     }
@@ -139,4 +154,17 @@ void redir_err (char *filename, char *err_message)
 
     err = ft_strjoin (filename , err_message);
     ft_putstr_fd (err, 2);
+}
+
+
+int isDir (char *filename)
+{
+    struct stat sfile;
+    int accs;
+
+    accs = access (filename, (F_OK));
+    if (accs == -1)
+        return (-1);
+    stat("filename", &sfile);
+    return (S_ISREG(sfile.st_mode));
 }

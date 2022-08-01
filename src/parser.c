@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/01 12:25:30 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/01 14:25:59 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,5 @@ t_exec_node   *parse(shell_args_t *args, lexer_node_t *node)
             }
         }
     }
-    print_exec_node(list);
     return (list);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:45:04 by yelatman          #+#    #+#             */
-/*   Updated: 2022/07/29 11:23:31 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/01 15:37:38 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,15 @@ char	**paths_table(char *path)
 	return (paths);
 }
 
-char	*check_access(char *command, char *path, int *status)
+char	*check_access(shell_args_t *args, char *command, char *path, int *status)
 {
 	char **paths;
 	int 	i;
 	char	*temp;
+	char *spath;
 
 	i = 0;
+	spath = get_env_path (args);
 	if (path)
 	{
 		temp = command;
@@ -35,6 +37,11 @@ char	*check_access(char *command, char *path, int *status)
 	}
 	else
 	{
+		if (!spath)
+		{
+			*status = 127;
+			return (NULL);
+		}
 		paths = paths_table(_PATH_STDPATH);
 		while (paths[i])
 		{
@@ -74,4 +81,19 @@ int access_status (char *cmd, int *status)
 		*status = 127;
 	rt_status = *status;
 	return (rt_status);
+}
+
+
+char *get_env_path (shell_args_t *args)
+{
+	env_list_t *temp;
+	
+	temp = args->env_list;
+	while (temp)
+	{
+		if (!ft_strcmp (temp->variable_name, "SPATH"))
+			return (ft_strdup (temp->value));
+		temp = temp->next;
+	}
+	return (NULL);
 }

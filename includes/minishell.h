@@ -163,7 +163,7 @@ void push_env_node (env_list_t **head, env_list_t *node);
 void free_tab (char *tab[]);
 int pwd_function (env_list_t *env_list);
 void test_env_list (env_list_t *list);
-int cd_function (char *arg, int flag, env_list_t **env_list);
+int cd_function (char *arg, env_list_t **env_list);
 void cd_to_home (env_list_t *env_list);
 int check_for_dots (char *arg, env_list_t *list);
 char *get_pwd_env (env_list_t *list);
@@ -224,7 +224,7 @@ char    *prompt(char *string);
 
 ///////// testing ////////
 void    test_exec_node (t_exec_node *node);
-char	*check_access(char *command, char *path, int *status);
+char	*check_access(shell_args_t *args, char *command, char *path, int *status);
 char	**paths_table(char *path);
 char    *update_prompt (shell_args_t *args);
 char *ft_getenv (shell_args_t *args, char *varName);
@@ -350,7 +350,7 @@ void shell_err (char *command, int status);
 int builtin_err (char *err, char *arg);
 void link_pipes (t_exec_node *tmp, int **fds, int indx);
 int exec_piped_commands (shell_args_t *args);
-char **get_path (char **cmds, int *status);
+char **get_path (shell_args_t *args, char **cmds, int *status);
 int handle_cd (shell_args_t *args, char **cmds);
 int access_status (char *cmd, int *status);
 int cd_prev_pwd (env_list_t *env_list);
@@ -367,5 +367,7 @@ int env_size(env_list_t *list);
 char    **get_env_table(env_list_t *list);
 char *expand_word (shell_args_t *args, char *str);
 char *handle_expand (shell_args_t *args, lexer_node_t *temp);
+int isDir (char *filename);
+char *get_env_path (shell_args_t *args);
 
 #endif
