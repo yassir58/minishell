@@ -54,13 +54,15 @@ void get_children_status (unsigned char *exit_status)
    {
         flag = waitpid (-1 , &status, 0);
         if (WIFEXITED(status) && flag != -1)
+        {
             parent_status = WEXITSTATUS (status);
+        }
         else if (WIFSIGNALED (status) && flag != -1)
         {
             if (WTERMSIG(status) + 128 == 131)
             {
                 parent_status = 131;
-                printf ("Quit : 3\n");
+                ft_putstr_fd("Quit : 3\n", 2);
             }
         }
    }

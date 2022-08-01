@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/01 10:08:59 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/01 12:25:30 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ t_exec_node *parse_command(shell_args_t *args, lexer_node_t **node)
         parse_cmd_args(&cmds, node);
         if ((*node) && check_redirect((*node)))
         {
-            tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node))));
+            tmp = add_redirect(&redirects, new_redirect(ft_strdup((*node)->next->start), NULL ,redirect_type((*node)), (*node)->next->token));
             if (redirect_type((*node)) == HEREDOC)
             {
                 if(!handle_ctrl(args ,tmp, (*node)))
@@ -158,5 +158,6 @@ t_exec_node   *parse(shell_args_t *args, lexer_node_t *node)
             }
         }
     }
+    print_exec_node(list);
     return (list);
 }

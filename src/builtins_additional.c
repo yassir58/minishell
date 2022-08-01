@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_additional.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/31 15:23:09 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/01 12:24:21 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int    ft_unset(t_exec_node *exec_node, env_list_t **list)
             delete_env_variable(list, cmds[i]);
         else
         {
-            printf("Minishell: unset: %s: not a valid identifier\n", cmds[i]);
+            ft_putstr_fd("Minishell: unset: not a valid identifier\n", 2);
             g_data->exit_code = 1;
             return (1);
         }
@@ -44,13 +44,13 @@ int ft_env(t_exec_node *exec_node, env_list_t *list)
     cmds = get_commands(exec_node->cmd->cmds);
     if (number_of_el(cmds) == 1)
     {
-        print_export_list(list);
+        print_env_list(list);
         g_data->exit_code = 0;
     }
     else
     {
         g_data->exit_code = 1;
-        perror("Minishell: env: illegal option\n");
+        ft_putstr_fd("Minishell: env: illegal option\n", 2);
         return (1);
     }
     return (0);
@@ -60,7 +60,7 @@ void handle_exit(char **cmds)
 {
     if (number_of_el(cmds) > 2)
     {
-        printf("Minishell: exit: too many arguments\n");
+        ft_putstr_fd("Minishell: exit: too many arguments\n", 2);
         g_data->exit_code = 1;
         return ;
     }
@@ -184,14 +184,12 @@ int    validate_export_args(char **cmds)
             i++;
         else
         {
-            printf("minishell: export: not a valid identifier\n");
+            ft_putstr_fd("Minishell: export: not a valid identifier\n", 2);
             return (1);
         }
     }
     return (0);
 }
-
-// This hole logic of checking existing nodes needs to be rechecked.
 
 int   check_existing_variable(char *argument, env_list_t *list)
 {
@@ -251,5 +249,4 @@ void    ft_export(t_exec_node *exec_node, env_list_t *list)
         if(!validate_export_args(cmds))
             add_export_variable(cmds, list);
     }
-    // Overwrite the value that is already been written by export. 
 }

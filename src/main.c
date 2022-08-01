@@ -10,7 +10,7 @@ int main (int argc ,char *argv[], char *env[])
     init_signals();
     g_data = init_global ();
     args = init_args (env);
-    rl_catch_signals = 0;
+    // rl_catch_signals = 0;
     (void)argc;
     (void)argv;
     while (1)

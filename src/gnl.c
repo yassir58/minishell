@@ -1,34 +1,5 @@
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
+#include "../includes/minishell.h"
 
-int 	ft_strlen(char *str)
-{
-	int i;
-	
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-char *ft_strdup(char *str)
-{
-	int i;
-	char *new;
-
-	i = 0;
-	new = (char *)malloc(sizeof(char) * ft_strlen(str) + 1);
-	if (!new)
-		return (NULL);
-	while (str[i])
-	{
-		new[i] = str[i];
-		i++;	
-	}
-	new[i] = '\0';
-	return (new);
-}
 
 char	*advanced_get_next_line(int fd, int status)
 {
