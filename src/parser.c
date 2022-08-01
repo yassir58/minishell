@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/01 14:08:03 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/01 16:14:04 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,5 @@ t_exec_node   *parse(shell_args_t *args, lexer_node_t *node)
             }
         }
     }
-    // print_exec_node(list);
     return (list);
 }
