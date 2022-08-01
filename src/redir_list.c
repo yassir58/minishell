@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:54 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/28 17:14:40 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/01 12:14:35 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_redirect  *add_redirect(t_redirect **list, t_redirect *node)
     return (node);
 }
 
-t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type)
+t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type, int token)
 {
     t_redirect *node;
     int i;
@@ -49,6 +49,7 @@ t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type)
         return (NULL);
     node->type = type;
     node->filename = name;
+    node->token = token;
     node->heredoc_content = heredoc;
     node->next = NULL;
     return (node);

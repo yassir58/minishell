@@ -72,6 +72,7 @@ typedef struct s_redirect
     t_redir_type type;
     char *filename;
     char *heredoc_content;
+    int token;
     struct s_redirect *next;
 } t_redirect;
 
@@ -245,7 +246,7 @@ void    display(char **cmds);
 // - Function related to redirection lists.
 t_redirect *last_redirect(t_redirect *lst);
 t_redirect  *add_redirect(t_redirect **list, t_redirect *node);
-t_redirect  *new_redirect(char *name, char *heredoc, t_redir_type type);
+t_redirect *new_redirect(char *name, char *heredoc, t_redir_type type, int token);
 
 // - Function related to commands lists.
 void        add_command(t_cmd **list, t_cmd *cmd);
