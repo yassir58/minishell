@@ -18,6 +18,7 @@ int main (int argc ,char *argv[], char *env[])
         args->prompt = update_prompt (args);
         args->line = prompt(args->prompt);
         args->lexer_list = lexer (args, args->line);
+        while (1);
         args->exec_node = parse (args, args->lexer_list);
         init_command (args);
         get_children_status ();
