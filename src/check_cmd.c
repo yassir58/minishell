@@ -6,7 +6,7 @@
 /*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:45:04 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/01 15:37:38 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/02 12:22:41 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*check_access(shell_args_t *args, char *command, char *path, int *status)
 			*status = 127;
 			return (NULL);
 		}
-		paths = paths_table(_PATH_STDPATH);
+		paths = paths_table(spath);
 		while (paths[i])
 		{
 			temp = ft_strjoin(ft_strjoin(paths[i], "/"), command);
@@ -64,20 +64,21 @@ int access_status (char *cmd, int *status)
 {
 	int rt_status;
 	struct stat sfile;
-	
+
+	rt_status = 0;
 	if (access (cmd, F_OK) != -1)
 	{
-			if (access (cmd, (F_OK & X_OK)) != -1)
-			{
-				*status = 0;
-				stat (cmd, &sfile);
-				if (S_ISDIR(sfile.st_mode) == 1)
+		*status = 0;
+		if (access (cmd , (F_OK | X_OK)) != -1)
+		{
+			stat (cmd, &sfile);
+			if (S_ISDIR(sfile.st_mode) == 1)
 				*status = -126;	
-			}
-			else
-				*status = 126;
+		}
+		else
+			*status = 126;
 	}
-	else 
+	else
 		*status = 127;
 	rt_status = *status;
 	return (rt_status);

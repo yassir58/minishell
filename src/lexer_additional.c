@@ -90,7 +90,7 @@ char *extract_var_name (char *str, int *index)
     (*index)++;
     start = *index;
     var_name = NULL;
-    while (str[*index] && str[*index] != ' ')
+    while (str[*index] && str[*index] != ' ' && str[*index] != '\'' && str[*index] != '"')
     {
         if (str[(*index)] == '$')
             break;

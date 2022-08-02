@@ -166,5 +166,7 @@ int isDir (char *filename)
     if (accs == -1)
         return (-1);
     stat("filename", &sfile);
-    return (S_ISREG(sfile.st_mode));
+    if (S_ISREG(sfile.st_mode) == 0)
+        accs = 1;
+    return (accs);
 }

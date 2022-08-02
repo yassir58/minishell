@@ -347,11 +347,11 @@ int get_status (int pid);
 void check_for_valid_command (t_exec_node *exec_node);
 void command_exist (t_exec_node *exec_node);
 int handle_simple_command (shell_args_t *args);
-void shell_err (char *command, int status);
+void shell_err (char *command, int status, int path_check);
 int builtin_err (char *err, char *arg);
 void link_pipes (t_exec_node *tmp, int **fds, int indx);
 int exec_piped_commands (shell_args_t *args);
-char **get_path (shell_args_t *args, char **cmds, int *status);
+char **get_path (shell_args_t *args, char **cmds, int *status, int *path_check);
 int handle_cd (shell_args_t *args, char **cmds);
 int access_status (char *cmd, int *status);
 int cd_prev_pwd (env_list_t *env_list);
@@ -370,5 +370,6 @@ char *expand_word (shell_args_t *args, char *str);
 char *handle_expand (shell_args_t *args, lexer_node_t *temp);
 int isDir (char *filename);
 char *get_env_path (shell_args_t *args);
+void init_env_list (env_list_t **env_list);
 
 #endif

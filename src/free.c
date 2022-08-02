@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:40 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/01 19:12:23 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/02 14:38:10 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,3 +81,11 @@ void	free_string_table(char **table)
 		free(table[i]);
 	free(table);
 }
+
+
+
+
+// void garbage_collector (shell_args_t *args)
+// {
+	
+// }

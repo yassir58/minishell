@@ -45,3 +45,18 @@ shell_args_t *init_args (char *env[])
     args->exec_node = NULL;
     return (args);
 }
+
+
+void init_env_list (env_list_t **env_list)
+{
+    char *pwd_val;
+    char *shlvl_val;
+    env_list_t *temp;
+
+    
+    temp = *env_list;
+    shlvl_val = ft_strdup ("SHLVL=0");
+    pwd_val = ft_strjoin ("PWD=", get_pwd (*env_list));
+    push_env_node (env_list, create_env_node (pwd_val, 0));
+    push_env_node (env_list, create_env_node (shlvl_val, 1));
+}

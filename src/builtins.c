@@ -25,15 +25,16 @@ int cd_function (char *arg, env_list_t **env_list)
         cd_prev_pwd (*env_list);
     else
     {
-        err = isDir (arg);
-        if (err == -1 || !err)
+        err = chdir (arg);
+        if (err == -1)
+            err = isDir (arg);
+        if (err == -1 || err == 1)
         {
             if (!err)
                 return (builtin_err (" : Not a directory\n", arg));
             else
                 return (builtin_err (": No such file or directory\n", arg));
         }
-        chdir (arg);
     }
     update_pwd_env (env_list);
     return (err);

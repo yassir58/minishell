@@ -72,13 +72,16 @@ void exec_command (shell_args_t *args, t_exec_node *exec_node)
     char **cmds;
     char **path;
     int status;
+    int path_check;
 
 
     status = 0;
+    path_check = 0 ;
     cmds = get_commands (exec_node->cmd->cmds);
-    path = get_path (args, cmds, &status);    
+    path = get_path (args, cmds, &status, &path_check);
+
     if (!path[0])
-        shell_err (cmds[0], status);
+        shell_err (cmds[0], status, path_check);
     execve (path[0], cmds, get_env_table (args->env_list));
 }
 
@@ -188,7 +191,7 @@ int handle_simple_command (shell_args_t *args)
 }
 
 
-void shell_err (char *command, int status)
+void shell_err (char *command, int status, int path_check)
 {
     if (status == -126)
     {
@@ -196,13 +199,18 @@ void shell_err (char *command, int status)
         ft_putstr_fd (ft_strjoin (command, ": is a directory\n"), STDERR_FILENO);
     }
     else if (status == 127)
-        ft_putstr_fd (ft_strjoin (command, ": command not found\n"), STDERR_FILENO);
-    else    
+    {
+        if (path_check)
+            ft_putstr_fd (ft_strjoin (command, ": no such file or directory\n"), STDERR_FILENO);
+        else
+            ft_putstr_fd (ft_strjoin (command, ": command not found\n"), STDERR_FILENO);
+    }
+    else if (status == 126)
         ft_putstr_fd (ft_strjoin (command, ":  Permission denied\n"), STDERR_FILENO);
     exit (status);
 }
 
-char **get_path (shell_args_t *args, char **cmds, int *status)
+char **get_path (shell_args_t *args, char **cmds, int *status, int *path_status)
 {
     char *path;
     char **path_check;
@@ -222,6 +230,7 @@ char **get_path (shell_args_t *args, char **cmds, int *status)
         path = path_check[0];
         path_table[1] = path_check[1];
         cmd = path_table[1];
+        *path_status = 1;
     }
     else
         path_table[1] = cmds[0];
@@ -291,9 +300,8 @@ void exec_cmd (shell_args_t *args,t_exec_node *tmp, t_exec_utils *utils)
     int status;
 
     status = 0;
+    link_pipes (tmp, utils->fds, utils->indx);
     link_rediriction_pipes (utils->infile, utils->outfile);
-    if (utils->infile == 0 && utils->outfile == 1)
-        link_pipes (tmp, utils->fds, utils->indx);
     if (tmp->builtin)
     {
         status = builtin_routine (args, tmp, utils->infile, utils->outfile);

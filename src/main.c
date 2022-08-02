@@ -15,6 +15,7 @@ int main (int argc ,char *argv[], char *env[])
     (void)argv;
     while (1)
     {
+       
         args->prompt = update_prompt (args);
         args->line = prompt(args->prompt);
         args->lexer_list = lexer (args, args->line);
