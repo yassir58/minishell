@@ -297,7 +297,7 @@ void    print_unsorted_env(env_list_t *list);
 
 // Builtins
 
-void    ft_export(t_exec_node *exec_node, env_list_t *list);
+int ft_export(t_exec_node *exec_node, env_list_t *list);
 
 // - Testing
 

@@ -6,11 +6,29 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/01 15:01:00 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/02 11:38:36 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+
+int validate_args(char *cmds, char *filter)
+{
+    int i;
+
+    i = 0;
+    if (ft_isdigit(cmds[i]))
+        return (0);
+    while (cmds[i])
+    {
+        if (ft_isalpha(cmds[i]) || ft_isdigit(cmds[i]) || ft_strchr(filter, cmds[i]))
+            i++;
+        else
+            return (0);
+    }
+    return (1);
+}
 
 int    ft_unset(t_exec_node *exec_node, env_list_t **list)
 {
@@ -18,13 +36,14 @@ int    ft_unset(t_exec_node *exec_node, env_list_t **list)
     int size;
     char **cmds;
 
+    (void)list;
     i = 1;
     cmds = get_commands(exec_node->cmd->cmds);
     size = number_of_el(cmds);
     g_data->exit_code = 0;
     while (i < size)
     {
-        if (cmds[i] && !ft_isdigit(cmds[i][1]))
+        if (validate_args(cmds[i], "_"))
             delete_env_variable(list, cmds[i]);
         else
         {
@@ -60,8 +79,8 @@ void handle_exit(char **cmds)
 {
     if (number_of_el(cmds) > 2)
     {
-        ft_putstr_fd("Minishell: exit: too many arguments\n", 2);
         g_data->exit_code = 1;
+        ft_putstr_fd("Minishell: exit: too many arguments\n", 2);
         return ;
     }
     else if (number_of_el(cmds) == 2)
@@ -88,7 +107,7 @@ int ft_exit(t_exec_node *exec_node)
     g_data->exit_code = 0;
     printf("exit\n");
     handle_exit(cmds);
-    return (1);
+    return (g_data->exit_code);
 }
 
 void    swap_nodes(env_list_t *a, env_list_t *b)
@@ -142,36 +161,36 @@ void    order_env_list(env_list_t *list)
     }
 }
 
-void    print_unsorted_env(env_list_t *list)
-{
-    int i;
-    env_list_t *tmp;
+// void    print_unsorted_env(env_list_t *list)
+// {
+//     int i;
+//     env_list_t *tmp;
 
-    i = 1;
-    tmp = list;
-    while (tmp != NULL)
-    {
-        while (tmp != NULL)
-        {
-            if (i == tmp->index)
-            {
-                printf("%s=%s\n",tmp->variable_name, tmp->value);
-                if (i == env_list_size(list))
-                    break;
-                i += 1;
-            }
-            else
-                tmp = tmp->next;
-        }
-        if (i != env_list_size(list))
-            tmp = list;
-        else
-        {
-            if (tmp)
-                tmp = tmp->next;
-        }
-    }
-}
+//     i = 1;
+//     tmp = list;
+//     while (tmp != NULL)
+//     {
+//         while (tmp != NULL)
+//         {
+//             if (i == tmp->index)
+//             {
+//                 printf("%s=%s\n",tmp->variable_name, tmp->value);
+//                 if (i == env_list_size(list))
+//                     break;
+//                 i += 1;
+//             }
+//             else
+//                 tmp = tmp->next;
+//         }
+//         if (i != env_list_size(list))
+//             tmp = list;
+//         else
+//         {
+//             if (tmp)
+//                 tmp = tmp->next;
+//         }
+//     }
+// }
 
 int    validate_export_args(char **cmds)
 {
@@ -180,7 +199,7 @@ int    validate_export_args(char **cmds)
     i = 1;
     while (cmds[i])
     {
-        if (ft_isalpha(cmds[i][0]))
+        if (validate_args(cmds[i], "_="))
             i++;
         else
         {
@@ -233,20 +252,26 @@ void    add_export_variable(char **cmds, env_list_t *list)
     }
 }
 
-void    ft_export(t_exec_node *exec_node, env_list_t *list)
+int    ft_export(t_exec_node *exec_node, env_list_t *list)
 {
     char **cmds;
     
     int i;
+    int ret;
 
     i = 0;
+    ret = 0;
     cmds = get_commands(exec_node->cmd->cmds);
     order_env_list(list);
     if (!cmds[1])
         print_export_list(list);
     else if (number_of_el(cmds) > 1)
     {
-        if(!validate_export_args(cmds))
+        ret = validate_export_args(cmds);
+        if(!ret)
             add_export_variable(cmds, list);
+        else
+            return (ret);
     }
+    return (0);
 }

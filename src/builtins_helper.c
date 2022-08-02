@@ -7,7 +7,11 @@ int is_number(char *str)
 
     i = 0;
     if (str[i] == '-' || str[i] == '+')
+    {
+        if (ft_strlen(str) == 1)
+            return (0);
         i++;
+    }
     while (str[i])
     {
         if (!ft_isdigit(str[i]))
