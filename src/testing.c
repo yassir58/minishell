@@ -176,3 +176,6 @@ char *update_prompt (shell_args_t *args)
     else
         return(ft_strjoin(pwd, elm));
 }
+
+
+

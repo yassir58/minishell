@@ -40,7 +40,7 @@ int cd_function (char *arg, env_list_t **env_list)
     return (err);
 }
 
-int echo_function (char *argv[], int argc)
+int echo_function (shell_args_t *args, char *argv[], int argc)
 {
     int i = 1;
     char thrilling;
@@ -57,7 +57,7 @@ int echo_function (char *argv[], int argc)
         while (argv[i])
         {
             if (i == (argc - 1))
-                printf ("%s", argv[i]);
+                echo_print (args, argv[i]);
             else
                 printf ("%s ", argv[i]);
             i++;
@@ -78,4 +78,22 @@ int builtin_err (char *err, char *arg)
         res = err;
     ft_putstr_fd (res, 2);
     return (1);
+}
+
+void echo_print (shell_args_t *args, char *str)
+{
+    env_list_t *env;
+
+    env = args->env_list;
+    if (!ft_strcmp (str, "~"))
+    {
+        while (env)
+        {
+            if (!ft_strcmp (env->variable_name, "HOME"))
+                printf ("%s", env->value);
+            env = env->next;
+        }
+    }
+    else
+        printf ("%s", str);
 }

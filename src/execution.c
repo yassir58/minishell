@@ -50,7 +50,7 @@ int builtin_routine (shell_args_t *args, t_exec_node *exec_node, int infile, int
     else if (!advanced_strcmp (cmds[0], "pwd"))
         pwd_function (args->env_list);
     else if (!advanced_strcmp (cmds[0], "echo"))
-        echo_function (cmds, number_of_el (cmds));
+        echo_function (args, cmds, number_of_el (cmds));
     else if (!advanced_strcmp (cmds[0], "env"))
         ft_env (exec_node, args->env_list);
     else if (!advanced_strcmp (cmds[0], "unset"))

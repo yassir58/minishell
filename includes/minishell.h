@@ -169,7 +169,7 @@ int check_for_dots (char *arg, env_list_t *list);
 char *get_pwd_env (env_list_t *list);
 int update_pwd_env (env_list_t **list);
 char *get_pwd (env_list_t *env_list);
-int echo_function (char *argv[], int argc);
+int echo_function (shell_args_t *args, char *argv[], int argc);
 int invalid_operator (lexer_node_t *node);
 int validate_first_node (shell_args_t *args);
 int validate_last_node (shell_args_t *args);
@@ -371,5 +371,7 @@ char *handle_expand (shell_args_t *args, lexer_node_t *temp);
 int isDir (char *filename);
 char *get_env_path (shell_args_t *args);
 void init_env_list (env_list_t **env_list);
+void echo_print (shell_args_t *args, char *str);
+
 
 #endif
