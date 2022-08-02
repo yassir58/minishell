@@ -263,11 +263,11 @@ int handle_one_builtin_cmd (shell_args_t *args, int infile, int outfile)
     if (!ft_strcmp (args->exec_node->cmd->cmds->cmd, "cd"))
         status = handle_cd (args, get_commands(args->exec_node->cmd->cmds));
     else if (!ft_strcmp (args->exec_node->cmd->cmds->cmd, "exit"))
-        ft_exit (args->exec_node);
+        status = ft_exit (args->exec_node); 
     else if (!ft_strcmp (args->exec_node->cmd->cmds->cmd, "export"))
-        ft_export (args->exec_node, args->env_list);
+        status = ft_export (args->exec_node, args->env_list); 
     else if (!ft_strcmp (args->exec_node->cmd->cmds->cmd, "unset"))
-        ft_unset (args->exec_node, &args->env_list);
+        status = ft_unset (args->exec_node, &args->env_list); 
     else
     {
         if (status)

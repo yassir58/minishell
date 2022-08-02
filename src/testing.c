@@ -169,9 +169,10 @@ char *update_prompt (shell_args_t *args)
         tab = ft_split (pwd, '/');
         res = tab[number_of_el(tab) - 1];
         res = ft_strjoin (res, elm);
+        free(pwd);
         free_tab (tab);
         return (res);
     }
     else
-        return (ft_strjoin(pwd, elm));
+        return(ft_strjoin(pwd, elm));
 }

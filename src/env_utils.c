@@ -33,12 +33,14 @@ env_list_t *create_env_node (char *envStr, int index)
     if (!ft_strcmp(node->variable_name, "SHLVL"))
     {
         shell = ft_atoi(envTab[1]) + 1;
+        free(envTab[1]);
         node->value = ft_itoa(shell);
     }
     else
         node->value = envTab[1];
     node->index = index;
     node->next = NULL;
+    free(envTab);
     return (node);
 }
 
@@ -91,7 +93,10 @@ void init_old_pwd (env_list_t **env_list)
     while (tmp)
     {
         if (!ft_strcmp (tmp->variable_name, "OLDPWD"))
+        {
+            free(tmp->value);
             tmp->value = ft_strdup ("");
+        }
         tmp= tmp->next;
     }
 }

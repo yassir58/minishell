@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:04 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/01 12:21:19 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/01 14:23:27 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void print_export_list (env_list_t *list)
     tmp = list;
     while (tmp)
     {
-        printf("declare -x %s=\"%s\"\n", tmp->variable_name, tmp->value);
+        if (ft_strcmp(tmp->variable_name, "SPATH"))
+            printf("declare -x %s=\"%s\"\n", tmp->variable_name, tmp->value);
         tmp = tmp->next;
     }
 }
@@ -31,7 +32,8 @@ void    print_env_list(env_list_t *list)
     tmp = list;
     while (tmp)
     {
-        printf("%s=\"%s\"\n", tmp->variable_name, tmp->value);
+        if (ft_strcmp(tmp->variable_name, "SPATH"))
+            printf("%s=\"%s\"\n", tmp->variable_name, tmp->value);
         tmp = tmp->next;
     }
 }

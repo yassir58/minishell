@@ -21,6 +21,8 @@ int main (int argc ,char *argv[], char *env[])
         args->exec_node = parse (args, args->lexer_list);
         init_command (args);
         get_children_status ();
+        free(args->prompt);
+        free(args->line);
     }
     /// free allocated global data
     return (0);
