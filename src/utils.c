@@ -90,12 +90,10 @@ char *push_char (char *str, char c)
     }
     res[i++] = c;
     res[i] = 0;
-    if (str && length > 0)
+    if (str)
         free (str);
     return (res);
 }
-
-
 
 char *ft_getenv (shell_args_t *args, char *varName)
 {

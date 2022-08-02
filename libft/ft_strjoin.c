@@ -6,11 +6,12 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 10:22:28 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/01 18:54:57 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/02 17:56:46 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "./libft.h"
+#include <stdio.h>
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {

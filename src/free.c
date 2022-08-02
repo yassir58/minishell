@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:40 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/01 19:12:23 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/02 19:14:06 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,10 @@ void	free_lexer(lexer_node_t **lst)
 	{
 		tmp_node = *lst;
 		*lst = tmp_node->next;
+		free(tmp_node->start);
 		free(tmp_node);
 	}
+	free(*lst);
 }
 
 void	free_string_table(char **table)
