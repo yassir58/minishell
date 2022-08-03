@@ -22,13 +22,16 @@ void create_token_list (shell_args_t *args, lexer_node_t **head, lexer_node_t *t
             if (ptr->token == DOUBLE_QUOTED_SEQUENCE || ptr->token == WORD)
                 ptr->start = expand_variable (args, ptr->start);
             tmp = ft_strjoin (ptr->start, temp->start);
+            // Refactor the free up function here.
             free(ptr->start);
+            free(temp->start);
             ptr->start = tmp;
             ptr->length += temp->length;
             ptr->joinable = TRUE;
             ptr->closed = temp->closed;
             if (ft_strchr (ptr->start, ' '))
                 ptr->token = temp->token;
+            free(temp);
         }
         else
         {
@@ -63,16 +66,23 @@ char *expand_variable (shell_args_t *args, char *str)
     int i;
     char *res;
     char *tmp;
+    char *sed;
 
     i = 0;
-    res = ft_strdup ("");
+    res = ft_strdup("");
     while (str[i])
     {
         if (str[i] == '$')
         {
             tmp = get_variable_value (args, str,  &i);
             if (tmp)
-               res = ft_strjoin (res, tmp);
+            {
+               sed = ft_strjoin (res, tmp);
+               // Refactor this free function.
+               free(res);
+               res = sed;
+            }
+            free(tmp);
         }
         else
         {

@@ -100,7 +100,6 @@ char *ft_getenv (shell_args_t *args, char *varName)
     env_list_t *temp;
    
     temp = args->env_list;
-
     while (temp)
     {
         if (!ft_strcmp (temp->variable_name, varName))

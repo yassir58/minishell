@@ -24,6 +24,7 @@ int exec_piped_commands (shell_args_t *args)
         tmp = tmp->next;
     }
     close_fd_table (utils->fds);
+    free(utils);
     return (status);
 }
 

@@ -1,8 +1,6 @@
 #include "../includes/minishell.h"
 
 
-
-
 int main (int argc ,char *argv[], char *env[])
 {
     shell_args_t *args;
@@ -18,10 +16,11 @@ int main (int argc ,char *argv[], char *env[])
         args->prompt = update_prompt (args);
         args->line = prompt(args->prompt);
         args->lexer_list = lexer (args, args->line);
-        // args->exec_node = parse (args, args->lexer_list);
-        // init_command (args);
-        // get_children_status ();
+        args->exec_node = parse (args, args->lexer_list);
+        init_command (args);
+        get_children_status ();
         free_lexer(&args->lexer_list);
+        free_parser(&args->exec_node);
         free(args->prompt);
         free(args->line);
     }

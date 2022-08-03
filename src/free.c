@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:40 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/02 19:14:06 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/03 16:04:32 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	clear_redirections(t_redirect **lst)
 	{
 		tmp_node = *lst;
 		*lst = tmp_node->next;
+		free(tmp_node->filename);
+		free(tmp_node->heredoc_content);
 		free(tmp_node);
 	}
 	*lst = NULL;
@@ -37,6 +39,7 @@ void	clear_commands(t_cmd **lst)
 	{
 		tmp_node = *lst;
 		*lst = tmp_node->next;
+		free(tmp_node->cmd);
 		free(tmp_node);
 	}
 	*lst = NULL;
@@ -51,12 +54,12 @@ void	free_parser(t_exec_node **lst)
 	while (*lst)
 	{
 		tmp_node = *lst;
+		*lst = tmp_node->next;
         clear_redirections(&tmp_node->cmd->redir_list);
         clear_commands(&tmp_node->cmd->cmds);
-		*lst = tmp_node->next;
+		free(tmp_node->cmd);
 		free(tmp_node);
 	}
-	*lst = NULL;
 }
 
 void	free_lexer(lexer_node_t **lst)

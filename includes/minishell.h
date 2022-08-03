@@ -89,7 +89,6 @@ typedef struct s_cmd_node
 
 typedef struct s_exec_node
 {
-    t_node_type type;
     t_cmd_node *cmd;
     bool piped;
     bool builtin;

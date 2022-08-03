@@ -54,9 +54,10 @@ lexer_node_t *handle_delim (char *line, int *index)
     }
     else
     {
-         handle_quote (line, index, &node);
-         return (node);
+        handle_quote (line, index, &node);
+        return (node);
     }
+    free(node);
     return (NULL);
 }
 
