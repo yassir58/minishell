@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:40 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/03 16:04:32 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/04 19:05:24 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void	free_lexer(lexer_node_t **lst)
 	free(*lst);
 }
 
+// String related frees
+
 void	free_string_table(char **table)
 {
 	int i;
@@ -85,4 +87,13 @@ void	free_string_table(char **table)
 	while (table[i])
 		free(table[i]);
 	free(table);
+}
+
+char    *free_joined(char *str)
+{
+    char *tmp;
+
+    tmp = str;
+    free(str);
+    return (tmp);
 }

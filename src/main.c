@@ -5,12 +5,12 @@ int main (int argc ,char *argv[], char *env[])
 {
     shell_args_t *args;
 
+    (void)argc;
+    (void)argv;
     init_signals();
     g_data = init_global ();
     args = init_args (env);
     // rl_catch_signals = 0;
-    (void)argc;
-    (void)argv;
     while (1)
     {
         args->prompt = update_prompt (args);

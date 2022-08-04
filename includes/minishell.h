@@ -306,6 +306,7 @@ void    print_node_lex(lexer_node_t *node);
 void	free_parser(t_exec_node **lst);
 void	free_string_table(char **table);
 void	free_lexer(lexer_node_t **lst);
+char    *free_joined(char *str);
 
 // - Util functions for builtins
 char	*advanced_get_next_line(int fd, int status);
