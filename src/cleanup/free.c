@@ -6,11 +6,11 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:40 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 15:11:20 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 19:11:14 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 void	clear_redirections(t_redirect **lst)
 {

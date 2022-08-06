@@ -6,15 +6,18 @@
 #    By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/06 18:42:41 by ochoumou          #+#    #+#              #
-#    Updated: 2022/08/06 18:42:42 by ochoumou         ###   ########.fr        #
+#    Updated: 2022/08/06 19:10:09 by ochoumou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCDIR=./src/
-SRCS = main.c lexer.c lexer_additional.c utils.c  syntax_err.c lexer_utils.c parse_helper.c parse_utils.c testing.c  execution.c env_utils.c builtins.c \
-builtins_utils.c check_cmd.c execution_utils.c execution_additional.c general_utils.c  command_list.c exec_list.c history.c parse_printer.c redir_list.c string_convert.c \
-parser.c redirections_utils.c env_list.c builtins_additional.c builtins_helper.c execution_init.c gnl.c signal_handler.c free.c init_data.c exec_add1.c exec_add2.c 
-OBJS=$(addprefix $(SRCDIR), $(SRCS:.c=.o))
+SRCS = src/main.c src/builtins/ft_cd.c src/builtins/ft_echo.c src/builtins/ft_env.c src/builtins/ft_exit.c src/builtins/ft_export.c src/builtins/ft_helpers.c src/builtins/ft_pwd.c \
+src/builtins/ft_unset.c src/builtins/ft_validate.c src/cleanup/extra_free.c src/cleanup/free.c src/execution/check_cmd.c src/execution/exec_helpers.c src/execution/exec_list.c \
+src/execution/exec_utils.c src/execution/execution.c src/execution/execution_additional.c src/execution/execution_init.c src/execution/execution_utils.c src/execution/redirections_add.c \
+src/execution/redirections_utils.c src/init/history.c src/init/signal_handler.c src/lists/command_list.c src/lists/env_list.c src/lists/redir_list.c src/parser/lexer.c src/parser/lexer_additional.c \
+src/parser/lexer_utils.c src/parser/parse_helper.c src/parser/parse_heredoc.c src/parser/parse_printer.c src/parser/parse_utils.c src/parser/parser.c src/parser/syntax_err.c src/utils/env_utils.c \
+src/utils/general_utils.c src/utils/gnl.c src/utils/init_data.c src/utils/string_convert.c src/utils/utils.c
+
+OBJS= $(SRCS:.c=.o)
 NAME = minishell
 HEADERS = ./includes/minishell.h
 LIBNAME = ./libft/libft.a

@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 11:22:38 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 18:52:44 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 19:48:40 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,7 +338,7 @@ char			**handle_relative_path(char **path_table);
 int				handle_piped_command(t_shell_args *args);
 int				check_for_valid_option(char *option);
 void			exec_command(t_shell_args *args, t_exec_node *exec_node);
-void			handle_nonbuiltin(t_shell_args *args, t_exec_node *exec_node);
+int				handle_non_builtin(t_shell_args *args, int *in, int *out);
 int				handle_builtin(t_shell_args *args, t_exec_node *tmp, int **fds, \
 int indx);
 int				execution_chain(t_shell_args *args);
@@ -360,12 +360,9 @@ void			close_unused_fds(int **fds_table, int used);
 void			close_unused_fds_2(int **fds_table, int used1, int used2);
 void			init_old_pwd(t_env_list **env_list);
 void			get_children_status(void);
-int				handle_redir_input(t_shell_args *args, \
-t_redirect *redirect_node, int *err);
-int				handle_redir_output(t_shell_args *args, \
-t_redirect *redirect_node, int *err);
-int				handle_redir_append(t_shell_args *args, \
-t_redirect *redirect_node, int *err);
+int				handle_redir_input(t_redirect *redirect_node, int *err);
+int				handle_redir_output(t_redirect *redirect_node, int *err);
+int				handle_redir_append(t_redirect *redirect_node, int *err);
 int				handle_redirections(t_shell_args *args, t_exec_node *exec_node, \
 int *infile, int *outfile);
 void			*allocation_err(void);
@@ -408,5 +405,9 @@ void			escape_char(char *line, int *indx, int *length, char operator);
 void			increment_indx(char *line, int *index, int *length, char delim);
 void			handle_joinable(t_shell_args *args, t_lexer_node **joinable, \
 t_lexer_node *temp);
+char			*cmd_with_no_path(char *spath, int *status, char *command);
+void			run_builtin(t_shell_args *args, int *in, int *out);
+char			**check_for_path(char *cmd);
+int				trait_herdoc(t_shell_args *args, t_redirect *temp, int *in);
 
 #endif
