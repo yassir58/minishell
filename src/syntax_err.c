@@ -26,7 +26,8 @@ int syntax_validation (shell_args_t *args)
         if (status)
             return (status);
         if (tmp->token == DOUBLE_QUOTED_SEQUENCE ||
-            tmp->token == SINGLE_QUOTED_SEQUENCE)
+            tmp->token == SINGLE_QUOTED_SEQUENCE ||
+            tmp->token == WORD)
         {
             if (tmp->closed == FALSE)
                 return (syntax_error ());

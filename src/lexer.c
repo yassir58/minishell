@@ -31,6 +31,7 @@ lexer_node_t *handle_regular (char *line, int *index)
     node->start = &line[(*index)];
     node->token = WORD;
     node->next =  NULL;
+    node->closed = 2;
     if (*index > 0 && line[(*index - 1)] != ' ' && !ft_strchr (OPERATORS, line[(*index - 1)])) 
         node->joinable = TRUE;
     while (!ft_strchr (DELIMTERS, line[(*index)]) 

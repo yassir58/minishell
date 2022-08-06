@@ -25,11 +25,14 @@ void cd_to_home (env_list_t *env_list)
     tmp = env_list;
     while (tmp)
     {
-        if (!(strcmp (tmp->variable_name, "HOME")))
+        if (!(ft_strcmp (tmp->variable_name, "HOME")))
             break ;
         tmp = tmp->next;
     }
-    chdir (tmp->value);
+    if (tmp) 
+        chdir (tmp->value);
+    else
+        ft_putstr_fd ("cd :HOME not set\n", 2);
 }
 
 char *get_pwd_env (env_list_t *list)
@@ -41,7 +44,7 @@ char *get_pwd_env (env_list_t *list)
     pwd = NULL;
     while (tmp)
     {
-        if (!strcmp (tmp->variable_name, "PWD"))
+        if (!ft_strcmp (tmp->variable_name, "PWD"))
             pwd = ft_strdup (tmp->value);
         tmp = tmp->next;
     }
@@ -62,9 +65,9 @@ int update_pwd_env (env_list_t **list)
     old = get_pwd_env (*list);
     while (tmp)
     {
-        if (!strcmp (tmp->variable_name, "PWD"))
+        if (!ft_strcmp (tmp->variable_name, "PWD"))
             tmp->value = current;
-        else if (!strcmp (tmp->variable_name, "OLDPWD"))
+        else if (!ft_strcmp (tmp->variable_name, "OLDPWD"))
             tmp->value = old;
         tmp = tmp->next;
     }

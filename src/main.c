@@ -3,26 +3,6 @@
 
 
 
-void test_minishell (char *env[], char *line)
-    shell_args_t *args;
-
-    (void)argc;
-    (void)argv;
-    init_signals();
-    g_data = init_global ();
-    args = init_args (env);
-    // rl_catch_signals = 0;
-    // args->prompt = update_prompt (args);
-    args->line = line;
-    args->lexer_list = lexer (args, args->line);
-    args->exec_node = parse (args, args->lexer_list);
-    init_command (args);
-    get_children_status ();
-    /// free allocated global data
-}
-
-
-
 int main (int argc ,char *argv[], char *env[])
 {
 
