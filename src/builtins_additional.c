@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/02 11:38:36 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 11:03:26 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,11 @@ int    ft_unset(t_exec_node *exec_node, env_list_t **list)
     while (i < size)
     {
         if (validate_args(cmds[i], "_"))
+        {
+            if (!ft_strcmp(cmds[i], "PATH"))
+                delete_env_variable(list, "SPATH");
             delete_env_variable(list, cmds[i]);
+        }
         else
         {
             ft_putstr_fd("Minishell: unset: not a valid identifier\n", 2);
