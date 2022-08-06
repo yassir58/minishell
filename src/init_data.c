@@ -51,12 +51,15 @@ void init_env_list (t_env_list **env_list)
 {
     char *pwd_val;
     char *shlvl_val;
+    char *old_pwd;
     t_env_list *temp;
 
     
     temp = *env_list;
     shlvl_val = ft_strdup ("SHLVL=0");
+    old_pwd = ft_strdup ("OLDPWD=");
     pwd_val = ft_strjoin ("PWD=", get_pwd (*env_list));
     push_env_node (env_list, create_env_node (pwd_val, 0));
     push_env_node (env_list, create_env_node (shlvl_val, 1));
+    push_env_node (env_list, create_env_node (old_pwd, 2));
 }

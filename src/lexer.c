@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 11:19:47 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 11:52:29 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 14:42:18 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,20 @@ t_lexer_node	*handle_regular(char *line, int *index)
 {
 	t_lexer_node *node;
 
-	node = init_node ();
-	node->start = &line[(*index)];
-	node->token = WORD;
-	node->next =  NULL;
-	if (*index > 0 && line[(*index - 1)] != ' ' && !ft_strchr (OPERATORS, line[(*index - 1)])) 
-		node->joinable = TRUE;
-	while (!ft_strchr (DELIMTERS, line[(*index)]) 
-		&& !ft_strchr (OPERATORS, line[(*index)]))
-	{
-		node->length++;
-		(*index)++;
-	}
-	return (node);
+    node = init_node ();
+    node->start = &line[(*index)];
+    node->token = WORD;
+    node->next =  NULL;
+    node->closed = 2;
+    if (*index > 0 && line[(*index - 1)] != ' ' && !ft_strchr (OPERATORS, line[(*index - 1)])) 
+        node->joinable = TRUE;
+    while (!ft_strchr (DELIMTERS, line[(*index)]) 
+        && !ft_strchr (OPERATORS, line[(*index)]))
+    {
+        node->length++;
+        (*index)++;
+    }
+    return (node);
 }
 
 t_lexer_node *handle_delim (char *line, int *index)
