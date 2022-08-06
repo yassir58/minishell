@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:40 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 11:30:07 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 15:11:20 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	clear_redirections(t_redirect **lst)
 {
-	t_redirect *tmp_node;
+	t_redirect	*tmp_node;
 
 	if (!*lst)
 		return ;
@@ -31,7 +31,7 @@ void	clear_redirections(t_redirect **lst)
 
 void	clear_commands(t_cmd **lst)
 {
-	t_cmd   *tmp_node;
+	t_cmd	*tmp_node;
 
 	if (!*lst)
 		return ;
@@ -55,8 +55,8 @@ void	free_parser(t_exec_node **lst)
 	{
 		tmp_node = *lst;
 		*lst = tmp_node->next;
-        clear_redirections(&tmp_node->cmd->redir_list);
-        clear_commands(&tmp_node->cmd->cmds);
+		clear_redirections(&tmp_node->cmd->redir_list);
+		clear_commands(&tmp_node->cmd->cmds);
 		free(tmp_node->cmd);
 		free(tmp_node);
 	}
@@ -64,7 +64,8 @@ void	free_parser(t_exec_node **lst)
 
 void	free_lexer(t_lexer_node **lst)
 {
-	t_lexer_node *tmp_node;
+	t_lexer_node	*tmp_node;
+
 	if (!*lst)
 		return ;
 	while (*lst)
@@ -77,24 +78,12 @@ void	free_lexer(t_lexer_node **lst)
 	free(*lst);
 }
 
-// String related frees
-
 void	free_string_table(char **table)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (table[i])
 		free(table[i]);
 	free(table);
 }
-
-char    *free_joined(char *str)
-{
-    char *tmp;
-
-    tmp = str;
-    free(str);
-    return (tmp);
-}
-

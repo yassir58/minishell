@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 11:22:38 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 14:38:59 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 16:56:23 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,7 @@ void			test_env_list(t_env_list *list);
 
 t_exec_node		*parse(t_shell_args *args, t_lexer_node *node);
 t_exec_node		*parse_command(t_shell_args *args, t_lexer_node **node);
+t_exec_node		*parser_core(t_lexer_node *token, t_shell_args *args);
 int				check_node(t_lexer_node *node, char *operator);
 int				check_redirect(t_lexer_node *node);
 int				redirect_type(t_lexer_node *node);
@@ -311,6 +312,9 @@ int				check_for_dots(char *arg, t_env_list *list);
 int				update_pwd_env(t_env_list **list);
 char			*get_pwd_env(t_env_list *list);
 char			*get_pwd(t_env_list *env_list);
+void			swap_nodes(t_env_list *a, t_env_list *b);
+int				validate_export_args(char **cmds);
+int				validate_args(char *cmds, char *filter);
 
 /**
 * @brief Env list

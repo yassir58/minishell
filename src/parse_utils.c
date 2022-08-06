@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:47 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 11:30:07 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 15:32:27 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	advanced_strcmp(char *s1, char *s2)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (ft_strlen(s1) != ft_strlen(s2))
@@ -34,15 +34,17 @@ bool	is_builtin(t_cmd_node *cmd)
 	char	*arg;
 
 	arg = cmd->cmds->cmd;
-	if (!advanced_strcmp(arg, "echo") || !advanced_strcmp(arg, "cd") || !advanced_strcmp(arg, "pwd") \
-	|| !advanced_strcmp(arg, "export") || !advanced_strcmp(arg, "unset") ||!advanced_strcmp(arg, "env") || !advanced_strcmp(arg, "exit"))
+	if (!advanced_strcmp(arg, "echo") || !advanced_strcmp(arg, "cd") \
+	|| !advanced_strcmp(arg, "pwd") || !advanced_strcmp(arg, "export") \
+	|| !advanced_strcmp(arg, "unset") ||!advanced_strcmp(arg, "env") || \
+	!advanced_strcmp(arg, "exit"))
 		return (true);
 	return (false);
 }
 
-int     count_filenames(t_lexer_node *node)
+int	count_filenames(t_lexer_node *node)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (node && node->token != OPERATOR)
@@ -53,10 +55,10 @@ int     count_filenames(t_lexer_node *node)
 	return (i);
 }
 
-char   **filenames_table(t_lexer_node **node, int files)
+char	**filenames_table(t_lexer_node **node, int files)
 {
-	int i;
-	char **filenames;
+	int		i;
+	char	**filenames;
 
 	i = 0;
 	filenames = (char **)malloc(sizeof(char *) * (files + 1));
@@ -67,7 +69,7 @@ char   **filenames_table(t_lexer_node **node, int files)
 		filenames[i++] = ft_strdup((*node)->next->start);
 		(*node) = (*node)->next->next;
 	}
-	else 
+	else
 	{
 		while (i < files)
 		{
