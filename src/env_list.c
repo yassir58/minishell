@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:04 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/01 14:23:27 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/02 14:22:53 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,3 @@ env_list_t *search_env_variable(char *var, env_list_t *list)
     }
     return (NULL);
 }
-
-
-
-

@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/01 16:20:47 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/04 19:04:56 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ void    get_file_content(t_redirect *tmp)
 
     fd = open("/tmp/.minishell", O_RDWR);
     content = advanced_get_next_line(fd, 1);
+    tmp->heredoc_content = ft_strdup("");
     while (content != NULL)
     {
+        tmp->heredoc_content = free_joined(tmp->heredoc_content);
         tmp->heredoc_content = ft_strjoin(tmp->heredoc_content, content);
         free(content);
         content = advanced_get_next_line(fd, 1);    
@@ -49,13 +51,15 @@ int handle_ctrl(shell_args_t *args, t_redirect *tmp, lexer_node_t *word)
     return (1);
 }
 
+
 void    handle_heredoc(shell_args_t *args, t_redirect *node, int fd, lexer_node_t *word)
 {
     char *input;
-
+    char *output;
     
     write(1, "> ", 2);
     input = advanced_get_next_line(0, 0);
+    output = ft_strdup("");
     if (input == NULL)
         exit(1);
     while (input != NULL)
@@ -64,15 +68,16 @@ void    handle_heredoc(shell_args_t *args, t_redirect *node, int fd, lexer_node_
         {
             if (word->next->token == WORD)
                 input = expand_variable(args, input);
-            node->heredoc_content = ft_strjoin(node->heredoc_content, input);
-            node->heredoc_content = ft_strjoin(node->heredoc_content, "\n");
+            output = free_joined(output);
+            output = ft_strjoin(output, input);
+            output = ft_strjoin(output, "\n");
         }
         else
             break;
         write(1, "> ", 2);
         input = advanced_get_next_line(0, 0);
     }
-    write(fd, node->heredoc_content, ft_strlen(node->heredoc_content));
+    write(fd, output, ft_strlen(output));
     exit(0);
 }
 

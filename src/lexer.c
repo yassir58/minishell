@@ -5,6 +5,7 @@ lexer_node_t *lexer (shell_args_t *args, char *line)
     int index;
     lexer_node_t *node;
     lexer_node_t *tmp;
+    (void)args;
 
     node = NULL;
     index = 0;
@@ -25,7 +26,6 @@ lexer_node_t *lexer (shell_args_t *args, char *line)
 lexer_node_t *handle_regular (char *line, int *index)
 {
     lexer_node_t *node;
-
 
     node = init_node ();
     node->start = &line[(*index)];
@@ -54,9 +54,10 @@ lexer_node_t *handle_delim (char *line, int *index)
     }
     else
     {
-         handle_quote (line, index, &node);
-         return (node);
+        handle_quote (line, index, &node);
+        return (node);
     }
+    free(node);
     return (NULL);
 }
 

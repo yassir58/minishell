@@ -4,9 +4,10 @@
 
 
 void test_minishell (char *env[], char *line)
-{
     shell_args_t *args;
 
+    (void)argc;
+    (void)argv;
     init_signals();
     g_data = init_global ();
     args = init_args (env);
@@ -48,6 +49,8 @@ int main (int argc ,char *argv[], char *env[])
         args->exec_node = parse (args, args->lexer_list);
         init_command (args);
         get_children_status ();
+        free_lexer(&args->lexer_list);
+        free_parser(&args->exec_node);
         free(args->prompt);
         free(args->line);
     }

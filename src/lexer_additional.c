@@ -4,6 +4,7 @@ void create_token_list (shell_args_t *args, lexer_node_t **head, lexer_node_t *t
 {
     lexer_node_t *node;
     lexer_node_t *ptr;
+    char *tmp;
 
     node = *head;
     ptr = node;
@@ -15,17 +16,22 @@ void create_token_list (shell_args_t *args, lexer_node_t **head, lexer_node_t *t
         {
             while (ptr->next)
                 ptr = ptr->next;
-            temp->start = strndup (temp->start, temp->length); // ft_strndup
+            temp->start = strndup (temp->start, temp->length); // ft_strndup // UNAUTHORIZED FUNCTION.
             if (temp->token == DOUBLE_QUOTED_SEQUENCE || temp->token == WORD)
                 temp->start = expand_variable (args, temp->start);
             if (ptr->token == DOUBLE_QUOTED_SEQUENCE || ptr->token == WORD)
                 ptr->start = expand_variable (args, ptr->start);
-            ptr->start = ft_strjoin (ptr->start, temp->start);
+            tmp = ft_strjoin (ptr->start, temp->start);
+            // Refactor the free up function here.
+            free(ptr->start);
+            free(temp->start);
+            ptr->start = tmp;
             ptr->length += temp->length;
             ptr->joinable = TRUE;
             ptr->closed = temp->closed;
             if (ft_strchr (ptr->start, ' '))
                 ptr->token = temp->token;
+            free(temp);
         }
         else
         {
@@ -60,16 +66,23 @@ char *expand_variable (shell_args_t *args, char *str)
     int i;
     char *res;
     char *tmp;
+    char *sed;
 
     i = 0;
-    res = ft_strdup ("");
+    res = ft_strdup("");
     while (str[i])
     {
         if (str[i] == '$')
         {
             tmp = get_variable_value (args, str,  &i);
             if (tmp)
-               res = ft_strjoin (res, tmp);
+            {
+               sed = ft_strjoin (res, tmp);
+               // Refactor this free function.
+               free(res);
+               res = sed;
+            }
+            free(tmp);
         }
         else
         {
@@ -77,6 +90,7 @@ char *expand_variable (shell_args_t *args, char *str)
             i++;
         }
     }
+    free(str);
     return (res);
 }
 

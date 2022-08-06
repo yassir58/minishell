@@ -6,7 +6,7 @@
 /*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:40 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/02 14:38:10 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/04 19:05:24 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	clear_redirections(t_redirect **lst)
 	{
 		tmp_node = *lst;
 		*lst = tmp_node->next;
+		free(tmp_node->filename);
+		free(tmp_node->heredoc_content);
 		free(tmp_node);
 	}
 	*lst = NULL;
@@ -37,6 +39,7 @@ void	clear_commands(t_cmd **lst)
 	{
 		tmp_node = *lst;
 		*lst = tmp_node->next;
+		free(tmp_node->cmd);
 		free(tmp_node);
 	}
 	*lst = NULL;
@@ -51,12 +54,12 @@ void	free_parser(t_exec_node **lst)
 	while (*lst)
 	{
 		tmp_node = *lst;
+		*lst = tmp_node->next;
         clear_redirections(&tmp_node->cmd->redir_list);
         clear_commands(&tmp_node->cmd->cmds);
-		*lst = tmp_node->next;
+		free(tmp_node->cmd);
 		free(tmp_node);
 	}
-	*lst = NULL;
 }
 
 void	free_lexer(lexer_node_t **lst)
@@ -68,9 +71,13 @@ void	free_lexer(lexer_node_t **lst)
 	{
 		tmp_node = *lst;
 		*lst = tmp_node->next;
+		free(tmp_node->start);
 		free(tmp_node);
 	}
+	free(*lst);
 }
+
+// String related frees
 
 void	free_string_table(char **table)
 {
@@ -82,10 +89,12 @@ void	free_string_table(char **table)
 	free(table);
 }
 
+char    *free_joined(char *str)
+{
+    char *tmp;
 
+    tmp = str;
+    free(str);
+    return (tmp);
+}
 
-
-// void garbage_collector (shell_args_t *args)
-// {
-	
-// }
