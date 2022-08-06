@@ -1,38 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/06 11:13:30 by ochoumou          #+#    #+#             */
+/*   Updated: 2022/08/06 11:52:29 by ochoumou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
-
-
-
-
-void test_minishell (char *env[], char *line)
-    shell_args_t *args;
-
-    (void)argc;
-    (void)argv;
-    init_signals();
-    g_data = init_global ();
-    args = init_args (env);
-    // rl_catch_signals = 0;
-    // args->prompt = update_prompt (args);
-    args->line = line;
-    args->lexer_list = lexer (args, args->line);
-    args->exec_node = parse (args, args->lexer_list);
-    init_command (args);
-    get_children_status ();
-    /// free allocated global data
-}
-
 
 
 int main (int argc ,char *argv[], char *env[])
 {
-
-    // (void)argc;
-    // if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
-    // {
-    //     test_minishell (env, argv[2]);
-    //     exit(g_data->exit_code);
-    // }
-    shell_args_t *args;
+    t_shell_args *args;
 
     init_signals();
     g_data = init_global ();

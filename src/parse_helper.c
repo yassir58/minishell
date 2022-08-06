@@ -6,13 +6,13 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:41 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/02 14:14:42 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 11:30:07 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int check_node(lexer_node_t *node, char *operator)
+int check_node(t_lexer_node *node, char *operator)
 {
     if (node->token == OPERATOR)
     {
@@ -22,7 +22,7 @@ int check_node(lexer_node_t *node, char *operator)
     return (0);
 }
 
-int check_redirect(lexer_node_t *node)
+int check_redirect(t_lexer_node *node)
 {
     if (node && node->token == OPERATOR)
     {
@@ -32,7 +32,7 @@ int check_redirect(lexer_node_t *node)
     return (0);
 }
 
-int redirect_type(lexer_node_t *node)
+int redirect_type(t_lexer_node *node)
 {
     if (node && node->token == OPERATOR)
     {

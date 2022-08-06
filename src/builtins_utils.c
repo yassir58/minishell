@@ -1,8 +1,8 @@
 #include "../includes/minishell.h"
 
-int cd_prev_pwd (env_list_t *env_list)
+int cd_prev_pwd (t_env_list *env_list)
 {
-    env_list_t *tmp;
+    t_env_list *tmp;
     int err;
 
     tmp = env_list;
@@ -18,9 +18,9 @@ int cd_prev_pwd (env_list_t *env_list)
     return (0);
 }
 
-void cd_to_home (env_list_t *env_list)
+void cd_to_home (t_env_list *env_list)
 {
-    env_list_t *tmp;
+    t_env_list *tmp;
 
     tmp = env_list;
     while (tmp)
@@ -32,9 +32,9 @@ void cd_to_home (env_list_t *env_list)
     chdir (tmp->value);
 }
 
-char *get_pwd_env (env_list_t *list)
+char *get_pwd_env (t_env_list *list)
 {
-    env_list_t *tmp;
+    t_env_list *tmp;
     char *pwd;
 
     tmp = list;
@@ -49,11 +49,11 @@ char *get_pwd_env (env_list_t *list)
 }
 
 
-int update_pwd_env (env_list_t **list)
+int update_pwd_env (t_env_list **list)
 {
     char *current;
     char *old;
-    env_list_t *tmp;
+    t_env_list *tmp;
 
     tmp = *list;
     current = getcwd (NULL, 0);
@@ -71,7 +71,7 @@ int update_pwd_env (env_list_t **list)
     return (0);
 }
 
-char *get_pwd (env_list_t *env_list)
+char *get_pwd (t_env_list *env_list)
 {
     char *buffer;
 

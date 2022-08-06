@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:13:40 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/04 19:05:24 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 11:30:07 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ void	free_parser(t_exec_node **lst)
 	}
 }
 
-void	free_lexer(lexer_node_t **lst)
+void	free_lexer(t_lexer_node **lst)
 {
-	lexer_node_t *tmp_node;
+	t_lexer_node *tmp_node;
 	if (!*lst)
 		return ;
 	while (*lst)

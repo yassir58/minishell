@@ -13,10 +13,10 @@ void print_token (int token)
         printf ("DOUBLE_QUOTED_SEQUENCE \n");
 }
 
-void testing (lexer_node_t *node)
+void testing (t_lexer_node *node)
 {
     printf (" __________________ lexer output __________________\n");
-    lexer_node_t *tmp;
+    t_lexer_node *tmp;
 
 
     if (!node)
@@ -37,9 +37,9 @@ void testing (lexer_node_t *node)
     }
 }
 
-void test_env_list (env_list_t *list)
+void test_env_list (t_env_list *list)
 {
-    env_list_t *tmp;
+    t_env_list *tmp;
    
     tmp = list;
     while (tmp)
@@ -49,7 +49,7 @@ void test_env_list (env_list_t *list)
     }
 }
 
-void    print_node_lex(lexer_node_t *node)
+void    print_node_lex(t_lexer_node *node)
 {
     print_token(node->token);
     printf("Node: %s\n", node->start);
@@ -154,7 +154,7 @@ void test_exec_node (t_exec_node *node)
 }
 
 
-char *update_prompt (shell_args_t *args)
+char *update_prompt (t_shell_args *args)
 {
     char *pwd;
     char **tab;

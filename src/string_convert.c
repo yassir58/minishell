@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   string_convert.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:15:02 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/01 09:56:55 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 11:51:06 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int commands_number(t_cmd *list)
     return (i);
 }
 
-int env_size(env_list_t *list)
+int env_size(t_env_list *list)
 {
-    env_list_t   *tmp;
+    t_env_list   *tmp;
     int     i;
 
     i = 0;
@@ -66,9 +66,9 @@ char    **get_commands(t_cmd *cmds)
     return (commands);
 }
 
-char    **get_env_table(env_list_t *list)
+char    **get_env_table(t_env_list *list)
 {
-    env_list_t *tmp;
+    t_env_list *tmp;
     int i;
     char **env_table;
     char *row;

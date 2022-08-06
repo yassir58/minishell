@@ -27,7 +27,7 @@ void handle_doubly_piped (int indx, int **fds_table)
     close_fd (fds_table[indx][WRITE_END]);
 }
 
-int nodes_number (shell_args_t *args)
+int nodes_number (t_shell_args *args)
 {
     t_exec_node *tmp;
     int len;

@@ -1,7 +1,7 @@
 #include "../includes/minishell.h"
 
 
-void init_command (shell_args_t *args)
+void init_command (t_shell_args *args)
 {
     int status;
 

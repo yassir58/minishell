@@ -8,9 +8,9 @@ int syntax_error (void)
     
 }
 
-int syntax_validation (shell_args_t *args)
+int syntax_validation (t_shell_args *args)
 {
-    lexer_node_t *tmp;
+    t_lexer_node *tmp;
     int status;
 
     status = 0;
@@ -36,7 +36,7 @@ int syntax_validation (shell_args_t *args)
     return (0);
 }
 
-int validate_first_node (shell_args_t *args)
+int validate_first_node (t_shell_args *args)
 {
     if (args->lexer_list->token == OPERATOR)
     {
@@ -48,7 +48,7 @@ int validate_first_node (shell_args_t *args)
     return (0);
 }
 
-int invalid_operator (lexer_node_t *node)
+int invalid_operator (t_lexer_node *node)
 {
     if (node->token == OPERATOR)
     {
@@ -68,9 +68,9 @@ int invalid_operator (lexer_node_t *node)
     return (0);
 }
 
-int validate_last_node (shell_args_t *args)
+int validate_last_node (t_shell_args *args)
 {
-    lexer_node_t *tmp ;
+    t_lexer_node *tmp ;
 
     tmp = args->lexer_list;
     while (tmp->next)

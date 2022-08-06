@@ -7,7 +7,7 @@ void *allocation_err (void)
     return (NULL);
 }
 
-int open_pipe (int *fd, shell_args_t *args)
+int open_pipe (int *fd, t_shell_args *args)
 {
     int err;
 
@@ -28,7 +28,7 @@ int close_fd (int fd)
 }
 
 
-int exit_with_failure (shell_args_t *args, char *err_message)
+int exit_with_failure (t_shell_args *args, char *err_message)
 {
     write (2, err_message ,ft_strlen (err_message));
     free (g_data);
@@ -37,7 +37,7 @@ int exit_with_failure (shell_args_t *args, char *err_message)
 }
 
 
-int fork_child (shell_args_t *args)
+int fork_child (t_shell_args *args)
 {
     int err;
 

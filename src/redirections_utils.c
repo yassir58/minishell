@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int handle_redir_input (shell_args_t *args, t_redirect *redirect_node, int *err)
+int handle_redir_input (t_shell_args *args, t_redirect *redirect_node, int *err)
 {
     int fd;
 
@@ -36,7 +36,7 @@ int handle_redir_input (shell_args_t *args, t_redirect *redirect_node, int *err)
     return (fd);
 }
 
-int handle_redir_output (shell_args_t *args, t_redirect *redirect_node, int *err)
+int handle_redir_output (t_shell_args *args, t_redirect *redirect_node, int *err)
 {
     int fd;
 
@@ -66,7 +66,7 @@ int handle_redir_output (shell_args_t *args, t_redirect *redirect_node, int *err
     return (fd);
 }
 
-int handle_redir_append (shell_args_t *args, t_redirect *redirect_node,  int *err)
+int handle_redir_append (t_shell_args *args, t_redirect *redirect_node,  int *err)
 {
     int fd;
     
@@ -96,7 +96,7 @@ int handle_redir_append (shell_args_t *args, t_redirect *redirect_node,  int *er
     return (fd);
 }
 
-// int handle_herdoc (shell_args_t *args ,t_redirect *redirect_node)
+// int handle_herdoc (t_shell_args *args ,t_redirect *redirect_node)
 // {
 //     int fds[2];
 //     int err;
@@ -114,7 +114,7 @@ int handle_redir_append (shell_args_t *args, t_redirect *redirect_node,  int *er
 //     return (infile);
 // }
 
-int handle_redirections (shell_args_t *args , t_exec_node *exec_node, int *infile, int *outfile)
+int handle_redirections (t_shell_args *args , t_exec_node *exec_node, int *infile, int *outfile)
 {
     t_redirect *temp;
     int err;

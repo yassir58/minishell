@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:57 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/04 19:04:56 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 11:52:29 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void    get_file_content(t_redirect *tmp)
     }
 }
 
-int handle_ctrl(shell_args_t *args, t_redirect *tmp, lexer_node_t *word)
+int handle_ctrl(t_shell_args *args, t_redirect *tmp, t_lexer_node *word)
 {
     int pid;
     int fd;
@@ -52,7 +52,7 @@ int handle_ctrl(shell_args_t *args, t_redirect *tmp, lexer_node_t *word)
 }
 
 
-void    handle_heredoc(shell_args_t *args, t_redirect *node, int fd, lexer_node_t *word)
+void    handle_heredoc(t_shell_args *args, t_redirect *node, int fd, t_lexer_node *word)
 {
     char *input;
     char *output;
@@ -81,7 +81,7 @@ void    handle_heredoc(shell_args_t *args, t_redirect *node, int fd, lexer_node_
     exit(0);
 }
 
-void    parse_cmd_args(t_cmd **cmds, lexer_node_t **node)
+void    parse_cmd_args(t_cmd **cmds, t_lexer_node **node)
 {
     while (*node && ((*node)->token == WORD || (*node)->token == DOUBLE_QUOTED_SEQUENCE || (*node)->token == SINGLE_QUOTED_SEQUENCE))
     {
@@ -90,7 +90,7 @@ void    parse_cmd_args(t_cmd **cmds, lexer_node_t **node)
     }
 }
 
-t_exec_node *check_piped(lexer_node_t **node, t_cmd *cmds, t_redirect *redirects)
+t_exec_node *check_piped(t_lexer_node **node, t_cmd *cmds, t_redirect *redirects)
 {
     if (cmds && (*node))
     {
@@ -105,7 +105,7 @@ t_exec_node *check_piped(lexer_node_t **node, t_cmd *cmds, t_redirect *redirects
     return (new_exec_cmd(command_node(redirects, cmds), FALSE, FALSE));
 }
 
-t_exec_node *parse_command(shell_args_t *args, lexer_node_t **node)
+t_exec_node *parse_command(t_shell_args *args, t_lexer_node **node)
 {
     t_redirect *redirects;
     t_redirect *tmp;
@@ -131,12 +131,12 @@ t_exec_node *parse_command(shell_args_t *args, lexer_node_t **node)
     return (check_piped(node, cmds, redirects));
 }
 
-t_exec_node   *parse(shell_args_t *args, lexer_node_t *node)
+t_exec_node   *parse(t_shell_args *args, t_lexer_node *node)
 {
    t_exec_node *list;
    t_exec_node *exec_node;
    t_exec_node *last_node;
-   lexer_node_t *token;
+   t_lexer_node *token;
 
    token = node;
    list = NULL;

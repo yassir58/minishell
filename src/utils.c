@@ -1,9 +1,9 @@
 #include "../includes/minishell.h"
 
-void	free_list(lexer_node_t *node)
+void	free_list(t_lexer_node *node)
 {
-	lexer_node_t	*temp;
-    lexer_node_t    *head;
+	t_lexer_node	*temp;
+    t_lexer_node    *head;
 
 	head = node;
 	while (head)
@@ -14,11 +14,11 @@ void	free_list(lexer_node_t *node)
     }
 }
 
-lexer_node_t *init_node ()
+t_lexer_node *init_node ()
 {
-    lexer_node_t *node;
+    t_lexer_node *node;
 
-    node = malloc (sizeof (lexer_node_t));
+    node = malloc (sizeof (t_lexer_node));
     if (!node)
         return (NULL);
     node->closed = 0;
@@ -31,9 +31,9 @@ lexer_node_t *init_node ()
     return (node);
 }
 
-void push_to_list (lexer_node_t **head, lexer_node_t *node)
+void push_to_list (t_lexer_node **head, t_lexer_node *node)
 {
-    lexer_node_t *temp;
+    t_lexer_node *temp;
 
     temp = *head;
     if (node)
@@ -50,7 +50,7 @@ void push_to_list (lexer_node_t **head, lexer_node_t *node)
 }
 
 
-char *get_variable_value (shell_args_t *args ,char *str, int *i)
+char *get_variable_value (t_shell_args *args ,char *str, int *i)
 {
     char *varName;
     char *varValue;
@@ -95,9 +95,9 @@ char *push_char (char *str, char c)
     return (res);
 }
 
-char *ft_getenv (shell_args_t *args, char *varName)
+char *ft_getenv (t_shell_args *args, char *varName)
 {
-    env_list_t *temp;
+    t_env_list *temp;
    
     temp = args->env_list;
     while (temp)

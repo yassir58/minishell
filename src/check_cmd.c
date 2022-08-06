@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:45:04 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/02 12:22:41 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 11:52:29 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	**paths_table(char *path)
 	return (paths);
 }
 
-char	*check_access(shell_args_t *args, char *command, char *path, int *status)
+char	*check_access(t_shell_args *args, char *command, char *path, int *status)
 {
 	char **paths;
 	int 	i;
@@ -85,9 +85,9 @@ int access_status (char *cmd, int *status)
 }
 
 
-char *get_env_path (shell_args_t *args)
+char *get_env_path (t_shell_args *args)
 {
-	env_list_t *temp;
+	t_env_list *temp;
 	
 	temp = args->env_list;
 	while (temp)

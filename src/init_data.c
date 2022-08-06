@@ -16,11 +16,11 @@ t_exec_utils *init_exec_utils (void)
     return (exec_utils);
 }
 
-g_shell_data *init_global (void)
+t_shell_data *init_global (void)
 {
-    g_shell_data *g_data;
+    t_shell_data *g_data;
 
-    g_data  = malloc (sizeof (g_shell_data));
+    g_data  = malloc (sizeof (t_shell_data));
     if (!g_data)
         allocation_err ();
     g_data->fork_status = 0;
@@ -29,11 +29,11 @@ g_shell_data *init_global (void)
     return (g_data);
 }
 
-shell_args_t *init_args (char *env[])
+t_shell_args *init_args (char *env[])
 {
-    shell_args_t *args;
+    t_shell_args *args;
 
-    args = malloc (sizeof (shell_args_t));
+    args = malloc (sizeof (t_shell_args));
     if (!args)
         allocation_err ();
     args->status = 0;
@@ -47,11 +47,11 @@ shell_args_t *init_args (char *env[])
 }
 
 
-void init_env_list (env_list_t **env_list)
+void init_env_list (t_env_list **env_list)
 {
     char *pwd_val;
     char *shlvl_val;
-    env_list_t *temp;
+    t_env_list *temp;
 
     
     temp = *env_list;

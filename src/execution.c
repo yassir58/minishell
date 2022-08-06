@@ -1,6 +1,6 @@
 #include "../includes/minishell.h"
 
-int exec_piped_commands (shell_args_t *args)
+int exec_piped_commands (t_shell_args *args)
 {
     t_exec_node *tmp;
     t_exec_utils *utils;
@@ -39,7 +39,7 @@ void link_pipes (t_exec_node *tmp, int **fds, int indx)
 }
 
 
-int builtin_routine (shell_args_t *args, t_exec_node *exec_node, int infile, int outfile)
+int builtin_routine (t_shell_args *args, t_exec_node *exec_node, int infile, int outfile)
 {
     char **cmds;
     int exit_status;
@@ -68,7 +68,7 @@ int builtin_routine (shell_args_t *args, t_exec_node *exec_node, int infile, int
     return (exit_status);
 }
 
-void exec_command (shell_args_t *args, t_exec_node *exec_node)
+void exec_command (t_shell_args *args, t_exec_node *exec_node)
 {
     char **cmds;
     char **path;
@@ -161,7 +161,7 @@ char **handle_relative_path (char **path_table)
     return (cmd_path);
 }
 
-int handle_simple_command (shell_args_t *args)
+int handle_simple_command (t_shell_args *args)
 {
     int id;
     int status;
@@ -211,7 +211,7 @@ void shell_err (char *command, int status, int path_check)
     exit (status);
 }
 
-char **get_path (shell_args_t *args, char **cmds, int *status, int *path_status)
+char **get_path (t_shell_args *args, char **cmds, int *status, int *path_status)
 {
     char *path;
     char **path_check;
@@ -241,7 +241,7 @@ char **get_path (shell_args_t *args, char **cmds, int *status, int *path_status)
 }
 
 
-int handle_cd (shell_args_t *args, char **cmds)
+int handle_cd (t_shell_args *args, char **cmds)
 {
     int exit_status ;
 
@@ -263,7 +263,7 @@ void link_rediriction_pipes (int infile, int outfile)
 }
 
 
-int handle_one_builtin_cmd (shell_args_t *args, int infile, int outfile)
+int handle_one_builtin_cmd (t_shell_args *args, int infile, int outfile)
 {
     int status;
     int id;
@@ -296,7 +296,7 @@ int handle_one_builtin_cmd (shell_args_t *args, int infile, int outfile)
 
 
 
-void exec_cmd (shell_args_t *args,t_exec_node *tmp, t_exec_utils *utils)
+void exec_cmd (t_shell_args *args,t_exec_node *tmp, t_exec_utils *utils)
 {
     int status;
 

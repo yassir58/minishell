@@ -6,15 +6,15 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:04 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/02 14:22:53 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 11:51:06 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void print_export_list (env_list_t *list)
+void print_export_list (t_env_list *list)
 {
-    env_list_t *tmp;
+    t_env_list *tmp;
 
     tmp = list;
     while (tmp)
@@ -25,9 +25,9 @@ void print_export_list (env_list_t *list)
     }
 }
 
-void    print_env_list(env_list_t *list)
+void    print_env_list(t_env_list *list)
 {
-    env_list_t *tmp;
+    t_env_list *tmp;
 
     tmp = list;
     while (tmp)
@@ -38,10 +38,10 @@ void    print_env_list(env_list_t *list)
     }
 }
 
-void delete_env_variable(env_list_t **list, char *key)
+void delete_env_variable(t_env_list **list, char *key)
 {
-    env_list_t *tmp;
-    env_list_t *prev;
+    t_env_list *tmp;
+    t_env_list *prev;
 
     tmp = *list;
     if (tmp != NULL && (ft_strcmp(tmp->variable_name, key) == 0))
@@ -61,9 +61,9 @@ void delete_env_variable(env_list_t **list, char *key)
     free(tmp);
 }
 
-env_list_t *search_env_variable(char *var, env_list_t *list)
+t_env_list *search_env_variable(char *var, t_env_list *list)
 {
-    env_list_t *node;
+    t_env_list *node;
 
     node = list;
     while (node != NULL)

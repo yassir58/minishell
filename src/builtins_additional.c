@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:43 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 11:03:26 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 11:51:06 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int validate_args(char *cmds, char *filter)
     return (1);
 }
 
-int    ft_unset(t_exec_node *exec_node, env_list_t **list)
+int    ft_unset(t_exec_node *exec_node, t_env_list **list)
 {
     int i;
     int size;
@@ -60,7 +60,7 @@ int    ft_unset(t_exec_node *exec_node, env_list_t **list)
     return (0);
 }
 
-int ft_env(t_exec_node *exec_node, env_list_t *list)
+int ft_env(t_exec_node *exec_node, t_env_list *list)
 {
     char **cmds;
 
@@ -114,7 +114,7 @@ int ft_exit(t_exec_node *exec_node)
     return (g_data->exit_code);
 }
 
-void    swap_nodes(env_list_t *a, env_list_t *b)
+void    swap_nodes(t_env_list *a, t_env_list *b)
 {
     char *key;
     char *value;
@@ -131,9 +131,9 @@ void    swap_nodes(env_list_t *a, env_list_t *b)
     b->index = index;
 }
 
-int env_list_size(env_list_t *list)
+int env_list_size(t_env_list *list)
 {
-    env_list_t *tmp;
+    t_env_list *tmp;
     int i;
 
     i = 0;
@@ -146,10 +146,10 @@ int env_list_size(env_list_t *list)
     return (i);
 }
 
-void    order_env_list(env_list_t *list)
+void    order_env_list(t_env_list *list)
 {
-    env_list_t *tmp_i;
-    env_list_t *tmp_j;
+    t_env_list *tmp_i;
+    t_env_list *tmp_j;
 
     tmp_i = list;
     while (tmp_i != NULL)
@@ -165,10 +165,10 @@ void    order_env_list(env_list_t *list)
     }
 }
 
-// void    print_unsorted_env(env_list_t *list)
+// void    print_unsorted_env(t_env_list *list)
 // {
 //     int i;
-//     env_list_t *tmp;
+//     t_env_list *tmp;
 
 //     i = 1;
 //     tmp = list;
@@ -214,9 +214,9 @@ int    validate_export_args(char **cmds)
     return (0);
 }
 
-int   check_existing_variable(char *argument, env_list_t *list)
+int   check_existing_variable(char *argument, t_env_list *list)
 {
-    env_list_t *node;
+    t_env_list *node;
     char **object;
 
     object = ft_split(argument, '=');
@@ -240,7 +240,7 @@ int   check_existing_variable(char *argument, env_list_t *list)
     return (0);
 }
 
-void    add_export_variable(char **cmds, env_list_t *list)
+void    add_export_variable(char **cmds, t_env_list *list)
 {
     int i;
     int tmp;
@@ -256,7 +256,7 @@ void    add_export_variable(char **cmds, env_list_t *list)
     }
 }
 
-int    ft_export(t_exec_node *exec_node, env_list_t *list)
+int    ft_export(t_exec_node *exec_node, t_env_list *list)
 {
     char **cmds;
     

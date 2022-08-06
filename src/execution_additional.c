@@ -15,7 +15,7 @@ void close_fd_table (int **fd_table)
     free (fd_table);
 }
 
-int **open_fd_table (int size , shell_args_t *args)
+int **open_fd_table (int size , t_shell_args *args)
 {
     int **fd_table;
     int i;

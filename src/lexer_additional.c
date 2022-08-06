@@ -1,9 +1,9 @@
 #include "../includes/minishell.h"
 
-void create_token_list (shell_args_t *args, lexer_node_t **head, lexer_node_t *temp)
+void create_token_list (t_shell_args *args, t_lexer_node **head, t_lexer_node *temp)
 {
-    lexer_node_t *node;
-    lexer_node_t *ptr;
+    t_lexer_node *node;
+    t_lexer_node *ptr;
     char *tmp;
 
     node = *head;
@@ -43,9 +43,9 @@ void create_token_list (shell_args_t *args, lexer_node_t **head, lexer_node_t *t
     }
 }
 
-void check_word (lexer_node_t *tokens_list)
+void check_word (t_lexer_node *tokens_list)
 {
-    lexer_node_t *tmp;
+    t_lexer_node *tmp;
 
     tmp = tokens_list;
     while (tmp)
@@ -61,7 +61,7 @@ void check_word (lexer_node_t *tokens_list)
     }
 }
 
-char *expand_variable (shell_args_t *args, char *str)
+char *expand_variable (t_shell_args *args, char *str)
 {
     int i;
     char *res;
