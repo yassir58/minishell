@@ -5,14 +5,22 @@ env_list_t *get_env_list (char *env[])
     int i;
     env_list_t *head;
 
-    i = 1;
+    i = 0;
     head = NULL;
-    while (env[i])
+    if (env)
     {
-        push_env_node (&head, create_env_node (env[i], i));
-        i++;
+        if (number_of_el (env) == 0)
+            init_env_list (&head);
+        else
+        {
+            while (env[i] && ft_strlen(env[i]) > 0)
+            {
+                push_env_node (&head, create_env_node (env[i], i));
+                i++;
+            }
+        }
+        push_env_node (&head, create_path_node ());
     }
-    push_env_node (&head, create_path_node ());
     init_old_pwd (&head);
     return (head);
 }

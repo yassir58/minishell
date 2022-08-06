@@ -168,7 +168,7 @@ int check_for_dots (char *arg, env_list_t *list);
 char *get_pwd_env (env_list_t *list);
 int update_pwd_env (env_list_t **list);
 char *get_pwd (env_list_t *env_list);
-int echo_function (char *argv[], int argc);
+int echo_function (shell_args_t *args, char *argv[], int argc);
 int invalid_operator (lexer_node_t *node);
 int validate_first_node (shell_args_t *args);
 int validate_last_node (shell_args_t *args);
@@ -347,11 +347,11 @@ int get_status (int pid);
 void check_for_valid_command (t_exec_node *exec_node);
 void command_exist (t_exec_node *exec_node);
 int handle_simple_command (shell_args_t *args);
-void shell_err (char *command, int status);
+void shell_err (char *command, int status, int path_check);
 int builtin_err (char *err, char *arg);
 void link_pipes (t_exec_node *tmp, int **fds, int indx);
 int exec_piped_commands (shell_args_t *args);
-char **get_path (shell_args_t *args, char **cmds, int *status);
+char **get_path (shell_args_t *args, char **cmds, int *status, int *path_check);
 int handle_cd (shell_args_t *args, char **cmds);
 int access_status (char *cmd, int *status);
 int cd_prev_pwd (env_list_t *env_list);
@@ -370,5 +370,8 @@ char *expand_word (shell_args_t *args, char *str);
 char *handle_expand (shell_args_t *args, lexer_node_t *temp);
 int isDir (char *filename);
 char *get_env_path (shell_args_t *args);
+void init_env_list (env_list_t **env_list);
+void echo_print (shell_args_t *args, char *str);
+
 
 #endif
