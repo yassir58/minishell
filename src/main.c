@@ -6,13 +6,11 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 11:13:30 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 17:01:38 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:28:28 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-/** rl_catch_signals = 0; */
 
 int	main(int argc, char *argv[], char *env[])
 {

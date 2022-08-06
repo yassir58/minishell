@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 11:22:38 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 16:56:23 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ char			*push_char(char *str, char c);
  * @brief Syntax validation
  * @description: Functions that helps validate the token list
  */
+<<<<<<< HEAD
 
 int				syntax_error(void);
 int				syntax_validation(t_shell_args *args);
@@ -403,5 +404,114 @@ int				isDir(char *filename);
 char			*get_env_path(t_shell_args *args);
 void			init_env_list(t_env_list **env_list);
 void			echo_print(t_shell_args *args, char *str);
+=======
+int	advanced_strcmp(char *s1, char *s2);
+int     count_filenames(lexer_node_t *node);
+char   **filenames_table(lexer_node_t **node, int files);
+
+// - Functions can be used as helpers.
+int check_node(lexer_node_t *node, char *operator);
+int check_redirect(lexer_node_t *node);
+int redirect_type(lexer_node_t *node);
+
+// - Function can be used for printing.
+void    print_exec_node(t_exec_node *list);
+void    print_redirects(t_redirect *list);
+void    print_commands(t_cmd *list);
+void    print_export_list (t_env_list *list);
+
+// - History function.
+char    *prompt(char *string);
+
+// - Function related to the ENV variables.
+t_env_list  *search_env_variable(char *var, t_env_list *list);
+void        print_env_list (t_env_list *list);
+void        order_env_list(t_env_list *list);
+void    print_unsorted_env(t_env_list *list);
+
+// Builtins
+
+int ft_export(t_exec_node *exec_node, t_env_list *list);
+
+// - Testing
+
+void    print_node_lex(lexer_node_t *node);
+
+// - Functions related to the parser clean up.
+void	free_parser(t_exec_node **lst);
+void	free_string_table(char **table);
+void	free_lexer(lexer_node_t **lst);
+char    *free_joined(char *str);
+
+// - Util functions for builtins
+char	*advanced_get_next_line(int fd, int status);
+int     is_number(char *str);
+
+// - Functions related to the signals handling
+
+void    init_signals(void);
+
+// void handle_piped_command (t_shell_args *args);
+void init_fds (t_shell_args *args);
+void handle_first_command (int indx, int **fds_table);
+void handle_last_command (int indx, int **fds_table);
+void handle_doubly_piped (int indx, int **fds_table);
+int nodes_number (t_shell_args *args);
+void close_fd_table (int **fd_table);
+int **open_fd_table (int size , t_shell_args *args);
+void exec_command (t_shell_args *args, t_exec_node *exec_node);
+void close_unused_fds (int **fds_table , int used);
+void close_unused_fds_2 (int **fds_table, int used1, int used2);
+t_env_list *create_path_node (void);
+void init_old_pwd (t_env_list **env_list);
+void get_children_status (void);
+/// redirections
+int handle_redir_input (t_shell_args *args, t_redirect *redirect_node, int *err);
+int handle_redir_output (t_shell_args *args, t_redirect *redirect_node, int *err);
+int handle_redir_append (t_shell_args *args, t_redirect *redirect_node, int *err);
+int handle_herdoc (t_shell_args *args ,t_redirect *redirect_node);
+int handle_redirections (t_shell_args *args, t_exec_node *exec_node, int *infile, int *outfile);
+//////// general utils
+void *allocation_err (void);
+int open_pipe (int *fd, t_shell_args *args);
+int close_fd (int fd);
+int exit_with_failure (t_shell_args *args, char *err_message);
+int fork_child (t_shell_args *args);
+void init_command (t_shell_args *args);
+int get_status (int pid);
+void check_for_valid_command (t_exec_node *exec_node);
+void command_exist (t_exec_node *exec_node);
+int handle_simple_command (t_shell_args *args);
+void shell_err (char *command, int status, int path_check);
+int builtin_err (char *err, char *arg);
+void link_pipes (t_exec_node *tmp, int **fds, int indx);
+int exec_piped_commands (t_shell_args *args);
+char **get_path (t_shell_args *args, char **cmds, int *status, int *path_check);
+int handle_cd (t_shell_args *args, char **cmds);
+int access_status (char *cmd, int *status);
+int cd_prev_pwd (t_env_list *env_list);
+void redir_err (char *filename, char *err_message);
+void link_rediriction_pipes (int infile, int outfile);
+int handle_one_builtin_cmd (t_shell_args *args, int infile, int outfile);
+t_exec_utils *init_exec_utils (void);
+g_shell_data *init_global (void);
+t_shell_args *init_args (char *env[]);
+void exec_cmd (t_shell_args *args,t_exec_node *tmp, t_exec_utils *utils);
+void add_exit_var (t_env_list **env_list);
+void set_exit_status (t_env_list **env_list, unsigned char exit_code);
+int env_size(t_env_list *list);
+char    **get_env_table(t_env_list *list);
+char *expand_word (t_shell_args *args, char *str);
+char *handle_expand (t_shell_args *args, lexer_node_t *temp);
+int is_dir (char *filename);
+char *get_env_path (t_shell_args *args);
+void init_env_list (t_env_list **env_list);
+void echo_print (t_shell_args *args, char *str);
+int handle_non_builtin (t_shell_args *args,  int *in, int *out);
+void	run_builtin(t_shell_args *args, int *in, int *out);
+char	**check_for_path(char *cmd);
+int	cd_error(int err, char *arg);
+char	*cmd_with_no_path(char *spath, int *status, char *command);
+>>>>>>> 6b46a81a2ec4d5814d2331284f60a73a6dda160e
 
 #endif

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/06 15:13:32 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 16:57:39 by ochoumou         ###   ########.fr       */
+/*   Created: 2022/08/06 12:12:48 by yelatman          #+#    #+#             */
+/*   Updated: 2022/08/06 17:26:41 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,27 +39,27 @@ t_env_list	*get_env_list(char *env[])
 
 t_env_list	*create_env_node(char *envStr, int index)
 {
-	char		**envtab;
+	char		**env_tab;
 	t_env_list	*node;
 	int			shell;
 
 	node = malloc (sizeof (t_env_list));
-	envtab = NULL;
+	env_tab = NULL;
 	if (!node)
 		return (NULL);
-	envtab = ft_split (envStr, '=');
-	node->variable_name = envtab[0];
+	env_tab = ft_split (envStr, '=');
+	node->variable_name = env_tab[0];
 	if (!ft_strcmp(node->variable_name, "SHLVL"))
 	{
-		shell = ft_atoi(envtab[1]) + 1;
-		free(envtab[1]);
+		shell = ft_atoi(env_tab[1]) + 1;
+		free(env_tab[1]);
 		node->value = ft_itoa(shell);
 	}
 	else
-		node->value = envtab[1];
+		node->value = env_tab[1];
 	node->index = index;
 	node->next = NULL;
-	free(envtab);
+	free(env_tab);
 	return (node);
 }
 
@@ -89,4 +89,20 @@ t_env_list	*create_path_node(void)
 	path_node->value = ft_strdup (_PATH_STDPATH);
 	path_node->next = NULL;
 	return (path_node);
+}
+
+void	init_old_pwd(t_env_list **env_list)
+{
+	t_env_list	*tmp;
+
+	tmp = *env_list;
+	while (tmp)
+	{
+		if (!ft_strcmp (tmp->variable_name, "OLDPWD"))
+		{
+			free(tmp->value);
+			tmp->value = ft_strdup ("");
+		}
+		tmp = tmp->next ;
+	}
 }

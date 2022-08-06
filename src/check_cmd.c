@@ -6,11 +6,11 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:45:04 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 11:52:29 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/minishell.h"
+#include "../includes/minishell.h"
 
 char	**paths_table(char *path)
 {
@@ -22,10 +22,9 @@ char	**paths_table(char *path)
 
 char	*check_access(t_shell_args *args, char *command, char *path, int *status)
 {
-	char **paths;
-	int 	i;
+	int		i;
 	char	*temp;
-	char *spath;
+	char	*spath;
 
 	i = 0;
 	spath = get_env_path (args);
@@ -36,44 +35,24 @@ char	*check_access(t_shell_args *args, char *command, char *path, int *status)
 			return (temp);
 	}
 	else
-	{
-		if (!spath)
-		{
-			*status = 127;
-			return (NULL);
-		}
-		paths = paths_table(spath);
-		while (paths[i])
-		{
-			temp = ft_strjoin(ft_strjoin(paths[i], "/"), command);
-			if (access_status (temp, status) == 0 && ft_strcmp(command, ""))
-			{
-				free_tab(paths);
-				return (temp);
-			}	
-			else
-				free(temp);
-			i++;
-		}
-		free_tab(paths);	
-	}
+		cmd_with_no_path (spath, status, command);
 	return (NULL);
 }
 
-int access_status (char *cmd, int *status)
+int	access_status(char *cmd, int *status)
 {
-	int rt_status;
-	struct stat sfile;
+	int			rt_status;
+	struct stat	sfile;
 
 	rt_status = 0;
 	if (access (cmd, F_OK) != -1)
 	{
 		*status = 0;
-		if (access (cmd , (F_OK | X_OK)) != -1)
+		if (access (cmd, (F_OK | X_OK)) != -1)
 		{
 			stat (cmd, &sfile);
 			if (S_ISDIR(sfile.st_mode) == 1)
-				*status = -126;	
+				*status = -126;
 		}
 		else
 			*status = 126;
@@ -84,11 +63,18 @@ int access_status (char *cmd, int *status)
 	return (rt_status);
 }
 
+<<<<<<< HEAD
 
 char *get_env_path (t_shell_args *args)
 {
 	t_env_list *temp;
 	
+=======
+char	*get_env_path(t_shell_args *args)
+{
+	t_env_list	*temp;
+
+>>>>>>> 6b46a81a2ec4d5814d2331284f60a73a6dda160e
 	temp = args->env_list;
 	while (temp)
 	{
@@ -97,4 +83,32 @@ char *get_env_path (t_shell_args *args)
 		temp = temp->next;
 	}
 	return (NULL);
+}
+
+char	*cmd_with_no_path(char *spath, int *status, char *command)
+{
+	int		i;
+	char	**paths;
+	char	*temp;
+
+	i = 0;
+	temp = NULL;
+	paths = NULL;
+	if (!spath)
+	{
+		*status = 127;
+		return (NULL);
+	}
+	paths = paths_table(spath);
+	while (paths[i])
+	{
+		temp = ft_strjoin(ft_strjoin(paths[i], "/"), command);
+		if (access_status (temp, status) == 0 && ft_strcmp(command, ""))
+			break ;
+		else
+			free(temp);
+		i++;
+	}
+	free_tab(paths);
+	return (temp);
 }

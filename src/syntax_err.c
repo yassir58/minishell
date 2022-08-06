@@ -5,10 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/06 16:43:54 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 16:44:55 by ochoumou         ###   ########.fr       */
+/*   Created: 2022/08/06 12:13:43 by yelatman          #+#    #+#             */
+/*   Updated: 2022/08/06 17:25:02 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../includes/minishell.h"
 
 #include "../includes/minishell.h"
 
