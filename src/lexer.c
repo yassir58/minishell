@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 12:13:28 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 17:24:07 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 18:39:14 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,7 @@ t_lexer_node	*handle_operator(char *line, int *index)
 	node->token = OPERATOR;
 	if (line[(*index)] != '|')
 	{
-		while (line[(*index)] == operator)
-		{
-			node->length++;
-			(*index)++;
-		}
+		escape_char (line, index, &(node->length), operator);
 		if (node->length > 2)
 			node->invalid = TRUE;
 	}
@@ -114,15 +110,12 @@ void	handle_quote(char *line, int *index, t_lexer_node **node)
 
 	tmp = *node;
 	delim = line[(*index)];
-	if (*index > 0 && line[(*index - 1)] != ' ' && !ft_strchr (OPERATORS, line[(*index - 1)])) 
+	if (*index > 0 && line[(*index - 1)] != ' ' && \
+	!ft_strchr (OPERATORS, line[(*index - 1)]))
 		tmp->joinable = TRUE;
 	(*index)++;
 	tmp->start = &(line[(*index)]);
-	while (line[(*index)] && line[(*index)] != delim)
-	{
-		(*index)++;
-		tmp->length++;
-	}
+	increment_indx (line, index, &(tmp->length), delim);
 	if (delim == '\'')
 		tmp->token = SINGLE_QUOTED_SEQUENCE;
 	if (delim == '"')
