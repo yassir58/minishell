@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/08/06 18:42:41 by ochoumou          #+#    #+#              #
+#    Updated: 2022/08/06 18:42:42 by ochoumou         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 SRCDIR=./src/
 SRCS = main.c lexer.c lexer_additional.c utils.c  syntax_err.c lexer_utils.c parse_helper.c parse_utils.c testing.c  execution.c env_utils.c builtins.c \
 builtins_utils.c check_cmd.c execution_utils.c execution_additional.c general_utils.c  command_list.c exec_list.c history.c parse_printer.c redir_list.c string_convert.c \
