@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 11:22:38 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 17:52:16 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 18:52:44 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,9 +399,14 @@ int				env_size(t_env_list *list);
 char			**get_env_table(t_env_list *list);
 char			*expand_word(t_shell_args *args, char *str);
 char			*handle_expand(t_shell_args *args, t_lexer_node *temp);
-int				isDir(char *filename);
+int				is_dir(char *filename);
 char			*get_env_path(t_shell_args *args);
 void			init_env_list(t_env_list **env_list);
 void			echo_print(t_shell_args *args, char *str);
+int				check_amb_redirect(t_redirect *redirect_node, int *err);
+void			escape_char(char *line, int *indx, int *length, char operator);
+void			increment_indx(char *line, int *index, int *length, char delim);
+void			handle_joinable(t_shell_args *args, t_lexer_node **joinable, \
+t_lexer_node *temp);
 
 #endif

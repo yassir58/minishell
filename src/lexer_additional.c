@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_additional.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 12:13:14 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 17:23:59 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 18:47:58 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	create_token_list(t_shell_args *args, t_lexer_node **head, t_lexer_node *temp)
+void	create_token_list(t_shell_args *args, t_lexer_node **head, \
+t_lexer_node *temp)
 {
 	t_lexer_node	*ptr;
-	char			*tmp;
 
 	ptr = *head;
 	if (!args)
@@ -23,25 +23,7 @@ void	create_token_list(t_shell_args *args, t_lexer_node **head, t_lexer_node *te
 	if (temp)
 	{
 		if (temp->joinable)
-		{
-			while (ptr->next)
-				ptr = ptr->next;
-			temp->start = ft_strndup(temp->start, temp->length);
-			if (temp->token == DOUBLE_QUOTED_SEQUENCE || temp->token == WORD)
-				temp->start = expand_variable (args, temp->start);
-			if (ptr->token == DOUBLE_QUOTED_SEQUENCE || ptr->token == WORD)
-				ptr->start = expand_variable (args, ptr->start);
-			tmp = ft_strjoin (ptr->start, temp->start);
-			free(ptr->start);
-			ptr->start = tmp;
-			free(temp->start);
-			ptr->length += temp->length;
-			ptr->joinable = TRUE;
-			ptr->closed = temp->closed;
-			if (ft_strchr (ptr->start, ' '))
-				ptr->token = temp->token;
-			free(temp);
-		}
+			handle_joinable (args, ptr, temp);
 		else
 		{
 			temp->start = ft_strndup (temp->start, temp->length);

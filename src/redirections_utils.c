@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 16:58:26 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 18:06:54 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,8 @@ int	handle_redir_input(t_shell_args *args, t_redirect *redirect_node, int *err)
 	int	fd;
 
 	fd = access(redirect_node->filename, (F_OK));
-	if (!ft_strcmp(redirect_node->filename, ""))
-	{
-		if (redirect_node->token == WORD)
-			redir_err (redirect_node->filename, " :ambiguous redirect\n");
-		else
-			redir_err (redirect_node->filename, \
-			" : No such file or directory\n");
-		*err = 1;
+	if (check_amb_redirect (redir_err, err) == -1)
 		return (-1);
-	}
 	if (fd == -1)
 	{
 		redir_err (redirect_node->filename, " : No such file or directory \n");
@@ -80,16 +72,6 @@ int	handle_redir_append(t_shell_args *args, t_redirect *redirect_node, int *err)
 {
 	int	fd;
 
-	if (!ft_strcmp(redirect_node->filename, ""))
-	{
-		if (redirect_node->token == WORD)
-			redir_err (redirect_node->filename, " :ambiguous redirect\n");
-		else
-			redir_err (redirect_node->filename, \
-			" : No such file or directory\n");
-		*err = 1;
-		return (-1);
-	}
 	fd = access (redirect_node->filename, (F_OK));
 	if (fd != -1)
 	{
@@ -120,7 +102,8 @@ int	trait_herdoc(t_shell_args *args, t_redirect *temp, int *in, int *fds)
 	return (err);
 }
 
-int	handle_redirections(t_shell_args *args, t_exec_node *exec_node, int *in, int *out)
+int	handle_redirections(t_shell_args *args, t_exec_node *exec_node, int *in, \
+int *out)
 {
 	t_redirect	*temp;
 	int			err;
