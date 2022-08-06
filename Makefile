@@ -1,7 +1,7 @@
 SRCDIR=./src/
 SRCS = main.c lexer.c lexer_additional.c utils.c  syntax_err.c lexer_utils.c parse_helper.c parse_utils.c testing.c  execution.c env_utils.c builtins.c \
 builtins_utils.c check_cmd.c execution_utils.c execution_additional.c general_utils.c  command_list.c exec_list.c history.c parse_printer.c redir_list.c string_convert.c \
-parser.c redirections_utils.c env_list.c builtins_additional.c builtins_helper.c execution_init.c gnl.c signal_handler.c free.c init_data.c
+parser.c redirections_utils.c env_list.c builtins_additional.c builtins_helper.c execution_init.c gnl.c signal_handler.c free.c init_data.c exec_add1.c exec_add2.c 
 OBJS=$(addprefix $(SRCDIR), $(SRCS:.c=.o))
 NAME = minishell
 HEADERS = ./includes/minishell.h

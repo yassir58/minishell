@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_data.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/06 12:13:10 by yelatman          #+#    #+#             */
+/*   Updated: 2022/08/06 12:13:11 by yelatman         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 
@@ -61,5 +73,5 @@ void init_env_list (env_list_t **env_list)
     pwd_val = ft_strjoin ("PWD=", get_pwd (*env_list));
     push_env_node (env_list, create_env_node (pwd_val, 0));
     push_env_node (env_list, create_env_node (shlvl_val, 1));
-     push_env_node (env_list, create_env_node (old_pwd, 2));
+    push_env_node (env_list, create_env_node (old_pwd, 2));
 }

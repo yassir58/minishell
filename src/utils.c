@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/06 12:15:02 by yelatman          #+#    #+#             */
+/*   Updated: 2022/08/06 16:50:54 by yelatman         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	free_list(lexer_node_t *node)
@@ -48,7 +60,6 @@ void push_to_list (lexer_node_t **head, lexer_node_t *node)
         }
     }
 }
-
 
 char *get_variable_value (shell_args_t *args ,char *str, int *i)
 {
@@ -107,4 +118,17 @@ char *ft_getenv (shell_args_t *args, char *varName)
         temp = temp->next;
     }
     return (NULL);
+}
+
+void free_tab(char *tab[])
+{
+	int i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free (tab[i]);
+		i++;
+	}
+	free (tab);
 }

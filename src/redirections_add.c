@@ -1,38 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_helper.c                                  :+:      :+:    :+:   */
+/*   redirections_add.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/06 16:29:37 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 16:46:19 by yelatman         ###   ########.fr       */
+/*   Created: 2022/08/06 17:17:03 by yelatman          #+#    #+#             */
+/*   Updated: 2022/08/06 17:18:12 by yelatman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	check_for_valid_option(char *option)
+void	redir_err(char *filename, char *err_message)
 {
-	int	i;
+	char	*err;
 
-	i = 0;
-	if (option[i] == '-')
-	{
-		i++;
-		while (option [i] && option[i] == 'n')
-			i++;
-		if (option[i] == 0)
-			return (1);
-	}
-	return (0);
+	err = ft_strjoin (filename, err_message);
+	ft_putstr_fd (err, 2);
 }
 
-int	cd_error(int err, char *arg)
+int	is_dir(char *filename)
 {
-	if (!err)
-		return (builtin_err (" : Not a directory\n", arg));
-	else
-		return (builtin_err (": No such file or directory\n", arg));
-	return (0);
+	struct stat	sfile;
+	int			accs;
+
+	accs = access (filename, (F_OK));
+	if (accs == -1)
+		return (-1);
+	stat("filename", &sfile);
+	if (S_ISREG(sfile.st_mode) == 0)
+		accs = 1;
+	return (accs);
 }

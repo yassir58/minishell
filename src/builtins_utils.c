@@ -1,102 +1,97 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/06 16:23:47 by yelatman          #+#    #+#             */
+/*   Updated: 2022/08/06 16:29:22 by yelatman         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-int cd_prev_pwd (env_list_t *env_list)
+int	cd_prev_pwd(env_list_t *env_list)
 {
-    env_list_t *tmp;
-    int err;
+	env_list_t	*tmp;
+	int			err;
 
-    tmp = env_list;
-    while (tmp)
-    {
-        if (!(strcmp (tmp->variable_name, "OLDPWD")))
-            break ;
-        tmp = tmp->next;
-    }
-    err = chdir (tmp->value);
-    if (err == -1)
-            return (builtin_err (" :no such file or directory\n", tmp->value));
-    return (0);
+	tmp = env_list;
+	while (tmp)
+	{
+		if (!(strcmp (tmp->variable_name, "OLDPWD")))
+			break ;
+		tmp = tmp->next;
+	}
+	err = chdir (tmp->value);
+	if (err == -1)
+		return (builtin_err (" :no such file or directory\n", tmp->value));
+	return (0);
 }
 
-void cd_to_home (env_list_t *env_list)
+void	cd_to_home(env_list_t *env_list)
 {
-    env_list_t *tmp;
+	env_list_t	*tmp;
 
-    tmp = env_list;
-    while (tmp)
-    {
-        if (!(ft_strcmp (tmp->variable_name, "HOME")))
-            break ;
-        tmp = tmp->next;
-    }
-    if (tmp) 
-        chdir (tmp->value);
-    else
-        ft_putstr_fd ("cd :HOME not set\n", 2);
+	tmp = env_list;
+	while (tmp)
+	{
+		if (!(ft_strcmp (tmp->variable_name, "HOME")))
+			break ;
+		tmp = tmp->next;
+	}
+	if (tmp)
+		chdir (tmp->value);
+	else
+		ft_putstr_fd ("cd :HOME not set\n", 2);
 }
 
-char *get_pwd_env (env_list_t *list)
+char	*get_pwd_env(env_list_t *list)
 {
-    env_list_t *tmp;
-    char *pwd;
+	env_list_t	*tmp;
+	char		*pwd;
 
-    tmp = list;
-    pwd = NULL;
-    while (tmp)
-    {
-        if (!ft_strcmp (tmp->variable_name, "PWD"))
-            pwd = ft_strdup (tmp->value);
-        tmp = tmp->next;
-    }
-    return (pwd);
+	tmp = list;
+	pwd = NULL;
+	while (tmp)
+	{
+		if (!ft_strcmp (tmp->variable_name, "PWD"))
+			pwd = ft_strdup (tmp->value);
+		tmp = tmp->next;
+	}
+	return (pwd);
 }
 
-
-int update_pwd_env (env_list_t **list)
+int	update_pwd_env(env_list_t **list)
 {
-    char *current;
-    char *old;
-    env_list_t *tmp;
+	char		*current;
+	char		*old;
+	env_list_t	*tmp;
 
-    tmp = *list;
-    current = getcwd (NULL, 0);
-    if (!current)
-        return (-1);
-    old = get_pwd_env (*list);
-    while (tmp)
-    {
-        if (!ft_strcmp (tmp->variable_name, "PWD"))
-            tmp->value = current;
-        else if (!ft_strcmp (tmp->variable_name, "OLDPWD"))
-            tmp->value = old;
-        tmp = tmp->next;
-    }
-    return (0);
+	tmp = *list;
+	current = getcwd (NULL, 0);
+	if (!current)
+		return (-1);
+	old = get_pwd_env (*list);
+	while (tmp)
+	{
+		if (!ft_strcmp (tmp->variable_name, "PWD"))
+			tmp->value = current;
+		else if (!ft_strcmp (tmp->variable_name, "OLDPWD"))
+			tmp->value = old;
+		tmp = tmp->next;
+	}
+	return (0);
 }
 
-char *get_pwd (env_list_t *env_list)
+char	*get_pwd(env_list_t *env_list)
 {
-    char *buffer;
+	char	*buffer;
 
-    buffer = NULL;
-    buffer = getcwd (NULL, 0);
-    if (!buffer)
-        buffer = get_pwd_env (env_list);
-    return (buffer);
-}
-
-int check_for_valid_option (char *option)
-{
-    int i;
-
-    i = 0;
-    if (option[i] == '-')
-    {
-        i++;
-        while (option [i] && option[i] == 'n')
-            i++;
-        if (option[i] == 0)
-            return (1);
-    }
-    return (0);
+	buffer = NULL;
+	buffer = getcwd (NULL, 0);
+	if (!buffer)
+		buffer = get_pwd_env (env_list);
+	return (buffer);
 }

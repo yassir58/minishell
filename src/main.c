@@ -2,16 +2,9 @@
 
 
 
-
 int main (int argc ,char *argv[], char *env[])
 {
 
-    // (void)argc;
-    // if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
-    // {
-    //     test_minishell (env, argv[2]);
-    //     exit(g_data->exit_code);
-    // }
     shell_args_t *args;
 
     init_signals();

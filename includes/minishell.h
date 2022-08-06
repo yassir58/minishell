@@ -368,10 +368,14 @@ int env_size(env_list_t *list);
 char    **get_env_table(env_list_t *list);
 char *expand_word (shell_args_t *args, char *str);
 char *handle_expand (shell_args_t *args, lexer_node_t *temp);
-int isDir (char *filename);
+int is_dir (char *filename);
 char *get_env_path (shell_args_t *args);
 void init_env_list (env_list_t **env_list);
 void echo_print (shell_args_t *args, char *str);
-
+int handle_non_builtin (shell_args_t *args,  int *in, int *out);
+void	run_builtin(shell_args_t *args, int *in, int *out);
+char	**check_for_path(char *cmd);
+int	cd_error(int err, char *arg);
+char	*cmd_with_no_path(char *spath, int *status, char *command);
 
 #endif
