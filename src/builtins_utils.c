@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 16:23:47 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 16:29:22 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:26:41 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	cd_prev_pwd(env_list_t *env_list)
+int	cd_prev_pwd(t_env_list *env_list)
 {
-	env_list_t	*tmp;
+	t_env_list	*tmp;
 	int			err;
 
 	tmp = env_list;
@@ -30,9 +30,9 @@ int	cd_prev_pwd(env_list_t *env_list)
 	return (0);
 }
 
-void	cd_to_home(env_list_t *env_list)
+void	cd_to_home(t_env_list *env_list)
 {
-	env_list_t	*tmp;
+	t_env_list	*tmp;
 
 	tmp = env_list;
 	while (tmp)
@@ -47,9 +47,9 @@ void	cd_to_home(env_list_t *env_list)
 		ft_putstr_fd ("cd :HOME not set\n", 2);
 }
 
-char	*get_pwd_env(env_list_t *list)
+char	*get_pwd_env(t_env_list *list)
 {
-	env_list_t	*tmp;
+	t_env_list	*tmp;
 	char		*pwd;
 
 	tmp = list;
@@ -63,11 +63,11 @@ char	*get_pwd_env(env_list_t *list)
 	return (pwd);
 }
 
-int	update_pwd_env(env_list_t **list)
+int	update_pwd_env(t_env_list **list)
 {
 	char		*current;
 	char		*old;
-	env_list_t	*tmp;
+	t_env_list	*tmp;
 
 	tmp = *list;
 	current = getcwd (NULL, 0);
@@ -85,7 +85,7 @@ int	update_pwd_env(env_list_t **list)
 	return (0);
 }
 
-char	*get_pwd(env_list_t *env_list)
+char	*get_pwd(t_env_list *env_list)
 {
 	char	*buffer;
 

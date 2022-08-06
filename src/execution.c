@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 12:12:21 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 14:44:06 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	exec_piped_commands(shell_args_t *args)
+int	exec_piped_commands(t_shell_args *args)
 {
 	t_exec_node		*tmp;
 	t_exec_utils	*utils;
@@ -51,7 +51,7 @@ void	link_pipes(t_exec_node *tmp, int **fds, int indx)
 		handle_first_command (indx, fds);
 }
 
-int	builtin_routine(shell_args_t *args, t_exec_node *exec_node, int in, int out)
+int	builtin_routine(t_shell_args *args, t_exec_node *exec_node, int in, int out)
 {
 	char	**cmds;
 	int		exit_status;
@@ -80,7 +80,7 @@ int	builtin_routine(shell_args_t *args, t_exec_node *exec_node, int in, int out)
 	return (exit_status);
 }
 
-void	exec_command(shell_args_t *args, t_exec_node *exec_node)
+void	exec_command(t_shell_args *args, t_exec_node *exec_node)
 {
 	char	**cmds;
 	char	**path;

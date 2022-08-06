@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_additional.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 12:12:38 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 15:12:50 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	close_fd_table(int **fd_table)
 	free (fd_table);
 }
 
-int	**open_fd_table(int size, shell_args_t *args)
+int	**open_fd_table(int size, t_shell_args *args)
 {
 	int	**fd_table;
 	int	i;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 14:45:04 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 16:45:30 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	**paths_table(char *path)
 	return (paths);
 }
 
-char	*check_access(shell_args_t *args, char *command, char *path, int *status)
+char	*check_access(t_shell_args *args, char *command, char *path, int *status)
 {
 	int		i;
 	char	*temp;
@@ -63,10 +63,18 @@ int	access_status(char *cmd, int *status)
 	return (rt_status);
 }
 
-char	*get_env_path(shell_args_t *args)
-{
-	env_list_t	*temp;
+<<<<<<< HEAD
 
+char *get_env_path (t_shell_args *args)
+{
+	t_env_list *temp;
+	
+=======
+char	*get_env_path(t_shell_args *args)
+{
+	t_env_list	*temp;
+
+>>>>>>> 6b46a81a2ec4d5814d2331284f60a73a6dda160e
 	temp = args->env_list;
 	while (temp)
 	{

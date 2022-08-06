@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 16:25:44 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 16:46:54 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	pwd_function(env_list_t *env_list)
+int	pwd_function(t_env_list *env_list)
 {
 	char	*pwd;
 
@@ -21,7 +21,7 @@ int	pwd_function(env_list_t *env_list)
 	return (0);
 }
 
-int	cd_function(char *arg, env_list_t **env_list)
+int	cd_function(char *arg, t_env_list **env_list)
 {
 	int	i;
 	int	err;
@@ -46,7 +46,7 @@ int	cd_function(char *arg, env_list_t **env_list)
 	return (err);
 }
 
-int	echo_function(shell_args_t *args, char *argv[], int argc)
+int	echo_function(t_shell_args *args, char *argv[], int argc)
 {
 	int		i ;
 	char	thrilling;
@@ -87,9 +87,9 @@ int	builtin_err(char *err, char *arg)
 	return (1);
 }
 
-void	echo_print(shell_args_t *args, char *str)
+void	echo_print(t_shell_args *args, char *str)
 {
-	env_list_t	*env;
+	t_env_list	*env;
 
 	env = args->env_list;
 	if (!ft_strcmp (str, "~"))

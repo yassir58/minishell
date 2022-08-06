@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 11:49:12 by yelatman          #+#    #+#             */
-/*   Updated: 2022/07/28 12:23:35 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:11:08 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,14 @@ void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *s1);
+char	*ft_strndup(const char *s, size_t n);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-int	 	ft_isspace(char c);
+int		ft_isspace(char c);
 int		ft_strcmp(const char *s1, const char *s2);
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);

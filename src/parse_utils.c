@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:47 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/07/28 12:13:40 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/06 15:32:27 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	advanced_strcmp(char *s1, char *s2)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (ft_strlen(s1) != ft_strlen(s2))
@@ -29,52 +29,54 @@ int	advanced_strcmp(char *s1, char *s2)
 	return (0);
 }
 
-bool is_builtin(t_cmd_node *cmd)
+bool	is_builtin(t_cmd_node *cmd)
 {
-    char *arg;
+	char	*arg;
 
-    arg = cmd->cmds->cmd;
-    if (!advanced_strcmp(arg, B1) || !advanced_strcmp(arg, B2) || !advanced_strcmp(arg, B3) \
-    || !advanced_strcmp(arg, B4) || !advanced_strcmp(arg, B5) ||!advanced_strcmp(arg, B6) || !advanced_strcmp(arg, B7))
-        return (true);
-    return (false);
+	arg = cmd->cmds->cmd;
+	if (!advanced_strcmp(arg, "echo") || !advanced_strcmp(arg, "cd") \
+	|| !advanced_strcmp(arg, "pwd") || !advanced_strcmp(arg, "export") \
+	|| !advanced_strcmp(arg, "unset") ||!advanced_strcmp(arg, "env") || \
+	!advanced_strcmp(arg, "exit"))
+		return (true);
+	return (false);
 }
 
-int     count_filenames(lexer_node_t *node)
+int	count_filenames(t_lexer_node *node)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (node && node->token != OPERATOR)
-    {
-        i += 1;
-        node = node->next;
-    }
-    return (i);
+	i = 0;
+	while (node && node->token != OPERATOR)
+	{
+		i += 1;
+		node = node->next;
+	}
+	return (i);
 }
 
-char   **filenames_table(lexer_node_t **node, int files)
+char	**filenames_table(t_lexer_node **node, int files)
 {
-    int i;
-    char **filenames;
+	int		i;
+	char	**filenames;
 
-    i = 0;
-    filenames = (char **)malloc(sizeof(char *) * (files + 1));
-    if (!filenames)
-        return (NULL);
-    if (files == 1)
-    {
-        filenames[i++] = ft_strdup((*node)->next->start);
-        (*node) = (*node)->next->next;
-    }
-    else 
-    {
-        while (i < files)
-        {
-            filenames[i++] = ft_strdup((*node)->start);
-            (*node) = (*node)->next;
-        }
-    }
-    filenames[i] = NULL;
-    return (filenames);
+	i = 0;
+	filenames = (char **)malloc(sizeof(char *) * (files + 1));
+	if (!filenames)
+		return (NULL);
+	if (files == 1)
+	{
+		filenames[i++] = ft_strdup((*node)->next->start);
+		(*node) = (*node)->next->next;
+	}
+	else
+	{
+		while (i < files)
+		{
+			filenames[i++] = ft_strdup((*node)->start);
+			(*node) = (*node)->next;
+		}
+	}
+	filenames[i] = NULL;
+	return (filenames);
 }

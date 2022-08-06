@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 16:58:26 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 17:16:59 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	handle_redir_input(shell_args_t *args, t_redirect *redirect_node, int *err)
+int	handle_redir_input(t_shell_args *args, t_redirect *redirect_node, int *err)
 {
 	int	fd;
 
@@ -47,7 +47,7 @@ int	handle_redir_input(shell_args_t *args, t_redirect *redirect_node, int *err)
 	return (fd);
 }
 
-int	handle_redir_output(shell_args_t *args, t_redirect *redirect_node, int *err)
+int	handle_redir_output(t_shell_args *args, t_redirect *redirect_node, int *err)
 {
 	int	fd;
 
@@ -76,7 +76,7 @@ int	handle_redir_output(shell_args_t *args, t_redirect *redirect_node, int *err)
 	return (fd);
 }
 
-int	handle_redir_append(shell_args_t *args, t_redirect *redirect_node, int *err)
+int	handle_redir_append(t_shell_args *args, t_redirect *redirect_node, int *err)
 {
 	int	fd;
 
@@ -105,7 +105,7 @@ int	handle_redir_append(shell_args_t *args, t_redirect *redirect_node, int *err)
 	return (fd);
 }
 
-int	trait_herdoc(shell_args_t *args, t_redirect *temp, int *in, int *fds)
+int	trait_herdoc(t_shell_args *args, t_redirect *temp, int *in, int *fds)
 {
 	int	err;
 
@@ -120,7 +120,7 @@ int	trait_herdoc(shell_args_t *args, t_redirect *temp, int *in, int *fds)
 	return (err);
 }
 
-int	handle_redirections(shell_args_t *args, t_exec_node *exec_node, int *in, int *out)
+int	handle_redirections(t_shell_args *args, t_exec_node *exec_node, int *in, int *out)
 {
 	t_redirect	*temp;
 	int			err;

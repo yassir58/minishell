@@ -3,132 +3,104 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/06 12:15:02 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 16:50:54 by yelatman         ###   ########.fr       */
+/*   Created: 2022/08/06 16:45:28 by ochoumou          #+#    #+#             */
+/*   Updated: 2022/08/06 17:25:47 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_list(lexer_node_t *node)
+t_lexer_node	*init_node(void)
 {
-	lexer_node_t	*temp;
-    lexer_node_t    *head;
+	t_lexer_node	*node;
 
-	head = node;
-	while (head)
-    {
-        temp = head;
-        head = head->next;
-        free (temp);
-    }
+	node = malloc (sizeof (t_lexer_node));
+	if (!node)
+		return (NULL);
+	node->closed = 0;
+	node->invalid = 0;
+	node->joinable = 0;
+	node->length = 0;
+	node->start = 0;
+	node->next = NULL;
+	node->token = 0;
+	return (node);
 }
 
-lexer_node_t *init_node ()
+void	push_to_list(t_lexer_node **head, t_lexer_node *node)
 {
-    lexer_node_t *node;
+	t_lexer_node	*temp;
 
-    node = malloc (sizeof (lexer_node_t));
-    if (!node)
-        return (NULL);
-    node->closed = 0;
-    node->invalid = 0;
-    node->joinable = 0;
-    node->length = 0;
-    node->start = 0;
-    node->next = NULL;
-    node->token = 0;
-    return (node);
+	temp = *head;
+	if (node)
+	{
+		if (*head == NULL)
+			*head = node;
+		else
+		{
+			while (temp->next)
+				temp = temp->next;
+			temp->next = node;
+		}
+	}
 }
 
-void push_to_list (lexer_node_t **head, lexer_node_t *node)
+char	*get_variable_value(t_shell_args *args, char *str, int *i)
 {
-    lexer_node_t *temp;
+	char	*key;
+	char	*value;
 
-    temp = *head;
-    if (node)
-    {
-        if (*head == NULL)
-            *head = node;
-        else
-        {
-            while (temp->next)
-                temp = temp->next;
-           temp->next = node; 
-        }
-    }
+	value = NULL;
+	key = extract_var_name (str, i);
+	if (key)
+	{
+		if (!ft_strcmp (key, "?"))
+			value = ft_itoa (g_data->exit_code);
+		else
+			value = ft_getenv (args, key);
+		free (key);
+	}
+	return (value);
 }
 
-char *get_variable_value (shell_args_t *args ,char *str, int *i)
+char	*push_char(char *str, char c)
 {
-    char *varName;
-    char *varValue;
-    
-    varName = NULL;
-    varValue = NULL;
-    varName = extract_var_name (str, i);
-    if (varName)
-    {
-        if (!ft_strcmp (varName, "?"))
-            varValue = ft_itoa (g_data->exit_code);
-        else
-            varValue = ft_getenv (args, varName);
-        free (varName);
-    }
-    return (varValue);
-}
-
-char *push_char (char *str, char c)
-{
-    int i;
-    int length;
-    char *res;
-
-    i = 0;
-    res = NULL;
-    length = 0;
-    if (str)
-        length = ft_strlen (str);
-    res = malloc (sizeof (char) * (length + 2));
-    if (!res)
-        return (NULL);
-    while (i < length)
-    {
-        res[i] = str[i];
-        i++;
-    }
-    res[i++] = c;
-    res[i] = 0;
-    if (str)
-        free (str);
-    return (res);
-}
-
-char *ft_getenv (shell_args_t *args, char *varName)
-{
-    env_list_t *temp;
-   
-    temp = args->env_list;
-    while (temp)
-    {
-        if (!ft_strcmp (temp->variable_name, varName))
-            return (ft_strdup (temp->value));
-        temp = temp->next;
-    }
-    return (NULL);
-}
-
-void free_tab(char *tab[])
-{
-	int i;
+	int		i;
+	int		length;
+	char	*res;
 
 	i = 0;
-	while (tab[i])
+	res = NULL;
+	length = 0;
+	if (str)
+		length = ft_strlen (str);
+	res = malloc (sizeof (char) * (length + 2));
+	if (!res)
+		return (NULL);
+	while (i < length)
 	{
-		free (tab[i]);
+		res[i] = str[i];
 		i++;
 	}
-	free (tab);
+	res[i++] = c;
+	res[i] = 0;
+	if (str)
+		free (str);
+	return (res);
+}
+
+char	*ft_getenv(t_shell_args *args, char *varName)
+{
+	t_env_list	*temp;
+
+	temp = args->env_list;
+	while (temp)
+	{
+		if (!ft_strcmp (temp->variable_name, varName))
+			return (ft_strdup (temp->value));
+		temp = temp->next;
+	}
+	return (NULL);
 }

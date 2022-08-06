@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_add2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 14:44:34 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 15:38:44 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	handle_cd(shell_args_t *args, char **cmds)
+int	handle_cd(t_shell_args *args, char **cmds)
 {
 	int	exit_status ;
 
@@ -32,7 +32,7 @@ void	link_rediriction_pipes(int infile, int outfile)
 		dup2 (outfile, STDOUT_FILENO);
 }
 
-int	handle_one_builtin_cmd(shell_args_t *args, int in, int out)
+int	handle_one_builtin_cmd(t_shell_args *args, int in, int out)
 {
 	int	status;
 	int	id;
@@ -56,7 +56,7 @@ int	handle_one_builtin_cmd(shell_args_t *args, int in, int out)
 	return (status);
 }
 
-void	exec_cmd(shell_args_t *args, t_exec_node *tmp, t_exec_utils *utils)
+void	exec_cmd(t_shell_args *args, t_exec_node *tmp, t_exec_utils *utils)
 {
 	int	status;
 
@@ -72,7 +72,7 @@ void	exec_cmd(shell_args_t *args, t_exec_node *tmp, t_exec_utils *utils)
 		exec_command (args, tmp);
 }
 
-void	run_builtin(shell_args_t *args, int *in, int *out)
+void	run_builtin(t_shell_args *args, int *in, int *out)
 {
 	int	status;
 

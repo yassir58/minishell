@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 12:12:48 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 16:51:34 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:26:41 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-env_list_t	*get_env_list(char *env[])
+t_env_list	*get_env_list(char *env[])
 {
 	int			i;
-	env_list_t	*head;
+	t_env_list	*head;
 
 	i = 0;
 	head = NULL;
@@ -37,13 +37,13 @@ env_list_t	*get_env_list(char *env[])
 	return (head);
 }
 
-env_list_t	*create_env_node(char *envStr, int index)
+t_env_list	*create_env_node(char *envStr, int index)
 {
 	char		**env_tab;
-	env_list_t	*node;
+	t_env_list	*node;
 	int			shell;
 
-	node = malloc (sizeof (env_list_t));
+	node = malloc (sizeof (t_env_list));
 	env_tab = NULL;
 	if (!node)
 		return (NULL);
@@ -63,9 +63,9 @@ env_list_t	*create_env_node(char *envStr, int index)
 	return (node);
 }
 
-void	push_env_node(env_list_t **head, env_list_t *node)
+void	push_env_node(t_env_list **head, t_env_list *node)
 {
-	env_list_t	*head_pointer;
+	t_env_list	*head_pointer;
 
 	head_pointer = *head;
 	if (*head == NULL)
@@ -78,11 +78,11 @@ void	push_env_node(env_list_t **head, env_list_t *node)
 	}
 }
 
-env_list_t	*create_path_node(void)
+t_env_list	*create_path_node(void)
 {
-	env_list_t	*path_node;
+	t_env_list	*path_node;
 
-	path_node = malloc (sizeof (env_list_t));
+	path_node = malloc (sizeof (t_env_list));
 	if (!path_node)
 		return (allocation_err ());
 	path_node->variable_name = "SPATH";
@@ -91,9 +91,9 @@ env_list_t	*create_path_node(void)
 	return (path_node);
 }
 
-void	init_old_pwd(env_list_t **env_list)
+void	init_old_pwd(t_env_list **env_list)
 {
-	env_list_t	*tmp;
+	t_env_list	*tmp;
 
 	tmp = *env_list;
 	while (tmp)

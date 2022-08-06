@@ -2,7 +2,7 @@
 
 
 
-env_list_t *init_shell (shell_args_t *args)
+t_env_list *init_shell (t_shell_args *args)
 {
     
 }

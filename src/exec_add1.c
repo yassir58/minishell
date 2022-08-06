@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_add1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 14:45:29 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 15:39:22 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	**handle_relative_path(char **path_table)
 	return (cmd_path);
 }
 
-int	handle_simple_command(shell_args_t *args)
+int	handle_simple_command(t_shell_args *args)
 {
 	int	status;
 	int	in;
@@ -81,7 +81,7 @@ int	handle_simple_command(shell_args_t *args)
 	return (status);
 }
 
-int	handle_non_builtin(shell_args_t *args, int *in, int *out)
+int	handle_non_builtin(t_shell_args *args, int *in, int *out)
 {
 	int	id;
 	int	status;

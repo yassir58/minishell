@@ -1,33 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   extra_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/06 17:09:12 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 17:09:44 by ochoumou         ###   ########.fr       */
+/*   Created: 2022/08/06 15:11:12 by ochoumou          #+#    #+#             */
+/*   Updated: 2022/08/06 16:48:21 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-char	*ft_strdup(const char *s)
+char	*free_joined(char *str)
 {
-	size_t	i;
-	char	*str;
-	char	*new;
+	char	*tmp;
+
+	tmp = str;
+	free(str);
+	return (tmp);
+}
+
+void	free_tab(char *tab[])
+{
+	int	i;
 
 	i = 0;
-	str = (char *)s;
-	new = (char *)malloc((sizeof(char) * ft_strlen(str)) + 1);
-	if (!new)
-		return (NULL);
-	while (s[i] != '\0')
+	while (tab[i])
 	{
-		new[i] = s[i];
+		free (tab[i]);
 		i++;
 	}
-	new[i] = '\0';
-	return (new);
+	free (tab);
+}
+
+void	free_list(t_lexer_node *node)
+{
+	t_lexer_node	*temp;
+	t_lexer_node	*head;
+
+	head = node;
+	while (head)
+	{
+		temp = head;
+		head = head->next;
+		free (temp);
+	}
 }

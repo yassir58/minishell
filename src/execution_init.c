@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   execution_init.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 12:12:35 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 15:10:40 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	init_command(shell_args_t *args)
+void	init_command(t_shell_args *args)
 {
 	int	status;
 
@@ -36,7 +36,7 @@ int	get_status(int pid)
 	return (status);
 }
 
-char	**get_path(shell_args_t *args, char **cmds, int *status, int *pstatus)
+char	**get_path(t_shell_args *args, char **cmds, int *status, int *pstatus)
 {
 	char	*path;
 	char	**path_check;

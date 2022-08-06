@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   general_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 16:52:17 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 16:53:32 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*allocation_err(void)
 	return (NULL);
 }
 
-int	open_pipe(int *fd, shell_args_t *args)
+int	open_pipe(int *fd, t_shell_args *args)
 {
 	int	err;
 
@@ -38,7 +38,7 @@ int	close_fd(int fd)
 	return (err);
 }
 
-int	exit_with_failure(shell_args_t *args, char *err_message)
+int	exit_with_failure(t_shell_args *args, char *err_message)
 {
 	write (2, err_message, ft_strlen (err_message));
 	free (g_data);
@@ -46,7 +46,7 @@ int	exit_with_failure(shell_args_t *args, char *err_message)
 	exit (EXIT_FAILURE);
 }
 
-int	fork_child(shell_args_t *args)
+int	fork_child(t_shell_args *args)
 {
 	int	err;
 

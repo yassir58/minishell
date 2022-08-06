@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/06 17:09:12 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 17:09:44 by ochoumou         ###   ########.fr       */
+/*   Created: 2022/08/06 15:03:56 by ochoumou          #+#    #+#             */
+/*   Updated: 2022/08/06 15:05:15 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-char	*ft_strdup(const char *s)
+int	ft_env(t_exec_node *exec_node, t_env_list *list)
 {
-	size_t	i;
-	char	*str;
-	char	*new;
+	char	**cmds;
 
-	i = 0;
-	str = (char *)s;
-	new = (char *)malloc((sizeof(char) * ft_strlen(str)) + 1);
-	if (!new)
-		return (NULL);
-	while (s[i] != '\0')
+	cmds = get_commands(exec_node->cmd->cmds);
+	if (number_of_el(cmds) == 1)
 	{
-		new[i] = s[i];
-		i++;
+		print_env_list(list);
+		g_data->exit_code = 0;
 	}
-	new[i] = '\0';
-	return (new);
+	else
+	{
+		g_data->exit_code = 1;
+		ft_putstr_fd("Minishell: env: illegal option\n", 2);
+		return (1);
+	}
+	return (0);
 }

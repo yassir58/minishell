@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <yelatman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 12:12:32 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 15:06:22 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:27:01 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	handle_doubly_piped(int indx, int **fds_table)
 	close_fd (fds_table[indx][WRITE_END]);
 }
 
-int	nodes_number(shell_args_t *args)
+int	nodes_number(t_shell_args *args)
 {
 	t_exec_node	*tmp;
 	int			len;
