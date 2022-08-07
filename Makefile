@@ -6,7 +6,7 @@
 #    By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/06 18:42:41 by ochoumou          #+#    #+#              #
-#    Updated: 2022/08/06 19:10:09 by ochoumou         ###   ########.fr        #
+#    Updated: 2022/08/07 13:05:45 by ochoumou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,10 @@ READLINE= -lreadline -L/Users/ochoumou/.brew/opt/readline/lib
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
 
-all: $(NAME)
+all: libft $(NAME)
+
+libft:
+	@cd libft && make && cd ..
 
 $(NAME): $(OBJS) $(HEADERS)
 	$(CC) $(FLAGS) $(OBJS) -o $(NAME) $(READLINE) $(LIBNAME)
@@ -40,5 +43,6 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
+	@cd libft && make clean
 
 re: fclean all

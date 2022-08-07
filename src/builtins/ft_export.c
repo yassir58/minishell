@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 15:04:03 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/07 12:55:50 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/07 13:03:14 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ void	order_env_list(t_env_list *list)
 	}
 }
 
-int	check_valid_input(char *str)
+int	check_valid_input(char **str)
 {
-	if (!str)
+	if (!str[1])
 	{
 		free_string_table(str);
 		return (1);
 	}
+	free_string_table(str);
+	return (0);
 }
 
 int	check_existing_variable(char *argument, t_env_list *list)
@@ -63,7 +65,7 @@ int	check_existing_variable(char *argument, t_env_list *list)
 			return (1);
 		}
 		else
-			return (check_valid_input(object[1]));
+			return (check_valid_input(object));
 	}
 	free_string_table(object);
 	return (0);
