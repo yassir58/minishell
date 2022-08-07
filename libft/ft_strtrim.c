@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yelatman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:09:33 by yelatman          #+#    #+#             */
-/*   Updated: 2021/11/11 22:48:51 by yelatman         ###   ########.fr       */
+/*   Updated: 2022/08/06 17:57:33 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
+
+#include "./libft.h"
 
 static int	check(char c, char const *str)
 {
@@ -28,7 +29,7 @@ static int	check(char c, char const *str)
 static int	allocate(char const *str, char const *set, int *start)
 {
 	int		i;
-	
+
 	i = 0;
 	while (check(str[i], set))
 		i++;

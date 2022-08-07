@@ -6,11 +6,13 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 11:13:30 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 17:28:28 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/07 11:52:44 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+// Don't forget the Makefile does not compile libft
 
 int	main(int argc, char *argv[], char *env[])
 {
@@ -19,6 +21,7 @@ int	main(int argc, char *argv[], char *env[])
 	init_signals();
 	g_data = init_global ();
 	args = init_args (env);
+	rl_catch_signals = 0;
 	(void)argc;
 	(void)argv;
 	while (1)
@@ -34,6 +37,7 @@ int	main(int argc, char *argv[], char *env[])
 		free(args->prompt);
 		free(args->line);
 	}
+	free(args);
 	free(g_data);
 	return (0);
 }

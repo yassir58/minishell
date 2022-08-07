@@ -1,34 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/06 15:03:56 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/07 12:33:53 by ochoumou         ###   ########.fr       */
+/*   Created: 2022/08/06 15:20:30 by ochoumou          #+#    #+#             */
+/*   Updated: 2022/08/06 19:12:09 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_env(t_exec_node *exec_node, t_env_list *list)
+char	*advanced_get_next_line(int fd, int status)
 {
-	char	**cmds;
+	char	buff[1];
+	char	line[1000000];
+	int		i;
+	int		n;
 
-	cmds = get_commands(exec_node->cmd->cmds);
-	if (number_of_el(cmds) == 1)
+	i = 0;
+	line[0] = 0;
+	n = read(fd, buff, 1);
+	while (n > 0)
 	{
-		print_env_list(list);
-		g_data->exit_code = 0;
+		line[i++] = buff[0];
+		line[i] = '\0';
+		if (buff[0] == '\n')
+		{
+			if (status == 0)
+				line[i - 1] = '\0';
+			return (ft_strdup(line));
+		}
+		n = read(fd, buff, 1);
 	}
-	else
-	{
-		g_data->exit_code = 1;
-		ft_putstr_fd("Minishell: env: illegal option\n", 2);
-		free_string_table(cmds);
-		return (1);
-	}
-	free_string_table(cmds);
-	return (0);
+	if (!line[0])
+		return (NULL);
+	return (ft_strdup(line));
 }
