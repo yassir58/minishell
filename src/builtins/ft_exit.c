@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 15:04:00 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 15:05:44 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/07 12:33:42 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,6 @@ int	ft_exit(t_exec_node *exec_node)
 	g_data->exit_code = 0;
 	printf("exit\n");
 	handle_exit(cmds);
+	free_string_table(cmds);
 	return (g_data->exit_code);
 }

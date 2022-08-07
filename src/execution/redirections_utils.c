@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 16:58:26 by yelatman          #+#    #+#             */
-/*   Updated: 2022/08/06 19:48:10 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/07 11:34:18 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,19 +87,14 @@ int	handle_redir_append(t_redirect *redirect_node, int *err)
 	return (fd);
 }
 
-int	trait_herdoc(t_shell_args *args, t_redirect *temp, int *in)
+void	handle_descriptors(int *in, int *out, int *status, t_redirect *temp)
 {
-	int fds[2];
-	int err ;
-
-	err = 0;
-	pipe(fds);
-	*in = fds[READ_END];
-	err = write (fds[WRITE_END], temp->heredoc_content, ft_strlen (temp->heredoc_content));
-	close_fd (fds[WRITE_END]);
-	if (err == -1)
-		return (exit_with_failure (args, "failed to write to pipe\n"));
-	return (err);
+	if (temp->type == REDIRIN)
+		*in = handle_redir_input (temp, status);
+	else if (temp->type == REDIROUT)
+		*out = handle_redir_output (temp, status);
+	else if (temp->type == APPEND)
+		*out = handle_redir_append (temp, status);
 }
 
 int	handle_redirections(t_shell_args *args, t_exec_node *exec_node, int *in, \
@@ -108,23 +103,23 @@ int *out)
 	t_redirect	*temp;
 	int			err;
 	int			status;
+	int			fds[2];
 
 	temp = exec_node->cmd->redir_list;
 	err = 0;
 	status = 0;
 	while (temp)
 	{
-		if (temp->type == REDIRIN)
-			*in = handle_redir_input (temp, &status);
-		else if (temp->type == REDIROUT)
-			*out = handle_redir_output (temp, &status);
-		else if (temp->type == APPEND)
-			*out = handle_redir_append (temp, &status);
-		else if (temp->type == HEREDOC)
+		handle_descriptors(in, out, &status, temp);
+		if (temp->type == HEREDOC)
 		{
-			status = trait_herdoc (args, temp, in);
+			pipe(fds);
+			*in = fds[READ_END];
+			err = write (fds[WRITE_END], temp->hc, ft_strlen (temp->hc));
+			close_fd (fds[WRITE_END]);
+			if (err == -1)
+				return (exit_with_failure (args, "failed to write to pipe\n"));
 		}
-			//status = trait_herdoc (args, temp, in, fds);
 		if (status)
 			return (status);
 		temp = temp->next;

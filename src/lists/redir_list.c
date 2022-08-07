@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:36:54 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 19:12:09 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/07 11:34:42 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int token)
 	node->type = type;
 	node->filename = name;
 	node->token = token;
-	node->heredoc_content = heredoc;
+	node->hc = heredoc;
 	node->next = NULL;
 	return (node);
 }

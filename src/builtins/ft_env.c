@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 15:03:56 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 15:05:15 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/07 12:33:53 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ int	ft_env(t_exec_node *exec_node, t_env_list *list)
 	{
 		g_data->exit_code = 1;
 		ft_putstr_fd("Minishell: env: illegal option\n", 2);
+		free_string_table(cmds);
 		return (1);
 	}
+	free_string_table(cmds);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 14:14:38 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 19:12:09 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/07 11:34:42 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void	print_redirects(t_redirect *list)
 		else if (tmp->type == REDIROUT)
 			printf("Type: Redir Output\n");
 		printf("Filename Token: %d\n", tmp->token);
-		if (tmp->heredoc_content)
-			printf("Redirect Content: %s\n", tmp->heredoc_content);
+		if (tmp->hc)
+			printf("Redirect Content: %s\n", tmp->hc);
 		else
 			printf("\n");
 		tmp = tmp->next;

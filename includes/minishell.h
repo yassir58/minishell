@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 11:22:38 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 19:48:40 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/07 12:29:15 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct s_redirect
 {
 	t_redir_type		type;
 	char				*filename;
-	char				*heredoc_content;
+	char				*hc;
 	int					token;
 	struct s_redirect	*next;
 }	t_redirect;
@@ -222,6 +222,7 @@ void			free_lexer(t_lexer_node **lst);
 char			*free_joined(char *str);
 void			free_list(t_lexer_node *node);
 void			free_tab(char *tab[]);
+void			free_array_table(char **table);
 
 /**
  * @brief Printing
@@ -408,6 +409,5 @@ t_lexer_node *temp);
 char			*cmd_with_no_path(char *spath, int *status, char *command);
 void			run_builtin(t_shell_args *args, int *in, int *out);
 char			**check_for_path(char *cmd);
-int				trait_herdoc(t_shell_args *args, t_redirect *temp, int *in);
 
 #endif

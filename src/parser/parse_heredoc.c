@@ -6,7 +6,7 @@
 /*   By: ochoumou <ochoumou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/06 16:49:30 by ochoumou          #+#    #+#             */
-/*   Updated: 2022/08/06 19:12:09 by ochoumou         ###   ########.fr       */
+/*   Updated: 2022/08/07 11:34:42 by ochoumou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ void	get_file_content(t_redirect *tmp)
 
 	fd = open("/tmp/.minishell", O_RDWR);
 	content = advanced_get_next_line(fd, 1);
-	tmp->heredoc_content = ft_strdup("");
+	tmp->hc = ft_strdup("");
 	while (content != NULL)
 	{
-		tmp->heredoc_content = free_joined(tmp->heredoc_content);
-		tmp->heredoc_content = ft_strjoin(tmp->heredoc_content, content);
+		tmp->hc = free_joined(tmp->hc);
+		tmp->hc = ft_strjoin(tmp->hc, content);
 		free(content);
 		content = advanced_get_next_line(fd, 1);
 	}
